@@ -2,16 +2,22 @@
     margin-right: 0px;
     margin-left: 0px;
     margin-top: 0px;
+    font-family: "Montserrat",sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
 }
-
 .header_contents {
     display:flex;
+
+    align-items:flex-end;
+    background-color:lightgray;
+    width: 100%;
 }
 .nav1{
     display:flex;
-
     justify-content:center;
     width: 100%;
+    align-items: center;
 }
 .logo {
     display: inline;
@@ -22,30 +28,32 @@
 .nav_cont {
     list-style: none;
     display:flex;
+    flex-direction: row;
     justify-content: center;
-    align-items: center;
-    margin-top: 20px;
-    font-size: 40px;
+    font-size: 30px;
 }
 .nav_cont li{
-    margin:0 10px;
+    margin:0 20px;
 }
 .nav2{
     display:flex;
-    justify-content:right;
+    justify-content:center;
+    align-items: center;
+    width:20vw;
 }
 .user_control{
     display:flex;
     list-style: none;
-    align-items: center;
 }
 .user_control li{
-    margin:0 10px;
-    font-size: 25px;
+    margin: 23px;
+    font-size: 20px;
 }
 .signup{
     background-color: orange;
     border-radius: 10px;
+    padding: 0 10px;
     color: white;
+    width:6vw;
 }
 
