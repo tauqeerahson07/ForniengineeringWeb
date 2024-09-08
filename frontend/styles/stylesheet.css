@@ -8,7 +8,7 @@
 }
 .header_contents {
     display:flex;
-
+    position:static;
     align-items:flex-end;
     background-color:lightgray;
     width: 100%;
@@ -35,6 +35,20 @@
 .nav_cont li{
     margin:0 20px;
 }
+.nav_cont li ul{
+    display: none;
+}
+.nav_cont li:hover ul{
+    display: inline-flexbox;
+    position: absolute;
+    display:block;
+    list-style: none;
+    background-color: white;
+    padding: 1px;
+    border-radius: 15px;
+    font-size: 16px;
+    justify-content:left;
+}
 .nav2{
     display:flex;
     justify-content:center;
@@ -54,6 +68,48 @@
     border-radius: 10px;
     padding: 0 10px;
     color: white;
-    width:6vw;
+    width:5vw;
+    text-align: center;
 }
+.footercontainer{
+    display: flex;
+    background-color: black;
+    width: 100%;
+}
+.contact{
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+}
+.contact div,img{
+    width: 30px;
+    height:30px;
+}
+.contact a{
+    display: flex;
+    align-items: center;
+    color: white;
+    text-decoration: none;
+}
+.contact a,p{
+    margin: 0 10px;
+}
+.location{
+    display: flex;
+    justify-content: right;
+    width:100%;
+}
+.tagline{
+    color: white;
+    white-space: nowrap;
+    font-size: 16px;
+    position:absolute;
+}
+.location a{
+    display: flex;
+    align-items: center;
+    justify-content:right;
+    color: white;
+}
+
 
