@@ -1,34 +1,115 @@
-.header_contents {
-    display: flex;
-    justify-content: justify;
-    align-items:center;
-    background-color: lightgray;
+* {
+    margin-right: 0px;
+    margin-left: 0px;
+    margin-top: 0px;
+    font-family: "Montserrat",sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
 }
-
+.header_contents {
+    display:flex;
+    position:static;
+    align-items:flex-end;
+    background-color:lightgray;
+    width: 100%;
+}
+.nav1{
+    display:flex;
+    justify-content:center;
+    width: 100%;
+    align-items: center;
+}
 .logo {
+    display: inline;
     width: 100px;
     height: 100px;
 }
 
-.nav_wrapper {
-    display: flex;
-    flex-grow:1;
-    justify-content:center;
-}
-
 .nav_cont {
-    display:flex;
     list-style: none;
+    display:flex;
+    flex-direction: row;
+    justify-content: center;
+    font-size: 30px;
 }
 .nav_cont li{
-    margin: 0 20px;
-    font-size:40px;
+    margin:0 20px;
+}
+.nav_cont li ul{
+    display: none;
+}
+.nav_cont li:hover ul{
+    display: inline-flexbox;
+    position: absolute;
+    display:block;
+    list-style: none;
+    background-color: white;
+    padding: 1px;
+    border-radius: 15px;
+    font-size: 16px;
+    justify-content:left;
+}
+.nav2{
+    display:flex;
+    justify-content:center;
+    align-items: center;
+    width:20vw;
 }
 .user_control{
     display:flex;
-    list-style:none;
+    list-style: none;
 }
 .user_control li{
-    margin: 0 20px;
-    font-size:40px;
+    margin: 23px;
+    font-size: 20px;
 }
+.signup{
+    background-color: orange;
+    border-radius: 10px;
+    padding: 0 10px;
+    color: white;
+    width:5vw;
+    text-align: center;
+}
+.footercontainer{
+    display: flex;
+    background-color: black;
+    width: 100%;
+}
+.contact{
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+}
+.contact div,img{
+    width: 30px;
+    height:30px;
+}
+.contact a{
+    display: flex;
+    align-items: center;
+    color: white;
+    text-decoration: none;
+}
+.contact a,p{
+    margin: 0 10px;
+}
+.location{
+    display: flex;
+    justify-content: right;
+    width:100%;
+}
+.tagline{
+    color: white;
+    white-space: nowrap;
+    font-size: 16px;
+    position:absolute;
+}
+.location a{
+    display: flex;
+    align-items: center;
+    justify-content:right;
+    color: white;
+}
+
+
