@@ -1,14 +1,19 @@
 from django.db import models
 # Create your models here.
+
+def furnaces_upload_path(instance, filename):
+    # Customize the upload path as needed
+    return f'furnaces/{instance.name}/{filename}'
+
 class Furnaces(models.Model):
     f_id = models.AutoField(primary_key=True, unique=True)
-    image = models.URLField(max_length=2000)
+    image = models.FileField(upload_to=furnaces_upload_path)
     name = models.CharField(max_length=1000)
     feature= models.CharField(max_length=1000)   
     specification =models.CharField(max_length=1000)
     
     def __str__(self):
-        return self.name + self.image
+        return f"{self.name} ({self.image.url if self.image else 'No Image'})"
 
 class Services(models.Model):
     s_id = models.AutoField(primary_key=True, unique=True)

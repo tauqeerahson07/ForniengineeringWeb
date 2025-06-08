@@ -2,6 +2,7 @@
 import React from 'react'
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
+import Card from '@/components/Card';
 
 export default function Product() {
   const [data, setData] = useState(null);
@@ -18,20 +19,11 @@ export default function Product() {
   }
 
   return (
-    <div className='bg-slate-100 w-screen h-screen flex '>
-      <div className='mt-24 space-y-5'>
-        {data.map((item) => (
-          <article key={item.f_id} className='flex items-start ml-10 bg-orange-400 rounded-2xl w-full max-w-full'>
-            <section className='mr-4'>
-              <Image src={item.image} alt={item.name} width={221} height={230} className='rounded-2xl' />
-            </section>
-            <section>
-              <h2 className='text-2xl font-bold uppercase'>{item.name}</h2>
-              <p className='text-lg'>{item.feature}</p>
-              <p className='text-lg'>{item.specification}</p>
-            </section>
-          </article>
-        ))}
+    <div className='bg-slate-100 w-screen h-screen'>
+      <div className='mt-24'>
+        {data.map((item) => {
+          return <Card name={item.name} feature={item.feature} specs={item.specs} image = {item.image}></Card>
+      })}
       </div>
     </div>
   );
