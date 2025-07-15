@@ -8,6 +8,15 @@ const nextConfig = {
       },
     ];
   },
+  async redirects() {
+    return [
+      {
+        source: '/admin',
+        destination: 'http://127.0.0.1:8080/admin',
+        permanent: false,
+      },
+    ];
+  },
 };
 
 export default nextConfig;

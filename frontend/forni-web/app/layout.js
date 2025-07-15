@@ -1,4 +1,5 @@
 import { Geist, Geist_Mono } from "next/font/google";
+import { DataContextProvider } from "@/contexts/DataContext";
 import "./globals.css";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
@@ -22,11 +23,12 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <Navbar/>
-        <main>
-          {children}</main>
-        <Footer/>
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      >
+        <DataContextProvider>
+          <Navbar />
+          <main>{children}</main>
+        </DataContextProvider>
       </body>
     </html>
   );

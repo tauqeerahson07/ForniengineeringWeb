@@ -11,20 +11,29 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
-
+import os
+# for connecting Django to supabase
+import dj_database_url
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+MEDIA_ROOT = os.path.join(BASE_DIR, '..', 'frontend', 'forni-web', 'public','webpage')
+MEDIA_URL = '/webpage/'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
+
+# Point to the root directory .env file
+ROOT_DIR = BASE_DIR.parent  # This goes up one more level to the project root
+ENV_FILE = ROOT_DIR / '.env'
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-82o1oc-%b1eh_(#gij(ic3@x77&hv#()gy1=sd(y!o1)p9^&6h'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config('DEBUG', default=True, cast=bool)
 
 ALLOWED_HOSTS = []
 
@@ -81,10 +90,15 @@ WSGI_APPLICATION = 'forni_backend.wsgi.application'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': BASE_DIR / 'db.sqlite3',
+    # }
+    'default': dj_database_url.parse(
+        config("SUPABASE_DB_URL"),
+        conn_max_age=600,
+        conn_health_checks=True,
+    )
 }
 
 
