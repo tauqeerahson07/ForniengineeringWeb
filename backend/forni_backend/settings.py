@@ -27,8 +27,8 @@ DEBUG = config('DEBUG', default=False, cast=bool)
 # Updated ALLOWED_HOSTS for Render
 ALLOWED_HOSTS = [
     'localhost',
-    # '127.0.0.1',
-    # '.onrender.com',  # Allow all Render subdomains
+    '127.0.0.1',
+    'forniengineeringweb.onrender.com'
 ]
 
 # Application definition
