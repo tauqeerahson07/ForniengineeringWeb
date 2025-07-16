@@ -238,7 +238,7 @@ const Furnaces = () => {
           </button>
           
           <Link
-            href={`/furnaces/${furnace.f_name}`}
+            href={`/furnaces/${encodeURIComponent(furnace.name)}`}
             className="w-full border border-gray-300 hover:border-gray-400 text-gray-700 hover:text-gray-800 font-medium py-2 px-4 rounded-md transition-colors duration-200 text-center"
           >
             View Details
