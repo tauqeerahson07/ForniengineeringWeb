@@ -121,7 +121,52 @@ export default function Home() {
     </div>
   </div>
 </section>
+{/* Services Section */}
+      <section className="py-16 sm:py-20 lg:py-24 bg-gray-50">
+  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    {/* Section Header */}
+    <div className="text-center mb-16">
+      <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
+        Our Services
+      </h2>
+      <div className="w-24 h-1 bg-orange-600 mx-auto mb-6"></div>
+      <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+        Discover few of the heat treatment service we provide
+      </p>
+    </div>
 
+    {/* Centered Furnaces Grid Container */}
+    <div className="flex justify-center">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10 max-w-6xl">
+        {services?.length > 0 ? (
+          services.map((item, index) => (
+            <div 
+              key={item.s_id}
+              className="transform hover:scale-105 transition-all duration-300 flex justify-center"
+              style={{ animationDelay: `${index * 0.1}s` }}
+            >
+              <Card
+                name={item.name}
+                specs={item.description}
+                image={item.cover_image}
+              />
+            </div>
+          ))
+        ) : (
+          <div className="col-span-full text-center py-16">
+            <div className="text-6xl text-gray-300 mb-4">⚙️</div>
+            <h3 className="text-xl font-semibold text-gray-600 mb-2">
+              No Service Available
+            </h3>
+            <p className="text-gray-500">
+              We're currently updating our product catalog. Please check back soon.
+            </p>
+          </div>
+        )}
+      </div>
+    </div>
+  </div>
+</section>
       {/* CTA Section */}
       <section className="py-16 sm:py-20 bg-gradient-to-r from-orange-600 to-orange-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">

@@ -68,7 +68,7 @@ const Sidebar = ({ isOpen, onClose }) => {
                     {furnaces.slice(0, 8).map((furnace) => (
                       <Link
                         key={furnace.f_id}
-                        href={`/furnaces/${furnace.f_id}`}
+                        href={`/furnaces/${furnace.name}`}
                         className="block text-sm text-gray-600 hover:text-orange-600 transition-colors duration-200"
                         onClick={onClose}
                       >
@@ -102,7 +102,7 @@ const Sidebar = ({ isOpen, onClose }) => {
                   services.map((service) => (
                     <Link
                       key={service.s_id}
-                      href={`/services/${service.s_id}`}
+                      href={`/services/${service.name}`}
                       className="block text-sm text-gray-600 hover:text-orange-600 transition-colors duration-200"
                       onClick={onClose}
                     >

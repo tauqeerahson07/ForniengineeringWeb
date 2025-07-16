@@ -7,7 +7,8 @@ const DataContext = createContext({
     loading: true,
     error: null,
     addData: function(){},
-    showData: function(){},
+    getFurnaceByName: function(name){},
+    getServiceByName: function(name){},
     refreshData: function(){}
 });
 
@@ -85,10 +86,36 @@ export function DataContextProvider({children}) {
             setServices([...services, newItem]);
         }
     };
+    // Get specific furnace by name
+    function getFurnaceByName(name){
+        if (!name || !furnaces?.length) return null;
+        
+        const decodedName = decodeURIComponent(name);
+        const furnace = furnaces.find(f => 
+            f.name.toLowerCase() === decodedName.toLowerCase()
+        );
+        
+        if (!furnace) {
+            console.warn(`⚠️ Furnace not found: ${decodedName}`);
+        }
+        
+        return furnace || null;
+    };
 
-    // Show data function
-    const showData = () => {
-        return { furnaces, services };
+    // Get specific service by name
+    function getServiceByName(name){
+        if (!name || !services?.length) return null;
+        
+        const decodedName = decodeURIComponent(name);
+        const service = services.find(s => 
+            s.name.toLowerCase() === decodedName.toLowerCase()
+        );
+        
+        if (!service) {
+            console.warn(`⚠️ Service not found: ${decodedName}`);
+        }
+        
+        return service || null;
     };
 
     // Refresh data function
@@ -102,7 +129,8 @@ export function DataContextProvider({children}) {
         loading,
         error,
         addData,
-        showData,
+        getFurnaceByName,
+        getServiceByName,
         refreshData
     };
 

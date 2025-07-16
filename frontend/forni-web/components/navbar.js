@@ -27,10 +27,9 @@ const Navbar = () => {
             furnace.specification?.toLowerCase().includes(query)) {
           results.push({
             type: 'furnace',
-            id: furnace.f_id,
             name: furnace.name,
             description: furnace.specification,
-            url: `/furnaces/${furnace.f_id}`
+            url: `/furnaces/${furnace.name}`
           });
         }
       });
@@ -43,10 +42,9 @@ const Navbar = () => {
             service.description?.toLowerCase().includes(query)) {
           results.push({
             type: 'service',
-            id: service.s_id,
             name: service.name,
             description: service.description,
-            url: `/services/${service.s_id}`
+            url: `/services/${service.name}`
           });
         }
       });
@@ -194,7 +192,7 @@ const Navbar = () => {
                       furnaces.slice(0, 6).map((furnace) => (
                         <Link
                           key={furnace.f_id}
-                          href={`/furnaces/${furnace.f_id}`}
+                          href={`/furnaces/${furnace.name}`}
                           className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors duration-150"
                         >
                           {furnace.name.length > 30 
@@ -221,32 +219,54 @@ const Navbar = () => {
 
               {/* Services Dropdown */}
               <div className="relative group">
+                <Link href='/services'>
                 <button className="text-gray-700 hover:text-orange-600 px-3 py-2 text-sm font-medium flex items-center transition-colors duration-200">
                   Services
                   <svg className="ml-1 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                   </svg>
                 </button>
+                </Link>
                 
-                <div className="absolute left-0 top-full mt-1 w-48 bg-white rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 border border-gray-200">
+                <div className="absolute left-0 top-full mt-1 w-64 bg-white rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 border border-gray-200">
                   <div className="py-2">
-                    {services && services.length > 0 ? (
-                      services.map((service) => (
+                    <Link 
+                      href="/services" 
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 font-medium border-b border-gray-100"
+                    >
+                      View All Services
+                    </Link>
+                    
+                    {loading ? (
+                      <div className="px-4 py-2 text-sm text-gray-500">Loading...</div>
+                    ) : services && services.length > 0 ? (
+                      services.slice(0, 6).map((service) => (
                         <Link
                           key={service.s_id}
-                          href={`/services/${service.s_id}`}
+                          href={`/services/${service.name}`}
                           className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors duration-150"
                         >
-                          {service.name}
+                          {service.name.length > 30 
+                            ? `${service.name.substring(0, 30)}...` 
+                            : service.name
+                          }
                         </Link>
                       ))
                     ) : (
-                      <div className="px-4 py-2 text-sm text-gray-500">No services available yet</div>
+                      <div className="px-4 py-2 text-sm text-gray-500">No services available</div>
+                    )}
+                    
+                    {services && services.length > 6 && (
+                      <Link 
+                        href="/services" 
+                        className="block px-4 py-2 text-sm text-orange-600 hover:bg-orange-50 font-medium border-t border-gray-100"
+                      >
+                        View More...
+                      </Link>
                     )}
                   </div>
                 </div>
               </div>
-
               <Link 
                 href="/contact" 
                 className="bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200"

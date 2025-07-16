@@ -6,21 +6,21 @@ def furnaces_upload_path(instance, filename):
     return f'furnaces/{instance.name}/{filename}'
 
 def additional_furnace_image_path(instance, filename):
-    return f'furnaces/{instance.product.name}/{filename}/gallery'
+    return f'furnaces/{instance.product.name}/gallery/{filename}'
 
 def services_upload_path(instance, filename):
     # Customize the upload path as needed
     return f'services/{instance.name}/{filename}'
 
 def additional_service_image_path(instance, filename):
-    return f'services/{instance.product.name}/{filename}/gallery'
+    return f'services/{instance.service.name}/gallery/{filename}'
 
 class Furnaces(models.Model):
     f_id = models.AutoField(primary_key=True, unique=True)
     cover_image = models.FileField(upload_to=furnaces_upload_path)
     name = models.CharField(max_length=1000)
     feature= models.CharField(max_length=1000)   
-    specification =models.CharField(max_length=1000)
+    specification =models.TextField(max_length=2000)
     
     def __str__(self):
         return f"{self.name} ({self.cover_image.url if self.cover_image else 'No Image'})"
@@ -37,18 +37,18 @@ class Services(models.Model):
     s_id = models.AutoField(primary_key=True, unique=True)
     cover_image = models.FileField(upload_to=services_upload_path)
     name = models.CharField(max_length=1000)
-    description= models.CharField(max_length=1000)   
+    description= models.TextField(max_length=1000)   
     
     def __str__(self):
-        return self.name + self.image
+        return f"{self.name} ({self.cover_image.url if self.cover_image else 'No Image'})"
 
 class ServiceImages(models.Model):
     image_id = models.AutoField(primary_key=True, unique=True)
-    product = models.ForeignKey(Services, related_name='gallery_images', on_delete=models.CASCADE)
+    service = models.ForeignKey(Services, related_name='gallery_images', on_delete=models.CASCADE)
     image = models.FileField(upload_to=additional_service_image_path)
 
     def __str__(self):
-        return f"Image for {self.product.name}"
+        return f"Image for {self.service.name}"
 
 # class customer(models.Model):
 #     id = models.AutoField(primary_key=True, unique=True)

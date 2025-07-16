@@ -5,20 +5,21 @@ import { useContext } from "react";
 import DataContext from "@/contexts/DataContext";
 import Image from "next/image";
 
-const FurnaceDetailPage = () => {
+const serviceDetailPage = () => {
   const pathname = usePathname();
   const name = pathname.split("/").pop();
   const decodedName = name ? decodeURIComponent(name) : "";
   const data = useContext(DataContext);
-  const furnace = data.getFurnaceByName(decodedName);
+  const service = data.getServiceByName(decodedName)
+  console.log(service)
   
   // Slideshow state
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   // Prepare all images for slideshow
-  const allImages = furnace ? [
-    ...(furnace.cover_image ? [{ image: furnace.cover_image, alt: `${furnace.name} - Cover Image` }] : []),
-    ...(furnace.gallery_images || [])
+  const allImages = service ? [
+    ...(service.cover_image ? [{ image: service.cover_image, alt: `${service.name} - Cover Image` }] : []),
+    ...(service.gallery_images || [])
   ] : [];
 
   // Navigation functions
@@ -57,15 +58,15 @@ const FurnaceDetailPage = () => {
   }
 
   // Not found state
-  if (!furnace) {
+  if (!service) {
     return (
       <div className="min-h-screen bg-gray-50 pt-20">
         <div className="max-w-7xl mx-auto px-4 py-8 text-center">
           <h1 className="text-3xl font-bold text-gray-900 mb-4">
-            Furnace Not Found
+            service Not Found
           </h1>
           <p className="text-gray-600 mb-8">
-            The furnace "{decodedName}" could not be found.
+            The service "{decodedName}" could not be found.
           </p>
           <button
             onClick={() => window.history.back()}
@@ -79,8 +80,8 @@ const FurnaceDetailPage = () => {
   }
 
   const handleGetQuotation = () => {
-    const subject = `Quotation Request - ${furnace.name}`;
-    const body = `Hello,\n\nI would like to request a quotation for the following furnace:\n\nFurnace: ${furnace.name}\n\nPlease provide detailed pricing, specifications, and delivery information.\n\nThank you.`;
+    const subject = `Quotation Request - ${service.name}`;
+    const body = `Hello,\n\nI would like to request a quotation for the following service:\n\nservice: ${service.name}\n\nPlease provide detailed pricing, specifications, and delivery information.\n\nThank you.`;
     const mailtoUrl = `mailto:forniengg@yahoo.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     window.open(mailtoUrl, '_blank');
   };
@@ -100,7 +101,7 @@ const FurnaceDetailPage = () => {
                 {allImages.length > 0 ? (
                   <Image
                     src={allImages[currentImageIndex].image}
-                    alt={allImages[currentImageIndex].alt || `${furnace.name} - Image ${currentImageIndex + 1}`}
+                    alt={allImages[currentImageIndex].alt || `${service.name} - Image ${currentImageIndex + 1}`}
                     fill
                     className="object-cover"
                     sizes="(max-width: 768px) 100vw, 50vw"
@@ -201,32 +202,32 @@ const FurnaceDetailPage = () => {
             {/* Title */}
             <div>
               <h1 className="text-4xl font-bold text-gray-900 mb-2">
-                {furnace.name}
+                {service.name}
               </h1>
             </div>
 
             {/* Features Section */}
-            {furnace.feature && (
+            {service.description && (
               <div>
                 <h2 className="text-xl font-semibold text-gray-900 mb-4">
-                  Features
+                  Description
                 </h2>
                 <div className="bg-gray-100 p-6 rounded-lg">
                   <p className="text-gray-700 leading-relaxed">
-                    {furnace.feature}
+                    {service.description}
                   </p>
                 </div>
               </div>
             )}
 
             {/* Specifications Section */}
-            {furnace.specification && (
+            {/* {service.specification && (
               <div>
                 <h2 className="text-xl font-semibold text-gray-900 mb-4">
                   Specifications
                 </h2>
                 <div className="space-y-3">
-                  {furnace.specification.split('\n').map((spec, index) => (
+                  {service.specification.split('\n').map((spec, index) => (
                     <div key={index} className="flex items-start space-x-3">
                       <span className="flex-shrink-0 w-2 h-2 bg-orange-600 rounded-full mt-2"></span>
                       <p className="text-gray-700">{spec.trim()}</p>
@@ -234,7 +235,7 @@ const FurnaceDetailPage = () => {
                   ))}
                 </div>
               </div>
-            )}
+            )} */}
 
             {/* Get Quotation Button */}
             <div className="pt-6">
@@ -251,7 +252,7 @@ const FurnaceDetailPage = () => {
           </div>
         </div>
 
-        {/* Back to Furnaces Link */}
+        {/* Back to services Link */}
         <div className="mt-12 pt-8 border-t border-gray-200">
           <button
             onClick={() => window.history.back()}
@@ -260,7 +261,7 @@ const FurnaceDetailPage = () => {
             <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>
-            Back to Furnaces
+            Back to services
           </button>
         </div>
       </div>
@@ -268,4 +269,4 @@ const FurnaceDetailPage = () => {
   );
 };
 
-export default FurnaceDetailPage;
+export default serviceDetailPage;
