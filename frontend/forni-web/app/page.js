@@ -7,7 +7,7 @@ import Card from "@/components/Card";
 import Link from "next/link";
 export default function Home() {
   const { furnaces, services, loading, error } = useContext(DataContext);
-
+  console.log('services are',services)
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-orange-50 to-orange-100 flex items-center justify-center">

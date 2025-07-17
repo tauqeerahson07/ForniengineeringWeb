@@ -31,7 +31,8 @@ export function DataContextProvider({children}) {
             
             // Fetch furnaces with individual error handling
             try {
-                const furnacesResponse = await fetch("http://127.0.0.1:8080/api/furnaces/");
+                const backendUrl = process.env.NEXT_PUBLIC_BACKEND;
+                const furnacesResponse = await fetch(`${backendUrl}/furnaces`);
                 if (furnacesResponse.ok) {
                     furnacesData = await furnacesResponse.json(); 
                     console.log('Furnaces loaded:', furnacesData);
@@ -46,7 +47,7 @@ export function DataContextProvider({children}) {
 
             // Fetch services with individual error handling
             try {
-                const servicesResponse = await fetch("http://127.0.0.1:8080/api/services/");
+                const servicesResponse = await fetch(`${backendUrl}/services`);
                 if (servicesResponse.ok) {
                     servicesData = await servicesResponse.json(); 
                     console.log('Services loaded:', servicesData);
