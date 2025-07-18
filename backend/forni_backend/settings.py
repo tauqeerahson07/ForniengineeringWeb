@@ -11,8 +11,10 @@ from decouple import config
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-MEDIA_ROOT = os.path.join(BASE_DIR, '..', 'frontend', 'forni-web', 'public','webpage')
-MEDIA_URL = '/webpage/'
+# MEDIA_ROOT = os.path.join(BASE_DIR, '..', 'frontend', 'forni-web', 'public','webpage')
+# MEDIA_URL = '/webpage/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
 
 # Point to the root directory .env file
 ROOT_DIR = BASE_DIR.parent  # This goes up one more level to the project root
@@ -28,6 +30,7 @@ DEBUG = config('DEBUG', default=False, cast=bool)
 ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
+    '0.0.0.0',
     'forniengineeringweb.onrender.com'
 ]
 
@@ -62,7 +65,7 @@ ROOT_URLCONF = 'forni_backend.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],  # Add templates directory
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -70,6 +73,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.media',  # ADD THIS LINE
             ],
         },
     },
@@ -121,7 +125,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # CORS settings(For frontend)
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",  # Allow Next.js frontend
-    # "https://your-frontend-domain.com",  # Add your actual frontend domain
+    "https://forniengineeringweb.onrender.com",
 ]
 
 # For production, you might want to allow all origins temporarily
