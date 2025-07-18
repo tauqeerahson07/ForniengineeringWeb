@@ -31,7 +31,7 @@ ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
     '0.0.0.0',
-    'forniengineeringweb.onrender.com'
+    'https://forniengineeringweb.onrender.com'
 ]
 
 # Application definition
@@ -125,6 +125,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # CORS settings(For frontend)
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",  # Allow Next.js frontend
+    "http://192.168.40.1:3000",
     "https://forniengineeringweb.onrender.com",
 ]
 
