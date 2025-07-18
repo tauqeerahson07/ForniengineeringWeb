@@ -1,5 +1,5 @@
 "use client"
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState, useCallback } from "react";
 
 const DataContext = createContext({
     furnaces: null,
@@ -14,81 +14,148 @@ const DataContext = createContext({
 
 export default DataContext;
 
-export function DataContextProvider({children}) {
-    const [furnaces, setFurnaces] = useState(null);
-    const [services, setServices] = useState(null);
-    const [loading, setLoading] = useState(true);
+// Cache configuration
+const CACHE_KEY = 'forni_data_cache';
+const CACHE_DURATION = 15 * 60 * 1000; //15 minutes
+const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND;
+
+// Local storage cache helpers
+const getCachedData = () => {
+    if (typeof window === 'undefined') return null; // SSR check
+    
+    try {
+        const cached = localStorage.getItem(CACHE_KEY);
+        if (cached) {
+            const { data, timestamp } = JSON.parse(cached);
+            const now = Date.now();
+            if (now - timestamp < CACHE_DURATION) {
+                console.log('📦 Using cached data');
+                return data;
+            }
+        }
+    } catch (error) {
+        console.warn('Cache read error:', error);
+    }
+    return null;
+};
+
+const setCachedData = (data) => {
+    if (typeof window === 'undefined') return; // SSR check
+    
+    try {
+        localStorage.setItem(CACHE_KEY, JSON.stringify({
+            data,
+            timestamp: Date.now()
+        }));
+    } catch (error) {
+        console.warn('Cache write error:', error);
+    }
+};
+
+export function DataContextProvider({children, initialData = null}) {
+    const [furnaces, setFurnaces] = useState(initialData?.furnaces || null);
+    const [services, setServices] = useState(initialData?.services || null);
+    const [loading, setLoading] = useState(!initialData);
     const [error, setError] = useState(null);
 
-    const fetchData = async() => {
+    const fetchData = useCallback(async (useCache = true) => {
         try {
             setLoading(true);
             setError(null);
             
-            // Initialize default values
-            let furnacesData = [];
-            let servicesData = [];
-            
-            // Fetch furnaces with individual error handling
-            try {
-                const backendUrl = process.env.NEXT_PUBLIC_BACKEND;
-                const furnacesResponse = await fetch(`${backendUrl}/furnaces`);
-                if (furnacesResponse.ok) {
-                    furnacesData = await furnacesResponse.json(); 
-                    console.log('Furnaces loaded:', furnacesData);
-                } else {
-                    console.warn('Furnaces API failed:', furnacesResponse.status);
-                    furnacesData = []; 
+            // Try cache first if no initial data
+            if (useCache && !initialData) {
+                const cachedData = getCachedData();
+                if (cachedData) {
+                    setFurnaces(cachedData.furnaces || []);
+                    setServices(cachedData.services || []);
+                    setLoading(false);
+                    return;
                 }
-            } catch (furnaceError) {
-                console.error('Furnaces fetch error:', furnaceError);
-                furnacesData = []; 
             }
 
-            // Fetch services with individual error handling
-            try {
-                const servicesResponse = await fetch(`${backendUrl}/services`);
-                if (servicesResponse.ok) {
-                    servicesData = await servicesResponse.json(); 
-                    console.log('Services loaded:', servicesData);
-                } else {
-                    console.warn('Services API failed:', servicesResponse.status);
-                    servicesData = []; 
-                }
-            } catch (serviceError) {
-                console.error('Services fetch error:', serviceError);
-                servicesData = []; 
+            console.log('🔗 Fetching fresh data from:', BACKEND_URL);
+            
+            // Parallel requests for better performance
+            const [furnacesResponse, servicesResponse] = await Promise.allSettled([
+                fetch(`${BACKEND_URL}/furnaces`, {
+                    headers: {
+                        'Cache-Control': 'max-age=300', // 5 minutes browser cache
+                    }
+                }),
+                fetch(`${BACKEND_URL}/services`, {
+                    headers: {
+                        'Cache-Control': 'max-age=300',
+                    }
+                })
+            ]);
+
+            // Process furnaces
+            let furnacesData = [];
+            if (furnacesResponse.status === 'fulfilled' && furnacesResponse.value.ok) {
+                furnacesData = await furnacesResponse.value.json();
+                console.log('✅ Furnaces loaded:', furnacesData.length, 'items');
+            } else {
+                console.warn('❌ Furnaces failed:', furnacesResponse.reason || furnacesResponse.value?.status);
             }
+
+            // Process services
+            let servicesData = [];
+            if (servicesResponse.status === 'fulfilled' && servicesResponse.value.ok) {
+                servicesData = await servicesResponse.value.json();
+                console.log('✅ Services loaded:', servicesData.length, 'items');
+            } else {
+                console.warn('❌ Services failed:', servicesResponse.reason || servicesResponse.value?.status);
+            }
+
+            // Cache the data
+            const dataToCache = {
+                furnaces: furnacesData,
+                services: servicesData
+            };
+            setCachedData(dataToCache);
 
             setFurnaces(furnacesData);
             setServices(servicesData);
 
         } catch (err) {
-            // Only for critical errors
-            console.error('Critical error in fetchData:', err);
+            console.error('💥 Critical error in fetchData:', err);
             setError(err.message);
-            // Set empty arrays as fallback
             setFurnaces([]);
             setServices([]);
         } finally {
-            setLoading(false); // Always set loading to false
+            setLoading(false);
         }
-    }
+    }, [initialData]);
 
     useEffect(() => {
-        fetchData();
-    }, []);
+        // Only fetch if we don't have initial data
+        if (!initialData) {
+            fetchData();
+        }
+    }, [fetchData, initialData]);
 
     // Add data function
-    const addData = (type, newItem) => {
+    const addData = useCallback((type, newItem) => {
         if (type === 'furnaces' && furnaces) {
-            setFurnaces([...furnaces, newItem]);
+            const updatedFurnaces = [...furnaces, newItem];
+            setFurnaces(updatedFurnaces);
+            setCachedData({
+                furnaces: updatedFurnaces,
+                services: services || []
+            });
         } else if (type === 'services' && services) {
-            setServices([...services, newItem]);
+            const updatedServices = [...services, newItem];
+            setServices(updatedServices);
+            setCachedData({
+                furnaces: furnaces || [],
+                services: updatedServices
+            });
         }
-    };
-    // Get specific furnace by name
-    function getFurnaceByName(name){
+    }, [furnaces, services]);
+
+    // Get specific furnace by name (memoized)
+    const getFurnaceByName = useCallback((name) => {
         if (!name || !furnaces?.length) return null;
         
         const decodedName = decodeURIComponent(name);
@@ -101,10 +168,10 @@ export function DataContextProvider({children}) {
         }
         
         return furnace || null;
-    };
+    }, [furnaces]);
 
-    // Get specific service by name
-    function getServiceByName(name){
+    // Get specific service by name (memoized)
+    const getServiceByName = useCallback((name) => {
         if (!name || !services?.length) return null;
         
         const decodedName = decodeURIComponent(name);
@@ -117,12 +184,12 @@ export function DataContextProvider({children}) {
         }
         
         return service || null;
-    };
+    }, [services]);
 
-    // Refresh data function
-    const refreshData = () => {
-        fetchData();
-    };
+    // Refresh data function (bypass cache)
+    const refreshData = useCallback(() => {
+        fetchData(false);
+    }, [fetchData]);
 
     const value = {
         furnaces,

@@ -3,6 +3,7 @@ import { DataContextProvider } from "@/contexts/DataContext";
 import "./globals.css";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import { getStaticData } from "@/lib/staticData";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -15,17 +16,19 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
+  Image:"/images/logo.png",
   title: "Forni Engineering",
   description: "Forni Engineering is a full-service engineering firm.",
 };
 
-export default function RootLayout({ children }) {
+export default async function RootLayout({ children }) {
+  const initialData = await getStaticData();
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <DataContextProvider>
+        <DataContextProvider initialData={initialData}>
           <Navbar />
           <main>{children}</main>
         </DataContextProvider>

@@ -1,4 +1,5 @@
 /** @type {import('next').NextConfig} */
+const backend_url = process.env.NEXT_BASE
 const nextConfig = {
   async rewrites() {
     return [
@@ -12,7 +13,7 @@ const nextConfig = {
     return [
       {
         source: '/admin',
-        destination: 'http://127.0.0.1:8080/admin',
+        destination: `${backend_url}/admin`,
         permanent: false,
       },
     ];
