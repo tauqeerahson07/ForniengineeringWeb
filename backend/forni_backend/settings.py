@@ -74,6 +74,8 @@ AWS_S3_ENDPOINT_URL = os.getenv("SUPABASE_STORAGRE")
 AWS_S3_FILE_OVERWRITE = True
 AWS_DEFAULT_ACL = None
 AWS_QUERYSTRING_AUTH = False
+CSRF_TRUSTED_ORIGINS = ['https://forniengineeringweb.onrender.com']
+
 
 ROOT_URLCONF = 'forni_backend.urls'
 
