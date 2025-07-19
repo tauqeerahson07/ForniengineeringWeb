@@ -7,6 +7,9 @@ import os
 # for connecting Django to supabase
 import dj_database_url
 from decouple import config
+# connecting to s3 bucket
+from dotenv import load_dotenv
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -59,6 +62,18 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+INSTALLED_APPS += ["storages"]
+
+DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+
+AWS_ACCESS_KEY_ID = os.getenv("FORNI_S3_ACCESS_KEY_ID")
+AWS_SECRET_ACCESS_KEY = os.getenv("FORNI_S3_SECRET_ACCESS_KEY")
+AWS_STORAGE_BUCKET_NAME = os.getenv("BUCKET")
+AWS_S3_ENDPOINT_URL = os.getenv("SUPABASE_STORAGRE")
+AWS_S3_FILE_OVERWRITE = True
+AWS_DEFAULT_ACL = None
+AWS_QUERYSTRING_AUTH = False
 
 ROOT_URLCONF = 'forni_backend.urls'
 
