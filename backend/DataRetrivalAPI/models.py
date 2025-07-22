@@ -1,29 +1,32 @@
 from django.db import models
-from urllib.parse import quote
+from django.utils.text import slugify
+import os
 
 # Create your models here.
 # helper functions
 def furnaces_upload_path(instance, filename):
-    # Encode both instance name and filename
-    encoded_name = quote(instance.name, safe='')
-    encoded_filename = quote(filename, safe='.')
-    return f'furnaces/{encoded_name}/{encoded_filename}'
+    safe_name = slugify(instance.name)
+    name, ext = os.path.splitext(filename)
+    safe_filename = slugify(name) + ext
+    return f'furnaces/{safe_name}/{safe_filename}'
 
 def additional_furnace_image_path(instance, filename):
-    encoded_name = quote(instance.product.name, safe='')
-    encoded_filename = quote(filename, safe='.')
-    return f'furnaces/{encoded_name}/gallery/{encoded_filename}'
+    safe_name = slugify(instance.product.name)
+    name, ext = os.path.splitext(filename)
+    safe_filename = slugify(name) + ext
+    return f'furnaces/{safe_name}/gallery/{safe_filename}'
 
 def services_upload_path(instance, filename):
-    # Encode both instance name and filename
-    encoded_name = quote(instance.name, safe='')
-    encoded_filename = quote(filename, safe='.')
-    return f'services/{encoded_name}/{encoded_filename}'
+    safe_name = slugify(instance.name)
+    name, ext = os.path.splitext(filename)
+    safe_filename = slugify(name) + ext
+    return f'services/{safe_name}/{safe_filename}'
 
 def additional_service_image_path(instance, filename):
-    encoded_name = quote(instance.service.name, safe='')
-    encoded_filename = quote(filename, safe='.')
-    return f'services/{encoded_name}/gallery/{encoded_filename}'
+    safe_name = slugify(instance.service.name)
+    name, ext = os.path.splitext(filename)
+    safe_filename = slugify(name) + ext
+    return f'services/{safe_name}/gallery/{safe_filename}'
 
 class Furnaces(models.Model):
     f_id = models.AutoField(primary_key=True, unique=True)
