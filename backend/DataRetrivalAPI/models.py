@@ -1,19 +1,29 @@
 from django.db import models
+from urllib.parse import quote
+
 # Create your models here.
 # helper functions
 def furnaces_upload_path(instance, filename):
-    # Customize the upload path as needed
-    return f'furnaces/{instance.name}/{filename}'
+    # Encode both instance name and filename
+    encoded_name = quote(instance.name, safe='')
+    encoded_filename = quote(filename, safe='.')
+    return f'furnaces/{encoded_name}/{encoded_filename}'
 
 def additional_furnace_image_path(instance, filename):
-    return f'furnaces/{instance.product.name}/gallery/{filename}'
+    encoded_name = quote(instance.product.name, safe='')
+    encoded_filename = quote(filename, safe='.')
+    return f'furnaces/{encoded_name}/gallery/{encoded_filename}'
 
 def services_upload_path(instance, filename):
-    # Customize the upload path as needed
-    return f'services/{instance.name}/{filename}'
+    # Encode both instance name and filename
+    encoded_name = quote(instance.name, safe='')
+    encoded_filename = quote(filename, safe='.')
+    return f'services/{encoded_name}/{encoded_filename}'
 
 def additional_service_image_path(instance, filename):
-    return f'services/{instance.service.name}/gallery/{filename}'
+    encoded_name = quote(instance.service.name, safe='')
+    encoded_filename = quote(filename, safe='.')
+    return f'services/{encoded_name}/gallery/{encoded_filename}'
 
 class Furnaces(models.Model):
     f_id = models.AutoField(primary_key=True, unique=True)
