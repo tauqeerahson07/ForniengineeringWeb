@@ -13,6 +13,7 @@ class FurnacesAdmin(admin.ModelAdmin):
     inlines = [ImagesInline]
     list_display = ('name', 'f_id')  # Optional: show more fields in list view
 
+
 class ServiceImageInline(admin.TabularInline):
     model = ServiceImages
     extra = 1

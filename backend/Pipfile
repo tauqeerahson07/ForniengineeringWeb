@@ -6,6 +6,10 @@ name = "pypi"
 [packages]
 django = "*"
 djangorestframework = "*"
+dj-database-url = "*"
+decouple = "*"
+boto3 = "*"
+python-decouple = "*"
 
 [dev-packages]
 
