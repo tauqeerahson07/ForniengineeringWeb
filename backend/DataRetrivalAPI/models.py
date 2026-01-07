@@ -72,12 +72,12 @@ class ServiceImages(models.Model):
     def __str__(self):
         return f"Image for {self.service.name}"
 
-# Signal to delete images from S3 when a FurnaceImages instance is deleted
-@receiver(post_delete, sender=FurnaceImages)
-def delete_furnace_image_from_s3(sender, instance, **kwargs):
-    if instance.image:
-        s3 = boto3.client('s3')
-        s3.delete_object(Bucket=bucket_name, Key=instance.image.name)
+# # Signal to delete images from S3 when a FurnaceImages instance is deleted
+# @receiver(post_delete, sender=FurnaceImages)
+# def delete_furnace_image_from_s3(sender, instance, **kwargs):
+#     if instance.image:
+#         s3 = boto3.client('s3')
+#         s3.delete_object(Bucket=bucket_name, Key=instance.image.name)
 
 # Signal to delete the cover image from S3 when a Furnaces instance is deleted
 @receiver(post_delete, sender=Furnaces)
