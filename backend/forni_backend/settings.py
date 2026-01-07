@@ -51,7 +51,9 @@ INSTALLED_APPS = [
     # To connect with frontend:
     'corsheaders',
 ]
-CKEDITOR_5_UPLOADS_PATH = "uploads/"
+
+CKEDITOR_5_UPLOAD_PATH = "uploads/"
+
 
 CKEDITOR_5_CONFIGS = {
     "default": {
