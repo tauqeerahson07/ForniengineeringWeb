@@ -52,7 +52,7 @@ INSTALLED_APPS = [
     'corsheaders',
 ]
 
-CKEDITOR_5_UPLOAD_PATH = "uploads/"
+# CKEDITOR_5_UPLOAD_PATH = "uploads/"
 
 
 CKEDITOR_5_CONFIGS = {
