@@ -50,26 +50,26 @@ class Furnaces(models.Model):
     def delete(self, *args, **kwargs):
         if self.cover_image:
             self.cover_image.delete(save=False)
+            safe_name = slugify(self.name)
             client = boto3.client('s3')
-            prefix = f'furnaces/{slugify(self.name)}/'
-            # List all objects with the given prefix
-            response = client.list_objects_v2(Bucket=bucket_name, Prefix=prefix)
-            if 'Contents' in response:
-                for obj in response['Contents']:
-                    client.delete_object(Bucket=bucket_name, Key=obj['Key'])
+            prefix = f'furnaces/{safe_name}/'
+            client.delete_object(Bucket=bucket_name, Key=prefix)
+            # # List all objects with the given prefix
+            # response = client.list_objects_v2(Bucket=bucket_name, Prefix=prefix)
+            # if 'Contents' in response:
+            #     for obj in response['Contents']:
+            #         client.delete_object(Bucket=bucket_name, Key=obj['Key'])
 
         # also delete gallery images
-        for img in self.gallery_images.all():
-            img.delete()
-            client = boto3.client('s3')
-            prefix = f'services/{slugify(self.name)}/gallery/'
-            # List all objects with the given prefix
-            response = client.list_objects_v2(Bucket=bucket_name, Prefix=prefix)
-            if 'Contents' in response:
-                for obj in response['Contents']:
-                    client.delete_object(Bucket=bucket_name, Key=obj['Key'])
-
-
+        # for img in self.gallery_images.all():
+        #     img.delete()
+        #     client = boto3.client('s3')
+        #     prefix = f'services/{slugify(self.name)}/gallery/'
+        #     # List all objects with the given prefix
+        #     response = client.list_objects_v2(Bucket=bucket_name, Prefix=prefix)
+        #     if 'Contents' in response:
+        #         for obj in response['Contents']:
+        #             client.delete_object(Bucket=bucket_name, Key=obj['Key'])
         super().delete(*args, **kwargs)
 
 class FurnaceImages(models.Model):
@@ -93,16 +93,6 @@ class Services(models.Model):
     description = models.TextField()    
     def __str__(self):
         return f"{self.name} ({self.cover_image.url if self.cover_image else 'No Image'})"
-    
-    def delete(self, *args, **kwargs):
-        if self.cover_image:
-            self.cover_image.delete(save=False)
-
-        # also delete gallery images
-        for img in self.gallery_images.all():
-            img.delete()
-
-        super().delete(*args, **kwargs)
 
 class ServiceImages(models.Model):
     image_id = models.AutoField(primary_key=True, unique=True)
@@ -111,8 +101,3 @@ class ServiceImages(models.Model):
 
     def __str__(self):
         return f"Image for {self.service.name}"
-    
-    def delete(self, *args, **kwargs):
-        if self.image:
-            self.image.delete(save=False)
-        super().delete(*args, **kwargs)
