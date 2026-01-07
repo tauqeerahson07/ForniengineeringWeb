@@ -47,9 +47,22 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'DataRetrivalAPI',
+    "django_ckeditor_5",
     # To connect with frontend:
     'corsheaders',
 ]
+CKEDITOR_5_UPLOADS_PATH = "uploads/"
+
+CKEDITOR_5_CONFIGS = {
+    "default": {
+        "toolbar": [
+            "bold", "italic", "link", "bulletedList", "numberedList",
+            "blockQuote", "undo", "redo"
+        ],
+        "height": "400px",
+        "width": "100%",
+    }
+}
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',  # Move CORS to top

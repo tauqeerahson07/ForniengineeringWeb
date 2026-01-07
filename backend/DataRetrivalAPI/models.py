@@ -1,4 +1,5 @@
 from django.db import models
+from django_ckeditor_5.fields import CKEditor5Field
 from django.utils.text import slugify
 import os
 from django.dispatch import receiver
@@ -38,9 +39,9 @@ class Furnaces(models.Model):
     f_id = models.AutoField(primary_key=True, unique=True)
     cover_image = models.FileField(upload_to=furnaces_upload_path)
     name = models.CharField(max_length=1000)
-    feature= models.CharField(max_length=1000)   
-    specification =models.TextField(max_length=2000)
-    
+    feature= CKEditor5Field("Text", config_name="default")
+    specification = CKEditor5Field("Text", config_name="default")
+
     def __str__(self):
         return f"{self.name} ({self.cover_image.url if self.cover_image else 'No Image'})"
 
@@ -55,8 +56,8 @@ class FurnaceImages(models.Model):
 class Services(models.Model):
     s_id = models.AutoField(primary_key=True, unique=True)
     cover_image = models.FileField(upload_to=services_upload_path)
-    name = models.CharField(max_length=1000)
-    description= models.TextField(max_length=1000)   
+    name = models.TextField()
+    description= CKEditor5Field("Text", config_name="default")
     
     def __str__(self):
         return f"{self.name} ({self.cover_image.url if self.cover_image else 'No Image'})"

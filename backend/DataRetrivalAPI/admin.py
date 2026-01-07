@@ -11,7 +11,7 @@ class ImagesInline(admin.TabularInline):  # You can also use admin.StackedInline
 # Custom admin for Furnaces to include gallery images
 class FurnacesAdmin(admin.ModelAdmin):
     inlines = [ImagesInline]
-    list_display = ('name', 'f_id')  # Optional: show more fields in list view
+    list_display = ('name', 'f_id','feature','specification','cover_image')  # Optional: show more fields in list view
 
 
 class ServiceImageInline(admin.TabularInline):
@@ -20,7 +20,7 @@ class ServiceImageInline(admin.TabularInline):
 
 class ServicesAdmin(admin.ModelAdmin):
     inlines = [ServiceImageInline]
-    list_display = ('name','s_id')
+    list_display = ('name','s_id','description','cover_image')
 
 admin.site.register(Furnaces,FurnacesAdmin)
 admin.site.register(Services,ServicesAdmin)
