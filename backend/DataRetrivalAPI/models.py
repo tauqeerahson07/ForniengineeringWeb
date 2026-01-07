@@ -39,8 +39,10 @@ class Furnaces(models.Model):
     f_id = models.AutoField(primary_key=True, unique=True)
     cover_image = models.FileField(upload_to=furnaces_upload_path)
     name = models.CharField(max_length=1000)
-    feature= CKEditor5Field("Text", config_name="default")
-    specification = CKEditor5Field("Text", config_name="default")
+    # feature= CKEditor5Field("Text", config_name="default")
+    feature = models.TextField()
+    # specification = CKEditor5Field("Text", config_name="default")
+    specification = models.TextField()
 
     def __str__(self):
         return f"{self.name} ({self.cover_image.url if self.cover_image else 'No Image'})"
@@ -57,8 +59,8 @@ class Services(models.Model):
     s_id = models.AutoField(primary_key=True, unique=True)
     cover_image = models.FileField(upload_to=services_upload_path)
     name = models.TextField()
-    description= CKEditor5Field("Text", config_name="default")
-    
+    # description= CKEditor5Field("Text", config_name="default")
+    description = models.TextField()    
     def __str__(self):
         return f"{self.name} ({self.cover_image.url if self.cover_image else 'No Image'})"
 
