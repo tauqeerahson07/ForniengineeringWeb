@@ -50,10 +50,25 @@ class Furnaces(models.Model):
     def delete(self, *args, **kwargs):
         if self.cover_image:
             self.cover_image.delete(save=False)
+            client = boto3.client('s3')
+            prefix = f'furnaces/{slugify(self.name)}/'
+            # List all objects with the given prefix
+            response = client.list_objects_v2(Bucket=bucket_name, Prefix=prefix)
+            if 'Contents' in response:
+                for obj in response['Contents']:
+                    client.delete_object(Bucket=bucket_name, Key=obj['Key'])
 
         # also delete gallery images
         for img in self.gallery_images.all():
             img.delete()
+            client = boto3.client('s3')
+            prefix = f'services/{slugify(self.name)}/gallery/'
+            # List all objects with the given prefix
+            response = client.list_objects_v2(Bucket=bucket_name, Prefix=prefix)
+            if 'Contents' in response:
+                for obj in response['Contents']:
+                    client.delete_object(Bucket=bucket_name, Key=obj['Key'])
+
 
         super().delete(*args, **kwargs)
 
