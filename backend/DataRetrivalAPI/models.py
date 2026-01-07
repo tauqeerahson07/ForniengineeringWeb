@@ -46,6 +46,16 @@ class Furnaces(models.Model):
 
     def __str__(self):
         return f"{self.name} ({self.cover_image.url if self.cover_image else 'No Image'})"
+    
+    def delete(self, *args, **kwargs):
+        if self.cover_image:
+            self.cover_image.delete(save=False)
+
+        # also delete gallery images
+        for img in self.gallery_images.all():
+            img.delete()
+
+        super().delete(*args, **kwargs)
 
 class FurnaceImages(models.Model):
     image_id = models.AutoField(primary_key=True, unique=True)
@@ -55,6 +65,11 @@ class FurnaceImages(models.Model):
     def __str__(self):
         return f"Image for {self.product.name}"
     
+    def delete(self, *args, **kwargs):
+        if self.image:
+            self.image.delete(save=False)
+        super().delete(*args, **kwargs)
+    
 class Services(models.Model):
     s_id = models.AutoField(primary_key=True, unique=True)
     cover_image = models.FileField(upload_to=services_upload_path)
@@ -63,6 +78,16 @@ class Services(models.Model):
     description = models.TextField()    
     def __str__(self):
         return f"{self.name} ({self.cover_image.url if self.cover_image else 'No Image'})"
+    
+    def delete(self, *args, **kwargs):
+        if self.cover_image:
+            self.cover_image.delete(save=False)
+
+        # also delete gallery images
+        for img in self.gallery_images.all():
+            img.delete()
+
+        super().delete(*args, **kwargs)
 
 class ServiceImages(models.Model):
     image_id = models.AutoField(primary_key=True, unique=True)
@@ -71,32 +96,8 @@ class ServiceImages(models.Model):
 
     def __str__(self):
         return f"Image for {self.service.name}"
-
-# # Signal to delete images from S3 when a FurnaceImages instance is deleted
-# @receiver(post_delete, sender=FurnaceImages)
-# def delete_furnace_image_from_s3(sender, instance, **kwargs):
-#     if instance.image:
-#         s3 = boto3.client('s3')
-#         s3.delete_object(Bucket=bucket_name, Key=instance.image.name)
-
-# Signal to delete the cover image from S3 when a Furnaces instance is deleted
-@receiver(post_delete, sender=Furnaces)
-def delete_furnace_cover_image_from_s3(sender, instance, **kwargs):
-    if instance.cover_image:
-        s3 = boto3.client('s3')
-        s3.delete_object(Bucket=bucket_name, Key=instance.cover_image.name)
-
-# Signal to delete images from S3 when a ServiceImages instance is deleted
-@receiver(post_delete, sender=ServiceImages)
-def delete_service_image_from_s3(sender, instance, **kwargs):
-    if instance.image:
-        s3 = boto3.client('s3')
-        s3.delete_object(Bucket=bucket_name, Key=instance.image.name)
-
-# Signal to delete the cover image from S3 when a Services instance is deleted
-@receiver(post_delete, sender=Services)
-def delete_service_cover_image_from_s3(sender, instance, **kwargs):
-    if instance.cover_image:
-        s3 = boto3.client('s3')
-        s3.delete_object(Bucket=bucket_name, Key=instance.cover_image.name)
-
+    
+    def delete(self, *args, **kwargs):
+        if self.image:
+            self.image.delete(save=False)
+        super().delete(*args, **kwargs)
