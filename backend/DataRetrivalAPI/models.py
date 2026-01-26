@@ -51,7 +51,7 @@ class Furnaces(models.Model):
         # Delete the associated cover image from S3 when the object is deleted
         if self.cover_image:
             s3 = boto3.client('s3')
-            s3_key = self.cover_image.name
+            s3_key = self.name
             s3.delete_object(Bucket=bucket_name, Key=s3_key)
     
 
@@ -62,14 +62,6 @@ class FurnaceImages(models.Model):
 
     def __str__(self):
         return f"Image for {self.product.name}"
-    
-    def __del__(self):
-        # Delete the associated image from S3 when the object is deleted
-        if self.image:
-            s3 = boto3.client('s3')
-            for image in FurnaceImages.objects.filter(product=self.product):
-                s3_key = image.image.name
-                s3.delete_object(Bucket=bucket_name, Key=s3_key)
     
 class Services(models.Model):
     s_id = models.AutoField(primary_key=True, unique=True)
