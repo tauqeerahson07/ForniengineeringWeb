@@ -54,7 +54,8 @@ class Furnaces(models.Model):
     
     def delete(self, *args, **kwargs):
         if self.name:
-            folder_path = f"furnaces/{self.name}/"
+            safe_name = slugify(self.name)
+            folder_path = f"furnaces/{safe_name}/"
             response = supabase.storage.from_(bucket_name).remove([folder_path])
         super().delete(*args, **kwargs)
         
