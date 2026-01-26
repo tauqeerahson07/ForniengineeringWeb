@@ -10,11 +10,13 @@ from supabase import create_client
 load_dotenv()
 
 bucket_name = os.getenv("BUCKET")
-SUPABASE_URL = os.getenv("SUPABASE_STORAGRE").replace("/s3", "")  # Remove "/s3" from the endpoint
+SUPABASE_URL = os.getenv("SUPABASE_STORAGE").replace("/storage", "")  # Remove "/storage" from the endpoint
+print(f"SUPABASE_URL: {SUPABASE_URL}")
 SUPABASE_KEY = os.getenv("ANNON_KEY")
-supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
+supabase = create_client()
 # Create your models here.
 # helper functions
+
 def furnaces_upload_path(instance, filename):
     safe_name = slugify(instance.name)
     name, ext = os.path.splitext(filename)
