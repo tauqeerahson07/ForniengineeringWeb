@@ -47,13 +47,20 @@ class Furnaces(models.Model):
     def __str__(self):
         return f"{self.name} ({self.cover_image.url if self.cover_image else 'No Image'})"
     
-    def __del__(self):
-        # Delete the associated cover image from S3 when the object is deleted
+    def delete(self, *args, **kwargs):
         if self.cover_image:
-            s3 = boto3.client('s3')
-            s3_key = self.name
-            s3.delete_object(Bucket=bucket_name, Key=s3_key)
-    
+            self.cover_image.delete(save=False)  # Delete the cover image file from S3
+            safe_name = slugify(self.name)
+            client = boto3.client('s3')
+
+            # Delete all objects under the prefix (e.g., gallery images)
+            prefix = f'furnaces/{safe_name}/'
+            response = client.list_objects_v2(Bucket=bucket_name, Prefix=prefix)
+            if 'Contents' in response:
+                for obj in response['Contents']:
+                    client.delete_object(Bucket=bucket_name, Key=obj['Key'])
+
+        super().delete(*args, **kwargs)  # Delete the database record
 
 class FurnaceImages(models.Model):
     image_id = models.AutoField(primary_key=True, unique=True)
