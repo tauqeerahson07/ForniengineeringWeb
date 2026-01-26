@@ -10,7 +10,7 @@ from supabase import create_client
 load_dotenv()
 
 bucket_name = os.getenv("BUCKET")
-SUPABASE_URL = os.getenv("SUPABASE_STORAGE").split("/storage")[0]  # Remove "/storage" from the endpoint
+SUPABASE_URL = os.getenv("SUPABASE_STORAGRE").split("/storage")[0]  # Remove "/storage" from the endpoint
 print(f"SUPABASE_URL: {SUPABASE_URL}")
 SUPABASE_KEY = os.getenv("ANNON_KEY")
 supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
