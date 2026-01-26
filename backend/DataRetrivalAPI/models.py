@@ -47,30 +47,13 @@ class Furnaces(models.Model):
     def __str__(self):
         return f"{self.name} ({self.cover_image.url if self.cover_image else 'No Image'})"
     
-    def delete(self, *args, **kwargs):
+    def __del__(self):
+        # Delete the associated cover image from S3 when the object is deleted
         if self.cover_image:
-            self.cover_image.delete(save=False)
-            safe_name = slugify(self.name)
-            client = boto3.client('s3')
-            prefix = f'furnaces/{safe_name}/'
-            client.delete_object(Bucket=bucket_name, Key=prefix)
-            # # List all objects with the given prefix
-            # response = client.list_objects_v2(Bucket=bucket_name, Prefix=prefix)
-            # if 'Contents' in response:
-            #     for obj in response['Contents']:
-            #         client.delete_object(Bucket=bucket_name, Key=obj['Key'])
-
-        # also delete gallery images
-        # for img in self.gallery_images.all():
-        #     img.delete()
-        #     client = boto3.client('s3')
-        #     prefix = f'services/{slugify(self.name)}/gallery/'
-        #     # List all objects with the given prefix
-        #     response = client.list_objects_v2(Bucket=bucket_name, Prefix=prefix)
-        #     if 'Contents' in response:
-        #         for obj in response['Contents']:
-        #             client.delete_object(Bucket=bucket_name, Key=obj['Key'])
-        super().delete(*args, **kwargs)
+            s3 = boto3.client('s3')
+            s3_key = self.cover_image.name
+            s3.delete_object(Bucket=bucket_name, Key=s3_key)
+    
 
 class FurnaceImages(models.Model):
     image_id = models.AutoField(primary_key=True, unique=True)
@@ -80,10 +63,13 @@ class FurnaceImages(models.Model):
     def __str__(self):
         return f"Image for {self.product.name}"
     
-    def delete(self, *args, **kwargs):
+    def __del__(self):
+        # Delete the associated image from S3 when the object is deleted
         if self.image:
-            self.image.delete(save=False)
-        super().delete(*args, **kwargs)
+            s3 = boto3.client('s3')
+            for image in FurnaceImages.objects.filter(product=self.product):
+                s3_key = image.image.name
+                s3.delete_object(Bucket=bucket_name, Key=s3_key)
     
 class Services(models.Model):
     s_id = models.AutoField(primary_key=True, unique=True)
@@ -93,6 +79,7 @@ class Services(models.Model):
     description = models.TextField()    
     def __str__(self):
         return f"{self.name} ({self.cover_image.url if self.cover_image else 'No Image'})"
+    
 
 class ServiceImages(models.Model):
     image_id = models.AutoField(primary_key=True, unique=True)
