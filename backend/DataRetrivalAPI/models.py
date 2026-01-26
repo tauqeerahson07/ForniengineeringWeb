@@ -11,7 +11,7 @@ load_dotenv()
 
 bucket_name = os.getenv("BUCKET")
 SUPABASE_URL = os.getenv("SUPABASE_STORAGRE").split("/storage")[0]  # Remove "/storage" from the endpoint
-SUPABASE_KEY = os.getenv("ANNON_KEY")
+SUPABASE_KEY = os.getenv("SERVICE_ROLE_KEY")
 supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 # Create your models here.
 # helper functions
@@ -56,14 +56,20 @@ class Furnaces(models.Model):
         if self.name:
             safe_name = slugify(self.name)
             folder_path = f"furnaces/{safe_name}/"
-            
-            # List all files in the folder
-            response = supabase.storage.from_(bucket_name).list(folder_path)
-            if response:
-                file_paths = [f"{folder_path}{file['name']}" for file in response]
-                # Remove all files in the folder
-                supabase.storage.from_(bucket_name).remove(file_paths)
-        
+            gallery_path = f"{folder_path}gallery/"
+
+            # List and delete files in the gallery folder
+            gallery_response = supabase.storage.from_(bucket_name).list(gallery_path)
+            if gallery_response:
+                gallery_files = [f"{gallery_path}{file['name']}" for file in gallery_response]
+                supabase.storage.from_(bucket_name).remove(gallery_files)
+
+            # List and delete files in the main folder (excluding gallery)
+            main_response = supabase.storage.from_(bucket_name).list(folder_path)
+            if main_response:
+                main_files = [f"{folder_path}{file['name']}" for file in main_response]
+                supabase.storage.from_(bucket_name).remove(main_files)
+
         super().delete(*args, **kwargs)
         
 class FurnaceImages(models.Model):
