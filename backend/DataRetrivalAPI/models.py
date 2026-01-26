@@ -6,9 +6,13 @@ from django.dispatch import receiver
 from django.db.models.signals import post_delete
 import boto3
 from dotenv import load_dotenv
+from supabase import create_client
 load_dotenv()
 
 bucket_name = os.getenv("BUCKET")
+SUPABASE_URL = os.getenv("SUPABASE_STORAGRE").replace("/s3", "")  # Remove "/s3" from the endpoint
+SUPABASE_KEY = os.getenv("ANNON_KEY")
+supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 # Create your models here.
 # helper functions
 def furnaces_upload_path(instance, filename):
@@ -48,20 +52,11 @@ class Furnaces(models.Model):
         return f"{self.name} ({self.cover_image.url if self.cover_image else 'No Image'})"
     
     def delete(self, *args, **kwargs):
-        if self.cover_image:
-            self.cover_image.delete(save=False)  # Delete the cover image file from S3
-            safe_name = slugify(self.name)
-            client = boto3.client('s3')
-
-            # Delete all objects under the prefix (e.g., gallery images)
-            prefix = f'furnaces/{safe_name}/'
-            response = client.list_objects_v2(Bucket=bucket_name, Prefix=prefix)
-            if 'Contents' in response:
-                for obj in response['Contents']:
-                    client.delete_object(Bucket=bucket_name, Key=obj['Key'])
-
-        super().delete(*args, **kwargs)  # Delete the database record
-
+        if self.name:
+            folder_path = f"furnaces/{self.name}/"
+            response = supabase.storage.from_(bucket_name).remove([folder_path])
+        super().delete(*args, **kwargs)
+        
 class FurnaceImages(models.Model):
     image_id = models.AutoField(primary_key=True, unique=True)
     product = models.ForeignKey(Furnaces, related_name='gallery_images', on_delete=models.CASCADE)
