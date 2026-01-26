@@ -56,7 +56,14 @@ class Furnaces(models.Model):
         if self.name:
             safe_name = slugify(self.name)
             folder_path = f"furnaces/{safe_name}/"
-            response = supabase.storage.from_(bucket_name).remove([folder_path])
+            
+            # List all files in the folder
+            response = supabase.storage.from_(bucket_name).list(folder_path)
+            if response:
+                file_paths = [f"{folder_path}{file['name']}" for file in response]
+                # Remove all files in the folder
+                supabase.storage.from_(bucket_name).remove(file_paths)
+        
         super().delete(*args, **kwargs)
         
 class FurnaceImages(models.Model):
