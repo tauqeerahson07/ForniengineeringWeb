@@ -12,6 +12,27 @@ SUPABASE_URL = os.getenv("SUPABASE_STORAGRE").split("/storage")[0]
 SUPABASE_KEY = os.getenv("SERVICE_ROLE_KEY")
 supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 
+# Helper function to delete folder from Supabase Storage
+def delete_supabase_folder(bucket, prefix):
+    try:
+        files = supabase.storage.from_(bucket).list(prefix)
+
+        if not files:
+            return
+
+        paths = []
+
+        for f in files:
+            if f.get("name"):
+                paths.append(f"{prefix}/{f['name']}")
+
+        if paths:
+            supabase.storage.from_(bucket).remove(paths)
+
+    except Exception as e:
+        print(f"Supabase folder delete error: {e}")
+
+
 # Register your models here.
 # Inline class to handle gallery images
 class ImagesInline(admin.TabularInline):  # You can also use admin.StackedInline for a vertical layout
@@ -26,23 +47,16 @@ class FurnacesAdmin(admin.ModelAdmin):
     
     def delete_model(self, request, obj):
         folder_path = f"furnaces/{slugify(obj.name)}"
-
-        try:
-            supabase.storage.from_(bucket_name).remove([folder_path])
-        except Exception as e:
-            print(f"Supabase delete error: {e}")
-
+        delete_supabase_folder(bucket_name, folder_path)
         super().delete_model(request, obj)
+
 
     def delete_queryset(self, request, queryset):
         for obj in queryset:
             folder_path = f"furnaces/{slugify(obj.name)}"
-            try:
-                supabase.storage.from_(bucket_name).remove([folder_path])
-            except Exception as e:
-                print(f"Supabase delete error: {e}")
-
+            delete_supabase_folder(bucket_name, folder_path)
         super().delete_queryset(request, queryset)
+
 
 
 class ServiceImageInline(admin.TabularInline):
@@ -55,23 +69,16 @@ class ServicesAdmin(admin.ModelAdmin):
     
     def delete_model(self, request, obj):
         folder_path = f"services/{slugify(obj.name)}"
-
-        try:
-            supabase.storage.from_(bucket_name).remove([folder_path])
-        except Exception as e:
-            print(f"Supabase delete error: {e}")
-
+        delete_supabase_folder(bucket_name, folder_path)
         super().delete_model(request, obj)
+
 
     def delete_queryset(self, request, queryset):
         for obj in queryset:
             folder_path = f"services/{slugify(obj.name)}"
-            try:
-                supabase.storage.from_(bucket_name).remove([folder_path])
-            except Exception as e:
-                print(f"Supabase delete error: {e}")
-
+            delete_supabase_folder(bucket_name, folder_path)
         super().delete_queryset(request, queryset)
+
 
 admin.site.register(Furnaces,FurnacesAdmin)
 admin.site.register(Services,ServicesAdmin)
