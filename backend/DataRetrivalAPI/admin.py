@@ -45,10 +45,10 @@ class FurnacesAdmin(admin.ModelAdmin):
     inlines = [ImagesInline]
     list_display = ('name', 'f_id')  # Optional: show more fields in list view
     
-    def delete_model(self, request, obj):
-        folder_path = f"furnaces/{slugify(obj.name)}"
-        delete_supabase_folder(bucket_name, folder_path)
-        super().delete_model(request, obj)
+    # def delete_model(self, request, obj):
+    #     folder_path = f"furnaces/{slugify(obj.name)}"
+    #     delete_supabase_folder(bucket_name, folder_path)
+    #     super().delete_model(request, obj)
 
 
     def delete_queryset(self, request, queryset):
