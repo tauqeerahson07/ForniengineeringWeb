@@ -15,22 +15,28 @@ supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 # Helper function to delete folder from Supabase Storage
 def delete_supabase_folder(bucket, prefix):
     try:
-        files = supabase.storage.from_(bucket).list(prefix)
+        stack = [prefix]
 
-        if not files:
-            return
+        while stack:
+            current = stack.pop()
+            items = supabase.storage.from_(bucket).list(current)
 
-        paths = []
+            files_to_delete = []
 
-        for f in files:
-            if f.get("name"):
-                paths.append(f"{prefix}/{f['name']}")
+            for item in items:
+                name = item["name"]
+                full_path = f"{current}/{name}"
 
-        if paths:
-            supabase.storage.from_(bucket).remove(paths)
+                if item.get("metadata"):  # file
+                    files_to_delete.append(full_path)
+                else:  # folder
+                    stack.append(full_path)
+
+            if files_to_delete:
+                supabase.storage.from_(bucket).remove(files_to_delete)
 
     except Exception as e:
-        print(f"Supabase folder delete error: {e}")
+        print("Supabase recursive delete error:", e)
 
 
 # Register your models here.
