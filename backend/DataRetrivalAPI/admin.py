@@ -8,7 +8,7 @@ load_dotenv()
 
 
 bucket_name = os.getenv("BUCKET")
-SUPABASE_URL = os.getenv("SUPABASE_STORAGRE").split("/storage")[0]
+SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_KEY = os.getenv("SERVICE_ROLE_KEY")
 supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 
