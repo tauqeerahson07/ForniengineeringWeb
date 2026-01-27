@@ -2,17 +2,12 @@ from django.db import models
 from django_ckeditor_5.fields import CKEditor5Field
 from django.utils.text import slugify
 import os
-from django.dispatch import receiver
-from django.db.models.signals import post_delete
 import boto3
 from dotenv import load_dotenv
-from supabase import create_client
+
 load_dotenv()
 
 bucket_name = os.getenv("BUCKET")
-SUPABASE_URL = os.getenv("SUPABASE_STORAGRE").split("/storage")[0]  # Remove "/storage" from the endpoint
-SUPABASE_KEY = os.getenv("SERVICE_ROLE_KEY")
-supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 # Create your models here.
 
 # helper functions
@@ -81,23 +76,3 @@ class ServiceImages(models.Model):
     def __str__(self):
         return f"Image for {self.service.name}"
     
-
-# Signal for deleting files from Supabase Storage when a Furnace instance is deleted
-@receiver(post_delete, sender=Furnaces)
-def delete_furnace_files(sender, instance, **kwargs):
-    folder_path = f'furnaces/{slugify(instance.name)}'
-    try:
-        # Remove the folder and its contents
-        supabase.storage.from_(bucket_name).remove([folder_path])
-    except Exception as e:
-        print(f"Error deleting furnace files: {e}")
-
-# Signal for deleting files from Supabase Storage when a Service instance is deleted
-@receiver(post_delete, sender=Services)
-def delete_service_files(sender, instance, **kwargs):
-    folder_path = f'services/{slugify(instance.name)}'
-    try:
-        # Remove the folder and its contents
-        supabase.storage.from_(bucket_name).remove([folder_path])
-    except Exception as e:
-        print(f"Error deleting service files: {e}")
