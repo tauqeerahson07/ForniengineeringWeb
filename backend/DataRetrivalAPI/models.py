@@ -14,6 +14,7 @@ SUPABASE_URL = os.getenv("SUPABASE_STORAGRE").split("/storage")[0]  # Remove "/s
 SUPABASE_KEY = os.getenv("SERVICE_ROLE_KEY")
 supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 # Create your models here.
+
 # helper functions
 
 def furnaces_upload_path(instance, filename):
@@ -40,6 +41,8 @@ def additional_service_image_path(instance, filename):
     safe_filename = slugify(name) + ext
     return f'services/{safe_name}/gallery/{safe_filename}'
 
+    
+
 class Furnaces(models.Model):
     f_id = models.AutoField(primary_key=True, unique=True)
     cover_image = models.FileField(upload_to=furnaces_upload_path)
@@ -51,26 +54,6 @@ class Furnaces(models.Model):
 
     def __str__(self):
         return f"{self.name} ({self.cover_image.url if self.cover_image else 'No Image'})"
-    
-    def delete(self, *args, **kwargs):
-        if self.name:
-            safe_name = slugify(self.name)
-            folder_path = f"furnaces/{safe_name}/"
-            gallery_path = f"{folder_path}gallery/"
-
-            # List and delete files in the gallery folder
-            gallery_response = supabase.storage.from_(bucket_name).list(gallery_path)
-            if gallery_response:
-                gallery_files = [f"{gallery_path}{file['name']}" for file in gallery_response]
-                supabase.storage.from_(bucket_name).remove(gallery_files)
-
-            # List and delete files in the main folder (excluding gallery)
-            main_response = supabase.storage.from_(bucket_name).list(folder_path)
-            if main_response:
-                main_files = [f"{folder_path}{file['name']}" for file in main_response]
-                supabase.storage.from_(bucket_name).remove(main_files)
-
-        super().delete(*args, **kwargs)
         
 class FurnaceImages(models.Model):
     image_id = models.AutoField(primary_key=True, unique=True)
@@ -97,3 +80,24 @@ class ServiceImages(models.Model):
 
     def __str__(self):
         return f"Image for {self.service.name}"
+    
+
+# Signal for deleting files from Supabase Storage when a Furnace instance is deleted
+@receiver(post_delete, sender=Furnaces)
+def delete_furnace_files(sender, instance, **kwargs):
+    folder_path = f'furnaces/{slugify(instance.name)}'
+    try:
+        # Remove the folder and its contents
+        supabase.storage.from_(bucket_name).remove([folder_path])
+    except Exception as e:
+        print(f"Error deleting furnace files: {e}")
+
+# Signal for deleting files from Supabase Storage when a Service instance is deleted
+@receiver(post_delete, sender=Services)
+def delete_service_files(sender, instance, **kwargs):
+    folder_path = f'services/{slugify(instance.name)}'
+    try:
+        # Remove the folder and its contents
+        supabase.storage.from_(bucket_name).remove([folder_path])
+    except Exception as e:
+        print(f"Error deleting service files: {e}")
