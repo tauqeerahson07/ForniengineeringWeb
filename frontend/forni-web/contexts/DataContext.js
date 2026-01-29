@@ -73,8 +73,6 @@ export function DataContextProvider({children, initialData = null}) {
                     return;
                 }
             }
-
-            console.log('🔗 Fetching fresh data from:', BACKEND_URL);
             
             // Parallel requests for better performance
             const [furnacesResponse, servicesResponse] = await Promise.allSettled([
@@ -118,6 +116,7 @@ export function DataContextProvider({children, initialData = null}) {
             setFurnaces(furnacesData);
             setServices(servicesData);
 
+
         } catch (err) {
             console.error('💥 Critical error in fetchData:', err);
             setError(err.message);
@@ -135,6 +134,7 @@ export function DataContextProvider({children, initialData = null}) {
         }
     }, [fetchData, initialData]);
 
+    console.log(furnaces)
     // Add data function
     const addData = useCallback((type, newItem) => {
         if (type === 'furnaces' && furnaces) {

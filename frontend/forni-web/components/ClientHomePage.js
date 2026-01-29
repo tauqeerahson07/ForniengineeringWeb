@@ -3,20 +3,38 @@ import { useContext, useState, useEffect } from "react";
 import DataContext from "@/contexts/DataContext";
 import Card from "@/components/Card";
 import Link from "next/link";
+import { getSignedUrl } from "@/lib/supabase";
 
 export default function ClientHomePage({ initialData }) {
     const { furnaces, services, loading, error } = useContext(DataContext);
     const [displayData, setDisplayData] = useState(initialData);
 
-    // Use fresh data when available, fallback to initial data
     useEffect(() => {
-        if (!loading && (furnaces !== null || services !== null)) {
+    async function fetchSignedUrls() {
+        if (!loading && (furnaces || services)) {
+            const signedFurnaces = await Promise.all(
+                (furnaces || initialData.furnaces).map(async (item) => {
+                    const signedUrl = await getSignedUrl('forni-web-images', item.cover_image);
+                    return { ...item, cover_image: signedUrl || item.cover_image };
+                })
+            );
+
+            const signedServices = await Promise.all(
+                (services || initialData.services).map(async (item) => {
+                    const signedUrl = await getSignedUrl('forni-web-images', item.cover_image);
+                    return { ...item, cover_image: signedUrl || item.cover_image };
+                })
+            );
+
             setDisplayData({
-                furnaces: furnaces || initialData.furnaces,
-                services: services || initialData.services
+                furnaces: signedFurnaces,
+                services: signedServices,
             });
         }
-    }, [furnaces, services, loading, initialData]);
+    }
+
+    fetchSignedUrls();
+}, [furnaces, services, loading, initialData]);
 
     const currentFurnaces = displayData.furnaces || [];
     const currentServices = displayData.services || [];

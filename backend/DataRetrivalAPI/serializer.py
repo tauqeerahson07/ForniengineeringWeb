@@ -9,11 +9,21 @@ class FurnaceImagesSerializer(serializers.ModelSerializer):
 
 
 class FurnacesSerializer(serializers.ModelSerializer):
-    gallery_images = FurnaceImagesSerializer(many=True, read_only=True)
+    # Override the cover_image field to return only the relative path
+    cover_image = serializers.SerializerMethodField()
+
     class Meta:
         model = Furnaces
-        fields = ['cover_image', 'name', 'feature', 'specification','gallery_images']
-        
+        fields = '__all__'  # Include all fields, or specify the fields explicitly
+
+    def get_cover_image(self, obj):
+        # Extract the relative path from the full URL
+        if obj.cover_image:
+            return obj.cover_image.name  # Returns the relative path (e.g., "furnaces/.../image.jpg")
+        return None
+
+
+
 # Serializer for the gallery images
 class ServiceImagesSerializer(serializers.ModelSerializer):
     class Meta:
@@ -22,8 +32,15 @@ class ServiceImagesSerializer(serializers.ModelSerializer):
 
 
 class ServiceSerializer(serializers.ModelSerializer):
-    gallery_images = ServiceImagesSerializer(many=True, read_only=True)
+    # Override the cover_image field to return only the relative path
+    cover_image = serializers.SerializerMethodField()
+
     class Meta:
         model = Services
-        fields = ['cover_image', 'name','description','gallery_images']
-        
+        fields = '__all__'  # Include all fields, or specify the fields explicitly
+
+    def get_cover_image(self, obj):
+        # Extract the relative path from the full URL
+        if obj.cover_image:
+            return obj.cover_image.name  # Returns the relative path (e.g., "services/.../image.jpg")
+        return None

@@ -1,5 +1,8 @@
+import { Protocol } from '@aws-sdk/client-s3';
+
 /** @type {import('next').NextConfig} */
 const backend_url = process.env.NEXT_BASE
+const supabase_domain = process.env.SUPABASSECRETHOSTNAME
 const nextConfig = {
   async rewrites() {
     return [
@@ -17,6 +20,15 @@ const nextConfig = {
         permanent: false,
       },
     ];
+  },
+  images: {
+    remotePatterns: [
+      {
+        protocol:"https",
+        hostname: supabase_domain,
+        pathname:"storage/v1/s3/**",
+      },
+    ],
   },
 };
 
