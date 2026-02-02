@@ -3,38 +3,19 @@ import { useContext, useState, useEffect } from "react";
 import DataContext from "@/contexts/DataContext";
 import Card from "@/components/Card";
 import Link from "next/link";
-import { getSignedUrl } from "@/lib/supabase";
 
 export default function ClientHomePage({ initialData }) {
-    const { furnaces, services, loading, error } = useContext(DataContext);
+    const { furnaces, services} = useContext(DataContext);
     const [displayData, setDisplayData] = useState(initialData);
 
     useEffect(() => {
-    async function fetchSignedUrls() {
-        if (!loading && (furnaces || services)) {
-            const signedFurnaces = await Promise.all(
-                (furnaces || initialData.furnaces).map(async (item) => {
-                    const signedUrl = await getSignedUrl('forni-web-images', item.cover_image);
-                    return { ...item, cover_image: signedUrl || item.cover_image };
-                })
-            );
-
-            const signedServices = await Promise.all(
-                (services || initialData.services).map(async (item) => {
-                    const signedUrl = await getSignedUrl('forni-web-images', item.cover_image);
-                    return { ...item, cover_image: signedUrl || item.cover_image };
-                })
-            );
-
+            // Update the local state as well
             setDisplayData({
-                furnaces: signedFurnaces,
-                services: signedServices,
+                furnaces: furnaces,
+                services: services,
             });
-        }
-    }
 
-    fetchSignedUrls();
-}, [furnaces, services, loading, initialData]);
+    }, [furnaces, services]);
 
     const currentFurnaces = displayData.furnaces || [];
     const currentServices = displayData.services || [];

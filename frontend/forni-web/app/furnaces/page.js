@@ -4,11 +4,14 @@ import Image from 'next/image';
 import Link from 'next/link';
 import DataContext from '@/contexts/DataContext';
 import { useRouter } from 'next/navigation';
+
 const Furnaces = () => {
   const { furnaces, loading, error } = useContext(DataContext);
+  console.log('Furnaces from DataContext:', furnaces);
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState('name');
-  const router = useRouter()
+  const router = useRouter();
+
   // Filter and sort furnaces
   const filteredAndSortedFurnaces = React.useMemo(() => {
     if (!furnaces) return [];
@@ -44,6 +47,7 @@ const Furnaces = () => {
     const mailtoUrl = `mailto:forniengg@yahoo.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     window.open(mailtoUrl, '_blank');
   };
+
 
   if (loading) {
     return (
@@ -151,23 +155,30 @@ const Furnaces = () => {
       className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow duration-200"
     >
       {/* Furnace Image */}
-      <div className="relative h-48 bg-gray-100">
-        {furnace.cover_image ? (
-          <Image
-            src={furnace.cover_image}
-            alt={furnace.name}
-            fill
-            className="object-cover"
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
-          />
+      <div className="relative h-60 bg-gray-100">
+        {
+          furnace.cover_image ? (
+            <img src={furnace.cover_image} 
+            alt={furnace.name} 
+            width={256}
+            height={256}
+            className='w-full h-full object-cover object-center'/>
         ) : (
           <div className="flex items-center justify-center h-full">
             <svg className="h-16 w-16 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
             </svg>
           </div>
+        )
+        }
+        {furnace.name && (
+          <div className="absolute inset-0 bg-black bg-opacity-0 hover:bg-opacity-20 transition-all duration-200 flex items-center justify-center opacity-0 hover:opacity-100">
+            <span className="text-white font-medium bg-black bg-opacity-50 px-3 py-1 rounded-md">
+              {furnace.name}
+            </span>
+          </div>
         )}
-        
+
         {/* View Details Link */}
         <Link
           href={`/furnaces/${encodeURIComponent(furnace.name)}`}
@@ -184,43 +195,26 @@ const Furnaces = () => {
         <h3 className="text-lg font-semibold text-gray-900 mb-2">
           {furnace.name}
         </h3>
-        
-        {furnace.specification && (
-          <p className="text-sm text-gray-600 mb-4">
-            {furnace.specification.length > 120 
-              ? `${furnace.specification.substring(0, 120)}...` 
-              : furnace.specification
-            }
-          </p>
-        )}
-
         {/* Additional Info */}
         <div className="space-y-2 mb-4">
-          {furnace.price && (
-            <div className="flex items-center text-sm">
-              <span className="font-medium text-gray-700">Price:</span>
-              <span className="ml-2 text-orange-600 font-semibold">{furnace.price}</span>
-            </div>
-          )}
-          
           {furnace.category && (
             <div className="flex items-center text-sm">
               <span className="font-medium text-gray-700">Category:</span>
-              <span className="ml-2 text-gray-600">{furnace.category}</span>
+              <span className="ml-2 text-gray-600">{furnace.name}</span>
             </div>
           )}
           
-          {furnace.model && (
+          {furnace.feature && (
             <div className="flex items-center text-sm">
-              <span className="font-medium text-gray-700">Model:</span>
-              <span className="ml-2 text-gray-600">{furnace.model}</span>
+              <span className="font-medium text-gray-700">Feature:</span>
+              <span className="ml-2 text-gray-600">{furnace.feature}</span>
             </div>
           )}
           
-          {furnace.capacity && (
+          {furnace.specification && (
             <div className="flex items-center text-sm">
-              <span className="font-medium text-gray-700">Capacity:</span>
-              <span className="ml-2 text-gray-600">{furnace.capacity}</span>
+              <span className="font-medium text-gray-700">Specification:</span>
+              <span className="ml-2 text-gray-600">{furnace.specification}</span>
             </div>
           )}
         </div>
