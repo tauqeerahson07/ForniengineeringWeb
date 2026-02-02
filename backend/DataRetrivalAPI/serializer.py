@@ -11,10 +11,11 @@ class FurnaceImagesSerializer(serializers.ModelSerializer):
 class FurnacesSerializer(serializers.ModelSerializer):
     # Override the cover_image field to return only the relative path
     cover_image = serializers.SerializerMethodField()
+    images = FurnaceImagesSerializer(many=True, read_only=True)
 
     class Meta:
         model = Furnaces
-        fields = '__all__'  # Include all fields, or specify the fields explicitly
+        fields = ['id', 'name', 'feature', 'specification', 'cover_image', 'images']
 
     def get_cover_image(self, obj):
         # Extract the relative path from the full URL
@@ -34,10 +35,11 @@ class ServiceImagesSerializer(serializers.ModelSerializer):
 class ServiceSerializer(serializers.ModelSerializer):
     # Override the cover_image field to return only the relative path
     cover_image = serializers.SerializerMethodField()
+    images = ServiceImagesSerializer(many=True, read_only=True)
 
     class Meta:
         model = Services
-        fields = '__all__'  # Include all fields, or specify the fields explicitly
+        fields = ['id', 'name', 'description', 'cover_image', 'images']
 
     def get_cover_image(self, obj):
         # Extract the relative path from the full URL
