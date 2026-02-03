@@ -11,7 +11,7 @@ class FurnaceImagesSerializer(serializers.ModelSerializer):
 class FurnacesSerializer(serializers.ModelSerializer):
     # Override the cover_image field to return only the relative path
     cover_image = serializers.SerializerMethodField()
-    gallery_images = FurnaceImagesSerializer(many=True, read_only=True)
+    gallery_images = serializers.SerializerMethodField()
 
     class Meta:
         model = Furnaces
@@ -23,8 +23,9 @@ class FurnacesSerializer(serializers.ModelSerializer):
             return obj.cover_image.name  # Returns the relative path (e.g., "furnaces/.../image.jpg")
         return None
     def get_gallery_images(self, obj):
-        images = obj.gallery_images.all()
-        return [image.image.name for image in images]
+        return list(
+            obj.gallery_images.values_list('image', flat=True)
+        )
 
 # Serializer for the gallery images
 class ServiceImagesSerializer(serializers.ModelSerializer):
@@ -36,7 +37,7 @@ class ServiceImagesSerializer(serializers.ModelSerializer):
 class ServiceSerializer(serializers.ModelSerializer):
     # Override the cover_image field to return only the relative path
     cover_image = serializers.SerializerMethodField()
-    gallery_images = ServiceImagesSerializer(many=True, read_only=True)
+    gallery_images = serializers.SerializerMethodField()
 
     class Meta:
         model = Services
@@ -49,5 +50,6 @@ class ServiceSerializer(serializers.ModelSerializer):
         return None
 
     def get_gallery_images(self, obj):
-        images = obj.gallery_images.all()
-        return [image.image.name for image in images]
+        return list(
+            obj.gallery_images.values_list('image', flat=True)
+        )
