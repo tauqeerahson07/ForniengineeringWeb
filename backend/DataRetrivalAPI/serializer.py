@@ -5,7 +5,7 @@ from .models import Furnaces,FurnaceImages,Services,ServiceImages
 class FurnaceImagesSerializer(serializers.ModelSerializer):
     class Meta:
         model = FurnaceImages
-        fields = ['image_id', 'image']
+        fields = '__all__'
 
 
 class FurnacesSerializer(serializers.ModelSerializer):
@@ -29,7 +29,7 @@ class FurnacesSerializer(serializers.ModelSerializer):
 class ServiceImagesSerializer(serializers.ModelSerializer):
     class Meta:
         model = ServiceImages
-        fields = ['image_id', 'image']
+        fields = '__all__'
 
 
 class ServiceSerializer(serializers.ModelSerializer):
