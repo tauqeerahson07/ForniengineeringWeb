@@ -22,8 +22,9 @@ class FurnacesSerializer(serializers.ModelSerializer):
         if obj.cover_image:
             return obj.cover_image.name  # Returns the relative path (e.g., "furnaces/.../image.jpg")
         return None
-
-
+    def get_gallery_images(self, obj):
+        images = obj.gallery_images.all()
+        return [image.image.name for image in images]
 
 # Serializer for the gallery images
 class ServiceImagesSerializer(serializers.ModelSerializer):
@@ -46,3 +47,7 @@ class ServiceSerializer(serializers.ModelSerializer):
         if obj.cover_image:
             return obj.cover_image.name  # Returns the relative path (e.g., "services/.../image.jpg")
         return None
+
+    def get_gallery_images(self, obj):
+        images = obj.gallery_images.all()
+        return [image.image.name for image in images]
