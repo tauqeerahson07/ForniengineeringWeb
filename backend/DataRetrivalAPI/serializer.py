@@ -11,7 +11,7 @@ class FurnaceImagesSerializer(serializers.ModelSerializer):
 class FurnacesSerializer(serializers.ModelSerializer):
     # Override the cover_image field to return only the relative path
     cover_image = serializers.SerializerMethodField()
-    images = FurnaceImagesSerializer(many=True, read_only=True)
+    gallery_images = FurnaceImagesSerializer(many=True, read_only=True)
 
     class Meta:
         model = Furnaces
@@ -35,7 +35,7 @@ class ServiceImagesSerializer(serializers.ModelSerializer):
 class ServiceSerializer(serializers.ModelSerializer):
     # Override the cover_image field to return only the relative path
     cover_image = serializers.SerializerMethodField()
-    images = ServiceImagesSerializer(many=True, read_only=True)
+    gallery_images = ServiceImagesSerializer(many=True, read_only=True)
 
     class Meta:
         model = Services
