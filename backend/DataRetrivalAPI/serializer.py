@@ -15,7 +15,7 @@ class FurnacesSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Furnaces
-        fields = ['id', 'name', 'feature', 'specification', 'cover_image', 'gallery_images']
+        fields = ['f_id', 'name', 'feature', 'specification', 'cover_image', 'gallery_images']
 
     def get_cover_image(self, obj):
         # Extract the relative path from the full URL
@@ -39,7 +39,7 @@ class ServiceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Services
-        fields = ['id', 'name', 'description', 'cover_image', 'gallery_images']
+        fields = ['s_id ', 'name', 'description', 'cover_image', 'gallery_images']
 
     def get_cover_image(self, obj):
         # Extract the relative path from the full URL
