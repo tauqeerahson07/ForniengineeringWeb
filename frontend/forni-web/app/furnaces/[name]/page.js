@@ -174,14 +174,20 @@ const FurnaceDetailPage = () => {
               {furnace.feature && (
                 <div>
                   <h2 className="text-xl font-semibold text-gray-800 mb-1">Feature</h2>
-                  <p className="text-gray-600">{furnace.feature}</p>
+                  <ul className="list-disc list-inside text-gray-600">
+                    {furnace.feature.split("\n").map((line, index) => (
+                      <li key={index}>{line}</li>
+                    ))}
+                  </ul>
                 </div>
               )}
               {furnace.specification && (
                 <div>
                   <h2 className="text-xl font-semibold text-gray-800 mb-1">Specifications</h2>
                   <ul className="list-disc list-inside text-gray-600">
-                    {furnace.specification}
+                    {furnace.specification.split("\n").map((line, index) => (
+                      <li key={index}>{line}</li>
+                    ))}
                   </ul>
                 </div>
               )}

@@ -205,16 +205,24 @@ const Furnaces = () => {
           )}
           
           {furnace.feature && (
-            <div className="flex items-center text-sm">
-              <span className="font-medium text-gray-700">Feature:</span>
-              <span className="ml-2 text-gray-600">{furnace.feature}</span>
+            <div className="flex flex-col w-100vw items-start text-sm ">
+              <p className="font-bold text-gray-700">Feature:</p>
+              <ul className="list-disc list-inside text-gray-600">
+                    {furnace.feature.split("\n").map((line, index) => (
+                      <li key={index}>{line}</li>
+                    ))}
+                  </ul>
             </div>
           )}
           
           {furnace.specification && (
-            <div className="flex items-center text-sm">
-              <span className="font-medium text-gray-700">Specification:</span>
-              <span className="ml-2 text-gray-600">{furnace.specification}</span>
+            <div className="flex flex-col w-100vw items-start text-sm">
+              <p className="font-bold text-gray-700">Specification:</p>
+              <ul className="list-disc list-inside text-gray-600">
+                    {furnace.specification.split("\n").map((line, index) => (
+                      <li key={index}>{line}</li>
+                    ))}
+                  </ul>
             </div>
           )}
         </div>
