@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, use } from "react";
 import { usePathname } from "next/navigation";
 import { useContext } from "react";
 import DataContext from "@/contexts/DataContext";
@@ -17,6 +17,27 @@ const FurnaceDetailPage = () => {
   // State for slideshow images
   const [allImages, setAllImages] = useState([]);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  const generateImageList = () => {
+    const images = [];
+    if (furnace) {
+      if (furnace.cover_image) {
+        images.push({ image: furnace.cover_image, alt: `${furnace.name} - Cover Image` });
+      }
+      if (furnace.gallery_images && furnace.gallery_images.length > 0) {
+        furnace.gallery_images.forEach((img, index) => {
+          images.push({ image: img, alt: `${furnace.name} - Gallery Image ${index + 1}` });
+        });
+      }
+    }
+    return images;
+  };
+
+  const imagesList = generateImageList();
+  useEffect(() => {
+    setAllImages(imagesList);
+    setCurrentImageIndex(0); // Reset to first image when furnace changes
+  }, [furnace]);
 
   // Navigation functions
   const nextImage = () => {
@@ -52,7 +73,6 @@ const FurnaceDetailPage = () => {
       </div>
     );
   }
-
   // Not found state
   if (!furnace) {
     return (
@@ -62,7 +82,7 @@ const FurnaceDetailPage = () => {
             Furnace Not Found
           </h1>
           <p className="text-gray-600 mb-8">
-            The furnace "{decodedName}" could not be found.
+            The furnace {decodedName} could not be found.
           </p>
           <button
             onClick={() => window.history.back()}
@@ -98,7 +118,7 @@ const FurnaceDetailPage = () => {
                   <img
                     src={allImages[currentImageIndex].image}
                     alt={allImages[currentImageIndex].alt || `${furnace.name} - Image ${currentImageIndex + 1}`}
-                    fill
+                    fill={true}
                     className="object-cover"
                     sizes="(max-width: 768px) 100vw, 50vw"
                   />
@@ -150,6 +170,30 @@ const FurnaceDetailPage = () => {
             <h1 className="text-4xl font-bold text-gray-900 mb-2">
               {furnace.name}
             </h1>
+            <div className="grid grid-cols-1 gap-4">
+              {furnace.feature && (
+                <div>
+                  <h2 className="text-xl font-semibold text-gray-800 mb-1">Feature</h2>
+                  <p className="text-gray-600">{furnace.feature}</p>
+                </div>
+              )}
+              {furnace.specification && (
+                <div>
+                  <h2 className="text-xl font-semibold text-gray-800 mb-1">Specifications</h2>
+                  <ul className="list-disc list-inside text-gray-600">
+                    {furnace.specification}
+                  </ul>
+                </div>
+              )}
+              <div>
+                <button
+                  onClick={handleGetQuotation}
+                  className="bg-orange-600 hover:bg-orange-700 text-white px-6 py-3 rounded-lg transition-colors"
+                >
+                  Get Quotation
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>

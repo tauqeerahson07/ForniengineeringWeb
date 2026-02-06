@@ -96,18 +96,36 @@ export function DataContextProvider({ children, initialData = null }) {
             let furnacesData = [];
             if (furnacesResponse.status === "fulfilled" && furnacesResponse.value.ok) {
                 const rawFurnacesData = await furnacesResponse.value.json();
+
                 furnacesData = await Promise.all(
                     rawFurnacesData.map(async (item) => {
-                        const signedUrl = await getSignedUrl("forni-web-images", item.cover_image);
+                        const cover_image =
+                            (await getSignedUrl("forni-web-images", item.cover_image)) || item.cover_image;
+                    
+                        // Process gallery images
+                        const gallery_images = item.gallery_images || [];
+                        const gallery_images_url = await Promise.all(
+                            gallery_images.map(async (image) => {
+                                const signedUrl = await getSignedUrl("forni-web-images", image);
+                                return signedUrl;
+                            })
+                        );
+                    
                         return {
                             ...item,
-                            cover_image: signedUrl || item.cover_image, // Use signed URL or fallback to original
+                            cover_image,
+                            gallery_images: gallery_images_url,
                         };
                     })
                 );
-            } else {
-                console.warn("❌ Furnaces failed:", furnacesResponse.reason || furnacesResponse.value?.status);
-            }
+
+                } else {
+                    console.warn(
+                        "❌ Furnaces failed:",
+                        furnacesResponse.reason || furnacesResponse.value?.status
+                    );
+                }
+
 
             // Process services
             let servicesData = [];
@@ -115,8 +133,24 @@ export function DataContextProvider({ children, initialData = null }) {
                 const rawServicesData = await servicesResponse.value.json();
                 servicesData = await Promise.all(
                     rawServicesData.map(async (item) => {
-                        const signedUrl = await getSignedUrl("forni-web-images", item.cover_image);
-                        return { ...item, cover_image: signedUrl || item.cover_image };
+                        const cover_image =
+                            (await getSignedUrl("forni-web-images", item.cover_image)) || item.cover_image;
+                    
+                        // Process gallery images
+                        const gallery_images = item.gallery_images || [];
+                        const gallery_images_url = await Promise.all(
+                            gallery_images.map(async (image) => {
+                                const signedUrl = await getSignedUrl("forni-web-images", image);
+                                return signedUrl;
+                            })
+                        );
+                    
+                        return {
+                            ...item,
+                            cover_image,
+                            gallery_images: gallery_images_url,
+                        };
+                        
                     })
                 );
             } else {
@@ -146,21 +180,45 @@ export function DataContextProvider({ children, initialData = null }) {
     useEffect(() => {
         // Only fetch if we don't have initial data
         if (!initialData) {
-            fetchData(false);
+            fetchData(true);
         } else {
             // Generate signed URLs for initial data
             (async () => {
                 const signedFurnaces = await Promise.all(
-                    (initialData.furnaces || []).map(async (item) => {
-                        const signedUrl = await getSignedUrl("forni-web-images", item.cover_image);
-                        return { ...item, cover_image: signedUrl || item.cover_image };
+                (initialData.furnaces || []).map(async (item) => {
+                    const cover_image =
+                    (await getSignedUrl("forni-web-images", item.cover_image)) || item.cover_image;
+                
+                    const gallery_images = await Promise.all(
+                    (item.gallery_images || []).map(async (img) => {
+                        return (await getSignedUrl("forni-web-images", img)) || img;
                     })
+                    );
+                
+                    return {
+                    ...item,
+                    cover_image,
+                    gallery_images,
+                    };
+                })
                 );
 
                 const signedServices = await Promise.all(
                     (initialData.services || []).map(async (item) => {
-                        const signedUrl = await getSignedUrl("forni-web-images", item.cover_image);
-                        return { ...item, cover_image: signedUrl || item.cover_image };
+                    
+                    const cover_image = (await getSignedUrl("forni-web-images", item.cover_image)) || item.cover_image;
+                
+                    const gallery_images = await Promise.all(
+                    (item.gallery_images || []).map(async (img) => {
+                        return (await getSignedUrl("forni-web-images", img)) || img;
+                    })
+                    );
+                
+                    return {
+                    ...item,
+                    cover_image,
+                    gallery_images,
+                    };
                     })
                 );
 
@@ -238,6 +296,5 @@ export function DataContextProvider({ children, initialData = null }) {
         getServiceByName,
         refreshData,
     };
-
     return <DataContext.Provider value={value}>{children}</DataContext.Provider>;
 }

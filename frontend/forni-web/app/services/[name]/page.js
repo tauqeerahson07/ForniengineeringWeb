@@ -1,26 +1,43 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback, use } from "react";
 import { usePathname } from "next/navigation";
 import { useContext } from "react";
 import DataContext from "@/contexts/DataContext";
 import Image from "next/image";
 
-const serviceDetailPage = () => {
+const ServiceDetailPage = () => {
   const pathname = usePathname();
   const name = pathname.split("/").pop();
   const decodedName = name ? decodeURIComponent(name) : "";
   const data = useContext(DataContext);
-  const service = data.getServiceByName(decodedName)
-  console.log(service)
-  
-  // Slideshow state
+  const service = data.getserviceByName(decodedName);
+
+
+
+  // State for slideshow images
+  const [allImages, setAllImages] = useState([]);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
-  // Prepare all images for slideshow
-  const allImages = service ? [
-    ...(service.cover_image ? [{ image: service.cover_image, alt: `${service.name} - Cover Image` }] : []),
-    ...(service.gallery_images || [])
-  ] : [];
+  const generateImageList = () => {
+    const images = [];
+    if (service) {
+      if (service.cover_image) {
+        images.push({ image: service.cover_image, alt: `${service.name} - Cover Image` });
+      }
+      if (service.gallery_images && service.gallery_images.length > 0) {
+        service.gallery_images.forEach((img, index) => {
+          images.push({ image: img, alt: `${service.name} - Gallery Image ${index + 1}` });
+        });
+      }
+    }
+    return images;
+  };
+
+  const imagesList = generateImageList();
+  useEffect(() => {
+    setAllImages(imagesList);
+    setCurrentImageIndex(0); // Reset to first image when service changes
+  }, [service]);
 
   // Navigation functions
   const nextImage = () => {
@@ -56,7 +73,6 @@ const serviceDetailPage = () => {
       </div>
     );
   }
-
   // Not found state
   if (!service) {
     return (
@@ -66,7 +82,7 @@ const serviceDetailPage = () => {
             service Not Found
           </h1>
           <p className="text-gray-600 mb-8">
-            The service "{decodedName}" could not be found.
+            The service {decodedName} could not be found.
           </p>
           <button
             onClick={() => window.history.back()}
@@ -99,10 +115,10 @@ const serviceDetailPage = () => {
               {/* Main Image Display */}
               <div className="relative aspect-square bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
                 {allImages.length > 0 ? (
-                  <Image
+                  <img
                     src={allImages[currentImageIndex].image}
                     alt={allImages[currentImageIndex].alt || `${service.name} - Image ${currentImageIndex + 1}`}
-                    fill
+                    fill={true}
                     className="object-cover"
                     sizes="(max-width: 768px) 100vw, 50vw"
                   />
@@ -146,127 +162,43 @@ const serviceDetailPage = () => {
                   </>
                 )}
               </div>
-
-              {/* Thumbnail Navigation */}
-              {allImages.length > 1 && (
-                <div className="flex gap-3 mt-4 overflow-x-auto pb-2">
-                  {allImages.map((image, index) => (
-                    <button
-                      key={index}
-                      onClick={() => goToImage(index)}
-                      className={`relative flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 transition-all duration-200 ${
-                        index === currentImageIndex
-                          ? 'border-orange-600 ring-2 ring-orange-200'
-                          : 'border-gray-200 hover:border-gray-300'
-                      }`}
-                    >
-                      <Image
-                        src={image.image}
-                        alt={`Thumbnail ${index + 1}`}
-                        fill
-                        className="object-cover"
-                        sizes="80px"
-                      />
-                      {index === 0 && (
-                        <div className="absolute top-1 left-1 bg-orange-600 text-white text-xs px-1 rounded">
-                          Main
-                        </div>
-                      )}
-                    </button>
-                  ))}
-                </div>
-              )}
-
-              {/* Dot Indicators (Alternative to thumbnails for smaller screens) */}
-              {allImages.length > 1 && (
-                <div className="flex justify-center gap-2 mt-4 sm:hidden">
-                  {allImages.map((_, index) => (
-                    <button
-                      key={index}
-                      onClick={() => goToImage(index)}
-                      className={`w-3 h-3 rounded-full transition-all duration-200 ${
-                        index === currentImageIndex
-                          ? 'bg-orange-600'
-                          : 'bg-gray-300 hover:bg-gray-400'
-                      }`}
-                      aria-label={`Go to image ${index + 1}`}
-                    />
-                  ))}
-                </div>
-              )}
             </div>
           </div>
 
           {/* Right Column - Details */}
           <div className="space-y-8">
-            {/* Title */}
-            <div>
-              <h1 className="text-4xl font-bold text-gray-900 mb-2">
-                {service.name}
-              </h1>
-            </div>
-
-            {/* Features Section */}
-            {service.description && (
-              <div>
-                <h2 className="text-xl font-semibold text-gray-900 mb-4">
-                  Description
-                </h2>
-                <div className="bg-gray-100 p-6 rounded-lg">
-                  <p className="text-gray-700 leading-relaxed">
-                    {service.description}
-                  </p>
+            <h1 className="text-4xl font-bold text-gray-900 mb-2">
+              {service.name}
+            </h1>
+            <div className="grid grid-cols-1 gap-4">
+              {service.feature && (
+                <div>
+                  <h2 className="text-xl font-semibold text-gray-800 mb-1">Feature</h2>
+                  <p className="text-gray-600">{service.feature}</p>
                 </div>
-              </div>
-            )}
-
-            {/* Specifications Section */}
-            {/* {service.specification && (
-              <div>
-                <h2 className="text-xl font-semibold text-gray-900 mb-4">
-                  Specifications
-                </h2>
-                <div className="space-y-3">
-                  {service.specification.split('\n').map((spec, index) => (
-                    <div key={index} className="flex items-start space-x-3">
-                      <span className="flex-shrink-0 w-2 h-2 bg-orange-600 rounded-full mt-2"></span>
-                      <p className="text-gray-700">{spec.trim()}</p>
-                    </div>
-                  ))}
+              )}
+              {service.specification && (
+                <div>
+                  <h2 className="text-xl font-semibold text-gray-800 mb-1">Specifications</h2>
+                  <ul className="list-disc list-inside text-gray-600">
+                    {service.specification}
+                  </ul>
                 </div>
+              )}
+              <div>
+                <button
+                  onClick={handleGetQuotation}
+                  className="bg-orange-600 hover:bg-orange-700 text-white px-6 py-3 rounded-lg transition-colors"
+                >
+                  Get Quotation
+                </button>
               </div>
-            )} */}
-
-            {/* Get Quotation Button */}
-            <div className="pt-6">
-              <button
-                onClick={handleGetQuotation}
-                className="w-full sm:w-auto bg-orange-600 hover:bg-orange-700 text-white font-semibold py-4 px-8 rounded-lg transition-colors duration-200 flex items-center justify-center gap-3 text-lg"
-              >
-                <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                </svg>
-                Get Quotation
-              </button>
             </div>
           </div>
-        </div>
-
-        {/* Back to services Link */}
-        <div className="mt-12 pt-8 border-t border-gray-200">
-          <button
-            onClick={() => window.history.back()}
-            className="text-orange-600 hover:text-orange-700 font-medium flex items-center gap-2 transition-colors"
-          >
-            <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-            </svg>
-            Back to services
-          </button>
         </div>
       </div>
     </div>
   );
 };
 
-export default serviceDetailPage;
+export default ServiceDetailPage;
