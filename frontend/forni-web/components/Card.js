@@ -3,6 +3,7 @@ import React from "react";
 import { useContext } from "react";
 import DataContext from "@/contexts/DataContext";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 const Card = (props) => {
   const data = useContext(DataContext)
   let url = null
@@ -43,7 +44,7 @@ const Card = (props) => {
   return (
     <div className="card text-black w-96 shadow-sm">
       <figure>
-        <img
+        <Image
           src={props.image}
           alt={props.name}
           width={256}

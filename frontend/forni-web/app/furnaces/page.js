@@ -158,10 +158,8 @@ const Furnaces = () => {
       <div className="relative h-60 bg-gray-100">
         {
           furnace.cover_image ? (
-            <img src={furnace.cover_image} 
-            alt={furnace.name} 
-            width={256}
-            height={256}
+            <Image src={furnace.cover_image} 
+            fill
             className='w-full h-full object-cover object-center'/>
         ) : (
           <div className="flex items-center justify-center h-full">
@@ -209,8 +207,10 @@ const Furnaces = () => {
               <p className="font-bold text-gray-700">Feature:</p>
               <ul className="list-disc list-inside text-gray-600">
                     {furnace.feature.split("\n").map((line, index) => (
+                      index <3 &&
                       <li key={index}>{line}</li>
                     ))}
+                    <li>{`...`}</li>
                   </ul>
             </div>
           )}

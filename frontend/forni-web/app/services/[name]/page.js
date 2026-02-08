@@ -114,14 +114,17 @@ const ServiceDetailPage = () => {
             <div className="relative">
               {/* Main Image Display */}
               <div className="relative aspect-square bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
-                {allImages.length > 0 ? (
-                  <img
-                    src={allImages[currentImageIndex].image}
-                    alt={allImages[currentImageIndex].alt || `${service.name} - Image ${currentImageIndex + 1}`}
-                    fill={true}
-                    className="object-cover"
-                    sizes="(max-width: 768px) 100vw, 50vw"
-                  />
+              {allImages.length > 0 ? (
+                  allImages.map((img, index) => (
+                    <Image
+                      key={index}
+                      src={img.image}
+                      alt={img.alt}
+                      layout="fill"
+                      objectFit="cover"
+                      className={`transition-opacity duration-500 ${index === currentImageIndex ? 'opacity-100' : 'opacity-0'}`}
+                    />
+                    ))
                 ) : (
                   <div className="flex items-center justify-center h-full">
                     <svg className="h-24 w-24 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
