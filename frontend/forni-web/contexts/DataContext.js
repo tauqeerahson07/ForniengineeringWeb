@@ -59,12 +59,11 @@ const setCachedData = (data) => {
 export function DataContextProvider({ children, initialData = null }) {
     const [furnaces, setFurnaces] = useState(initialData?.furnaces || null);
     const [services, setServices] = useState(initialData?.services || null);
-    const [loading, setLoading] = useState(!initialData);
+    const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
     const fetchData = useCallback(async (useCache = true) => {
         try {
-            setLoading(true);
             setError(null);
 
             // Try cache first if no initial data
@@ -178,54 +177,64 @@ export function DataContextProvider({ children, initialData = null }) {
     }, [initialData]);
 
     useEffect(() => {
-        // Only fetch if we don't have initial data
-        if (!initialData) {
-            fetchData(true);
-        } else {
-            // Generate signed URLs for initial data
-            (async () => {
-                const signedFurnaces = await Promise.all(
-                (initialData.furnaces || []).map(async (item) => {
-                    const cover_image =
-                    (await getSignedUrl("forni-web-images", item.cover_image)) || item.cover_image;
-                
-                    const gallery_images = await Promise.all(
-                    (item.gallery_images || []).map(async (img) => {
-                        return (await getSignedUrl("forni-web-images", img)) || img;
-                    })
-                    );
-                
-                    return {
-                    ...item,
-                    cover_image,
-                    gallery_images,
-                    };
-                })
-                );
-
-                const signedServices = await Promise.all(
-                    (initialData.services || []).map(async (item) => {
+        const processData = async () => {
+            if (!initialData) {
+                // No initial data - fetch from API
+                await fetchData(true);
+            } else {
+                // Process initial data and generate signed URLs
+                try {
+                    setLoading(true);
                     
-                    const cover_image = (await getSignedUrl("forni-web-images", item.cover_image)) || item.cover_image;
-                
-                    const gallery_images = await Promise.all(
-                    (item.gallery_images || []).map(async (img) => {
-                        return (await getSignedUrl("forni-web-images", img)) || img;
-                    })
+                    const signedFurnaces = await Promise.all(
+                        (initialData.furnaces || []).map(async (item) => {
+                            const cover_image =
+                                (await getSignedUrl("forni-web-images", item.cover_image)) || item.cover_image;
+                        
+                            const gallery_images = await Promise.all(
+                                (item.gallery_images || []).map(async (img) => {
+                                    return (await getSignedUrl("forni-web-images", img)) || img;
+                                })
+                            );
+                        
+                            return {
+                                ...item,
+                                cover_image,
+                                gallery_images,
+                            };
+                        })
                     );
-                
-                    return {
-                    ...item,
-                    cover_image,
-                    gallery_images,
-                    };
-                    })
-                );
 
-                setFurnaces(signedFurnaces);
-                setServices(signedServices);
-            })();
-        }
+                    const signedServices = await Promise.all(
+                        (initialData.services || []).map(async (item) => {
+                            const cover_image = 
+                                (await getSignedUrl("forni-web-images", item.cover_image)) || item.cover_image;
+                        
+                            const gallery_images = await Promise.all(
+                                (item.gallery_images || []).map(async (img) => {
+                                    return (await getSignedUrl("forni-web-images", img)) || img;
+                                })
+                            );
+                        
+                            return {
+                                ...item,
+                                cover_image,
+                                gallery_images,
+                            };
+                        })
+                    );
+
+                    setFurnaces(signedFurnaces);
+                    setServices(signedServices);
+                } catch (err) {
+                    console.error("Error processing initial data:", err);
+                    setError(err.message);
+                } finally {
+                    setLoading(false);
+                }
+            }
+        };
+        processData();
     }, [fetchData, initialData]);
 
     // Add data function

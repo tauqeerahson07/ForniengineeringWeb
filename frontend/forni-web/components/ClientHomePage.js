@@ -5,7 +5,7 @@ import Card from "@/components/Card";
 import Link from "next/link";
 
 export default function ClientHomePage() {
-    const { furnaces, services, loading } = useContext(DataContext);
+    const { furnaces, services, loading} = useContext(DataContext);
 
     if (loading) {
         return (
@@ -28,23 +28,6 @@ export default function ClientHomePage() {
     const currentFurnaces = furnaces || [];
     const currentServices = services || [];
     
-    if (loading) {
-        return (
-            <div className="min-h-screen bg-gray-50 pt-20">
-                <div className="max-w-7xl mx-auto px-4 py-8">
-                    <div className="animate-pulse">
-                        <div className="h-6 bg-gray-300 rounded w-1/3 mb-4"></div>
-                        <div className="h-4 bg-gray-300 rounded w-1/2 mb-6"></div>
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10 max-w-6xl mx-auto">
-                            {[...Array(6)].map((_, index) => (
-                                <div key={index} className="h-64 bg-gray-200 rounded-lg"></div>
-                            ))}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        );
-    }
     return (
         <div className="bg-white min-h-screen">
             {/* Copy ALL your existing JSX from page.js here */}
