@@ -171,7 +171,7 @@ export default function ClientHomePage() {
                     </p>
                     <div className="flex flex-col sm:flex-row gap-4 justify-center">
                         <Link 
-                            href='mailto:forniengg@yahoo.com' 
+                            href='/contact' 
                             className="bg-white text-orange-600 hover:bg-gray-100 font-semibold py-4 px-8 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg"
                         >
                             Contact Us
