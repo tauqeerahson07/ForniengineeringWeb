@@ -7,7 +7,6 @@ import { useRouter } from 'next/navigation';
 
 const Furnaces = () => {
   const { furnaces, loading, error } = useContext(DataContext);
-  console.log('Furnaces from DataContext:', furnaces);
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState('name');
   const router = useRouter();
