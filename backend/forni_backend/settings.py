@@ -52,19 +52,19 @@ INSTALLED_APPS = [
     'corsheaders',
 ]
 
-CKEDITOR_5_UPLOAD_PATH = "uploads/"
+# CKEDITOR_5_UPLOAD_PATH = "uploads/"
 
 
-CKEDITOR_5_CONFIGS = {
-    "default": {
-        "toolbar": [
-            "bold", "italic", "link", "bulletedList", "numberedList",
-            "blockQuote", "undo", "redo"
-        ],
-        "height": "400px",
-        "width": "100%",
-    }
-}
+# CKEDITOR_5_CONFIGS = {
+#     "default": {
+#         "toolbar": [
+#             "bold", "italic", "link", "bulletedList", "numberedList",
+#             "blockQuote", "undo", "redo"
+#         ],
+#         "height": "400px",
+#         "width": "100%",
+#     }
+# }
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',  # Move CORS to top
@@ -82,10 +82,10 @@ INSTALLED_APPS += ["storages"]
 
 DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
 
-AWS_ACCESS_KEY_ID = os.getenv("FORNI_S3_ACCESS_KEY_ID")
-AWS_SECRET_ACCESS_KEY = os.getenv("FORNI_S3_SECRET_ACCESS_KEY")
-AWS_STORAGE_BUCKET_NAME = os.getenv("BUCKET")
-AWS_S3_ENDPOINT_URL = os.getenv("SUPABASE_STORAGRE")
+AWS_ACCESS_KEY_ID = os.getenv("R2_ACCESS_KEY_ID")
+AWS_SECRET_ACCESS_KEY = os.getenv("R2_SECRET_ACCESS_KEY")
+AWS_STORAGE_BUCKET_NAME = os.getenv("R2_Bucket")
+AWS_S3_ENDPOINT_URL = os.getenv("R2_ENDPOINT")
 AWS_S3_FILE_OVERWRITE = True
 AWS_DEFAULT_ACL = None
 AWS_QUERYSTRING_AUTH = False
