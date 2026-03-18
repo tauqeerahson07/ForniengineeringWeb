@@ -36,7 +36,13 @@ def additional_service_image_path(instance, filename):
     safe_filename = slugify(name) + ext
     return f'services/{safe_name}/gallery/{safe_filename}'
 
-    
+def delete_file_from_s3(file_key):
+    s3 = boto3.client('s3')
+    try:
+        s3.delete_object(Bucket=bucket_name, Key=file_key)
+    except Exception as e:
+        print(f"Error deleting file from S3: {e}")
+
 
 class Furnaces(models.Model):
     f_id = models.AutoField(primary_key=True, unique=True)
@@ -46,6 +52,29 @@ class Furnaces(models.Model):
     feature = models.TextField()
     # specification = CKEditor5Field("Text", config_name="default")
     specification = models.TextField()
+    
+    def save(self, *args, **kwargs):
+        # 🔥 Handle update (delete old file)
+        if self.pk:
+            try:
+                old_instance = Furnaces.objects.get(pk=self.pk)
+                old_file = old_instance.cover_image
+                new_file = self.cover_image
+
+                if old_file and old_file != new_file:
+                    delete_file_from_s3(old_file.name)
+
+            except Furnaces.DoesNotExist:
+                pass
+
+        super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        # 🔥 Handle delete (remove file from S3)
+        if self.cover_image:
+            delete_file_from_s3(self.cover_image.name)
+
+        super().delete(*args, **kwargs)
 
     def __str__(self):
         return f"{self.name} ({self.cover_image.url if self.cover_image else 'No Image'})"

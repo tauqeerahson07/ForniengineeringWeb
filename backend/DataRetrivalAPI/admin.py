@@ -62,6 +62,8 @@ class FurnacesAdmin(admin.ModelAdmin):
             folder_path = f"furnaces/{slugify(obj.name)}"
             delete_supabase_folder(bucket_name, folder_path)
         super().delete_queryset(request, queryset)
+        
+    
 
 
 
