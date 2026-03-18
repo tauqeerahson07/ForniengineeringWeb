@@ -4,10 +4,13 @@ from django.utils.text import slugify
 import os
 import boto3
 from dotenv import load_dotenv
-
+from supabase import create_client
 load_dotenv()
 
 bucket_name = os.getenv("BUCKET")
+SUPABASE_URL = os.getenv("SUPABASE_URL")
+SUPABASE_KEY = os.getenv("SERVICE_ROLE_KEY")
+supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 # Create your models here.
 
 # helper functions
@@ -46,6 +49,39 @@ class Furnaces(models.Model):
     feature = models.TextField()
     # specification = CKEditor5Field("Text", config_name="default")
     specification = models.TextField()
+    
+    def save(self, *args, **kwargs):
+        if self.pk:
+            try:
+                old_instance = Furnaces.objects.get(pk=self.pk)
+            except Furnaces.DoesNotExist:
+                old_instance = None
+
+            # If file changed → delete old from Supabase
+            if old_instance and old_instance.cover_image:
+                if old_instance.cover_image != self.cover_image:
+                    old_path = old_instance.cover_image.name
+
+                    if old_path:
+                        try:
+                            supabase.storage.from_(bucket_name).remove([old_path])
+                        except Exception as e:
+                            print("Supabase delete error:", e)
+
+        super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        # Delete file from Supabase when object is deleted
+        if self.cover_image:
+            file_path = self.cover_image.name
+            if file_path:
+                try:
+                    supabase.storage.from_(bucket_name).remove([file_path])
+                except Exception as e:
+                    print("Supabase delete error:", e)
+
+        super().delete(*args, **kwargs)
+
 
     def __str__(self):
         return f"{self.name} ({self.cover_image.url if self.cover_image else 'No Image'})"
