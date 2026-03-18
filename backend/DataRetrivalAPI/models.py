@@ -90,6 +90,38 @@ class FurnaceImages(models.Model):
     image_id = models.AutoField(primary_key=True, unique=True)
     product = models.ForeignKey(Furnaces, related_name='gallery_images', on_delete=models.CASCADE)
     image = models.FileField(upload_to=additional_furnace_image_path)
+    
+    def save(self, *args, **kwargs):
+        if self.pk:
+            try:
+                old_instance = FurnaceImages.objects.get(pk=self.pk)
+            except FurnaceImages.DoesNotExist:
+                old_instance = None
+
+            # If file changed → delete old from Supabase
+            if old_instance and old_instance.image:
+                if old_instance.image != self.image:
+                    old_path = old_instance.image.name
+
+                    if old_path:
+                        try:
+                            supabase.storage.from_(bucket_name).remove([old_path])
+                        except Exception as e:
+                            print("Supabase delete error:", e)
+
+        super().save(*args, **kwargs)
+    
+    def delete(self, *args, **kwargs):
+        # Delete file from Supabase when object is deleted
+        if self.image:
+            file_path = self.image.name
+            if file_path:
+                try:
+                    supabase.storage.from_(bucket_name).remove([file_path])
+                except Exception as e:
+                    print("Supabase delete error:", e)
+
+        super().delete(*args, **kwargs)
 
     def __str__(self):
         return f"Image for {self.product.name}"
@@ -100,6 +132,39 @@ class Services(models.Model):
     name = models.TextField()
     # description= CKEditor5Field("Text", config_name="default")
     description = models.TextField()    
+    
+    def save(self, *args, **kwargs):
+        if self.pk:
+            try:
+                old_instance = Services.objects.get(pk=self.pk)
+            except Services.DoesNotExist:
+                old_instance = None
+
+            # If file changed → delete old from Supabase
+            if old_instance and old_instance.cover_image:
+                if old_instance.cover_image != self.cover_image:
+                    old_path = old_instance.cover_image.name
+
+                    if old_path:
+                        try:
+                            supabase.storage.from_(bucket_name).remove([old_path])
+                        except Exception as e:
+                            print("Supabase delete error:", e)
+
+        super().save(*args, **kwargs)
+    
+    def delete(self, *args, **kwargs):
+        # Delete file from Supabase when object is deleted
+        if self.cover_image:
+            file_path = self.cover_image.name
+            if file_path:
+                try:
+                    supabase.storage.from_(bucket_name).remove([file_path])
+                except Exception as e:
+                    print("Supabase delete error:", e)
+
+        super().delete(*args, **kwargs)
+        
     def __str__(self):
         return f"{self.name} ({self.cover_image.url if self.cover_image else 'No Image'})"
     
@@ -108,7 +173,38 @@ class ServiceImages(models.Model):
     image_id = models.AutoField(primary_key=True, unique=True)
     service = models.ForeignKey(Services, related_name='gallery_images', on_delete=models.CASCADE)
     image = models.FileField(upload_to=additional_service_image_path)
+    
+    def save(self, *args, **kwargs):
+        if self.pk:
+            try:
+                old_instance = ServiceImages.objects.get(pk=self.pk)
+            except ServiceImages.DoesNotExist:
+                old_instance = None
 
+            # If file changed → delete old from Supabase
+            if old_instance and old_instance.image:
+                if old_instance.image != self.image:
+                    old_path = old_instance.image.name
+
+                    if old_path:
+                        try:
+                            supabase.storage.from_(bucket_name).remove([old_path])
+                        except Exception as e:
+                            print("Supabase delete error:", e)
+
+        super().save(*args, **kwargs)
+    
+    def delete(self, *args, **kwargs):
+        # Delete file from Supabase when object is deleted
+        if self.image:
+            file_path = self.image.name
+            if file_path:
+                try:
+                    supabase.storage.from_(bucket_name).remove([file_path])
+                except Exception as e:
+                    print("Supabase delete error:", e)
+
+        super().delete(*args, **kwargs)
     def __str__(self):
         return f"Image for {self.service.name}"
     
