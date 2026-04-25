@@ -1,3 +1,185 @@
+# """
+# Django settings for forni_backend project.
+# """
+
+# from pathlib import Path
+# import os
+# # for connecting Django to supabase
+# import dj_database_url
+# from decouple import config
+# # connecting to s3 bucket
+# from dotenv import load_dotenv
+# load_dotenv()
+
+# # Build paths inside the project like this: BASE_DIR / 'subdir'.
+# BASE_DIR = Path(__file__).resolve().parent.parent
+
+# # MEDIA_ROOT = os.path.join(BASE_DIR, '..', 'frontend', 'forni-web', 'public','webpage')
+# # MEDIA_URL = '/webpage/'
+# # MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# # MEDIA_URL = '/media/'
+
+# MEDIA_URL = f"https://{os.getenv("R2_S3_ENDPOINT_URL")}/"
+# MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+
+# # Point to the root directory .env file
+# ROOT_DIR = BASE_DIR.parent  # This goes up one more level to the project root
+# ENV_FILE = ROOT_DIR / '.env'
+
+# # SECURITY WARNING: keep the secret key used in production secret!
+# SECRET_KEY = config('SECRET_KEY', default='django-insecure-82o1oc-%b1eh_(#gij(ic3@x77&hv#()gy1=sd(y!o1)p9^&6h')
+
+# # SECURITY WARNING: don't run with debug turned on in production!
+# DEBUG = config('DEBUG', default=False, cast=bool)
+
+# # Updated ALLOWED_HOSTS for Render
+# ALLOWED_HOSTS = [
+#     'localhost',
+#     '127.0.0.1',
+#     '0.0.0.0',
+#     'forniengineeringweb.onrender.com'
+# ]
+
+# # Application definition
+# INSTALLED_APPS = [
+#     'django.contrib.admin',
+#     'django.contrib.auth',
+#     'django.contrib.contenttypes',
+#     'django.contrib.sessions',
+#     'django.contrib.messages',
+#     'django.contrib.staticfiles',
+#     'rest_framework',
+#     'DataRetrivalAPI',
+#     "django_ckeditor_5",
+#     # To connect with frontend:
+#     'corsheaders',
+# ]
+
+# CKEDITOR_5_UPLOAD_PATH = "uploads/"
+
+
+# CKEDITOR_5_CONFIGS = {
+#     "default": {
+#         "toolbar": [
+#             "bold", "italic", "link", "bulletedList", "numberedList",
+#             "blockQuote", "undo", "redo"
+#         ],
+#         "height": "400px",
+#         "width": "100%",
+#     }
+# }
+
+# MIDDLEWARE = [
+#     'corsheaders.middleware.CorsMiddleware',  # Move CORS to top
+#     'django.middleware.security.SecurityMiddleware',
+#     'whitenoise.middleware.WhiteNoiseMiddleware',  # Add Whitenoise
+#     'django.contrib.sessions.middleware.SessionMiddleware',
+#     'django.middleware.common.CommonMiddleware',
+#     'django.middleware.csrf.CsrfViewMiddleware',
+#     'django.contrib.auth.middleware.AuthenticationMiddleware',
+#     'django.contrib.messages.middleware.MessageMiddleware',
+#     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+# ]
+
+# INSTALLED_APPS += ["storages"]
+
+# DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+
+# AWS_ACCESS_KEY_ID = os.getenv("R2_ACCESS_KEY_ID")
+# AWS_SECRET_ACCESS_KEY = os.getenv("R2_SECRET_ACCESS_KEY")
+# AWS_STORAGE_BUCKET_NAME = os.getenv("BUCKET")
+# AWS_S3_ENDPOINT_URL = os.getenv("R2_S3_ENDPOINT_URL")
+# AWS_S3_REGION_NAME = "auto"
+# AWS_S3_SIGNATURE_VERSION = "s3v4"
+# AWS_S3_FILE_OVERWRITE = False
+# AWS_DEFAULT_ACL = None
+# # AWS_S3_FILE_OVERWRITE = True
+# # AWS_DEFAULT_ACL = None
+# # AWS_QUERYSTRING_AUTH = False
+# CSRF_TRUSTED_ORIGINS = ['https://forniengineeringweb.onrender.com']
+
+
+# ROOT_URLCONF = 'forni_backend.urls'
+
+# TEMPLATES = [
+#     {
+#         'BACKEND': 'django.template.backends.django.DjangoTemplates',
+#         'DIRS': [BASE_DIR / 'templates'],
+#         'APP_DIRS': True,
+#         'OPTIONS': {
+#             'context_processors': [
+#                 'django.template.context_processors.debug',
+#                 'django.template.context_processors.request',
+#                 'django.contrib.auth.context_processors.auth',
+#                 'django.contrib.messages.context_processors.messages',
+#                 'django.template.context_processors.media',  # ADD THIS LINE
+#             ],
+#         },
+#     },
+# ]
+
+# WSGI_APPLICATION = 'forni_backend.wsgi.application'
+
+# # Database
+# DATABASES = {
+#     'default': dj_database_url.parse(
+#         config("SUPABASE_DB_URL"),
+#         conn_max_age=600,
+#         conn_health_checks=True,
+#     )
+# }
+
+# # Password validation
+# AUTH_PASSWORD_VALIDATORS = [
+#     {
+#         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+#     },
+#     {
+#         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+#     },
+#     {
+#         'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+#     },
+#     {
+#         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+#     },
+# ]
+
+# # Internationalization
+# LANGUAGE_CODE = 'en-us'
+# TIME_ZONE = 'UTC'
+# USE_I18N = True
+# USE_TZ = True
+
+# # Static files (CSS, JavaScript, Images)
+# STATIC_URL = '/static/'
+# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+# # Whitenoise configuration
+# STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# # Default primary key field type
+# DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# # CORS settings(For frontend)
+# CORS_ALLOWED_ORIGINS = [
+#     "http://localhost:3000",  # Allow Next.js frontend
+#     "http://192.168.40.1:3000",
+#     "https://forniengineeringweb.onrender.com",
+# ]
+
+# # For production, you might want to allow all origins temporarily
+# # CORS_ALLOW_ALL_ORIGINS = True  # Only for development
+
+# # Security settings for production
+# if not DEBUG:
+#     SECURE_SSL_REDIRECT = True
+#     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+#     SECURE_HSTS_SECONDS = 31536000
+#     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+#     SECURE_HSTS_PRELOAD = True
+
 """
 Django settings for forni_backend project.
 """
@@ -14,17 +196,8 @@ load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# MEDIA_ROOT = os.path.join(BASE_DIR, '..', 'frontend', 'forni-web', 'public','webpage')
-# MEDIA_URL = '/webpage/'
-# MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-# MEDIA_URL = '/media/'
-
-MEDIA_URL = f"https://{os.getenv("R2_S3_ENDPOINT_URL")}/"
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
-
 # Point to the root directory .env file
-ROOT_DIR = BASE_DIR.parent  # This goes up one more level to the project root
+ROOT_DIR = BASE_DIR.parent
 ENV_FILE = ROOT_DIR / '.env'
 
 # SECURITY WARNING: keep the secret key used in production secret!
@@ -52,12 +225,11 @@ INSTALLED_APPS = [
     'rest_framework',
     'DataRetrivalAPI',
     "django_ckeditor_5",
-    # To connect with frontend:
     'corsheaders',
+    "storages",
 ]
 
 CKEDITOR_5_UPLOAD_PATH = "uploads/"
-
 
 CKEDITOR_5_CONFIGS = {
     "default": {
@@ -71,9 +243,9 @@ CKEDITOR_5_CONFIGS = {
 }
 
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',  # Move CORS to top
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',  # Add Whitenoise
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -81,24 +253,6 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-
-INSTALLED_APPS += ["storages"]
-
-DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
-
-AWS_ACCESS_KEY_ID = os.getenv("R2_ACCESS_KEY_ID")
-AWS_SECRET_ACCESS_KEY = os.getenv("R2_SECRET_ACCESS_KEY")
-AWS_STORAGE_BUCKET_NAME = os.getenv("BUCKET")
-AWS_S3_ENDPOINT_URL = os.getenv("R2_S3_ENDPOINT_URL")
-AWS_S3_REGION_NAME = "auto"
-AWS_S3_SIGNATURE_VERSION = "s3v4"
-AWS_S3_FILE_OVERWRITE = False
-AWS_DEFAULT_ACL = None
-# AWS_S3_FILE_OVERWRITE = True
-# AWS_DEFAULT_ACL = None
-# AWS_QUERYSTRING_AUTH = False
-CSRF_TRUSTED_ORIGINS = ['https://forniengineeringweb.onrender.com']
-
 
 ROOT_URLCONF = 'forni_backend.urls'
 
@@ -113,7 +267,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'django.template.context_processors.media',  # ADD THIS LINE
+                'django.template.context_processors.media',
             ],
         },
     },
@@ -121,7 +275,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'forni_backend.wsgi.application'
 
-# Database
+# Database - Supabase
 DATABASES = {
     'default': dj_database_url.parse(
         config("SUPABASE_DB_URL"),
@@ -155,24 +309,46 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-
-# Whitenoise configuration
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# CORS settings(For frontend)
+# ===== CLOUDFLARE R2 CONFIGURATION =====
+# Enable S3 storage for file uploads
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
+# R2 Credentials
+AWS_ACCESS_KEY_ID = os.getenv("R2_ACCESS_KEY_ID")
+AWS_SECRET_ACCESS_KEY = os.getenv("R2_SECRET_ACCESS_KEY")
+AWS_STORAGE_BUCKET_NAME = os.getenv("BUCKET")
+AWS_S3_ENDPOINT_URL = os.getenv("R2_S3_ENDPOINT_URL")
+AWS_S3_REGION_NAME = "auto"
+AWS_S3_SIGNATURE_VERSION = "s3v4"
+AWS_S3_FILE_OVERWRITE = False
+AWS_DEFAULT_ACL = None
+
+# R2 Custom Domain (for serving files)
+R2_ACCOUNT_ID = os.getenv("R2_ACCOUNT_ID")
+if AWS_STORAGE_BUCKET_NAME and R2_ACCOUNT_ID:
+    AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.{R2_ACCOUNT_ID}.r2.cloudflarestorage.com"
+else:
+    AWS_S3_CUSTOM_DOMAIN = None
+
+# Media files
+MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/" if AWS_S3_CUSTOM_DOMAIN else "/media/"
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# ===== CORS SETTINGS =====
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",  # Allow Next.js frontend
+    "http://localhost:3000",
     "http://192.168.40.1:3000",
     "https://forniengineeringweb.onrender.com",
 ]
 
-# For production, you might want to allow all origins temporarily
-# CORS_ALLOW_ALL_ORIGINS = True  # Only for development
+CSRF_TRUSTED_ORIGINS = ['https://forniengineeringweb.onrender.com']
 
-# Security settings for production
+# ===== SECURITY SETTINGS (Production) =====
 if not DEBUG:
     SECURE_SSL_REDIRECT = True
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
