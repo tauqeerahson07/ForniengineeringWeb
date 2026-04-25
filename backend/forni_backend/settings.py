@@ -329,6 +329,9 @@ AWS_S3_FILE_OVERWRITE = False
 AWS_DEFAULT_ACL = None
 AWS_QUERYSTRING_AUTH = True
 
+# CRITICAL: Use path-style addressing for R2
+AWS_S3_ADDRESSING_STYLE = "path"
+
 # R2 Custom Domain (for serving files)
 R2_ACCOUNT_ID = os.getenv("R2_ACCOUNT_ID")
 AWS_S3_CUSTOM_DOMAIN = f"{os.getenv('BUCKET')}.{R2_ACCOUNT_ID}.r2.cloudflarestorage.com"
