@@ -318,7 +318,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Enable S3 storage for file uploads
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
-# R2 Credentials
+# R2 Credentials from .env
 AWS_ACCESS_KEY_ID = os.getenv("R2_ACCESS_KEY_ID")
 AWS_SECRET_ACCESS_KEY = os.getenv("R2_SECRET_ACCESS_KEY")
 AWS_STORAGE_BUCKET_NAME = os.getenv("BUCKET")
@@ -327,13 +327,11 @@ AWS_S3_REGION_NAME = "auto"
 AWS_S3_SIGNATURE_VERSION = "s3v4"
 AWS_S3_FILE_OVERWRITE = False
 AWS_DEFAULT_ACL = None
+AWS_QUERYSTRING_AUTH = True
 
 # R2 Custom Domain (for serving files)
 R2_ACCOUNT_ID = os.getenv("R2_ACCOUNT_ID")
-if AWS_STORAGE_BUCKET_NAME and R2_ACCOUNT_ID:
-    AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.{R2_ACCOUNT_ID}.r2.cloudflarestorage.com"
-else:
-    AWS_S3_CUSTOM_DOMAIN = None
+AWS_S3_CUSTOM_DOMAIN = f"{os.getenv('BUCKET')}.{R2_ACCOUNT_ID}.r2.cloudflarestorage.com"
 
 # Media files
 MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/" if AWS_S3_CUSTOM_DOMAIN else "/media/"
