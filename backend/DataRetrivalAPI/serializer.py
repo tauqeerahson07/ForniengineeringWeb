@@ -1,55 +1,63 @@
 from rest_framework import serializers
-from .models import Furnaces,FurnaceImages,Services,ServiceImages
+from .models import Furnaces, Services, FurnaceImages, ServiceImages
+from django.conf import settings
 
-# Serializer for the gallery images
 class FurnaceImagesSerializer(serializers.ModelSerializer):
+    image = serializers.SerializerMethodField()
+
+    def get_image(self, obj):
+        if obj.image:
+            if settings.DEBUG:
+                return obj.image.url
+            return obj.image.url  # R2 will provide signed URLs via Django storage
+        return None
+
     class Meta:
         model = FurnaceImages
-        fields = '__all__'
-
+        fields = ['image_id', 'image']
 
 class FurnacesSerializer(serializers.ModelSerializer):
-    # Override the cover_image field to return only the relative path
-    cover_image = serializers.SerializerMethodField()
     gallery_images = serializers.SerializerMethodField()
+    cover_image = serializers.SerializerMethodField()
+
+    def get_cover_image(self, obj):
+        if obj.cover_image:
+            return obj.cover_image.url
+        return None
+
+    def get_gallery_images(self, obj):
+        images = obj.gallery_images.all()
+        return [img.image.url for img in images if img.image]
 
     class Meta:
         model = Furnaces
         fields = ['name', 'feature', 'specification', 'cover_image', 'gallery_images']
 
-    def get_cover_image(self, obj):
-        # Extract the relative path from the full URL
-        if obj.cover_image:
-            return obj.cover_image.name  # Returns the relative path (e.g., "furnaces/.../image.jpg")
-        return None
-    def get_gallery_images(self, obj):
-        return list(
-            obj.gallery_images.values_list('image', flat=True)
-        )
-
-# Serializer for the gallery images
 class ServiceImagesSerializer(serializers.ModelSerializer):
+    image = serializers.SerializerMethodField()
+
+    def get_image(self, obj):
+        if obj.image:
+            return obj.image.url
+        return None
+
     class Meta:
         model = ServiceImages
-        fields = '__all__'
-
+        fields = ['image_id', 'image']
 
 class ServiceSerializer(serializers.ModelSerializer):
-    # Override the cover_image field to return only the relative path
-    cover_image = serializers.SerializerMethodField()
     gallery_images = serializers.SerializerMethodField()
+    cover_image = serializers.SerializerMethodField()
+
+    def get_cover_image(self, obj):
+        if obj.cover_image:
+            return obj.cover_image.url
+        return None
+
+    def get_gallery_images(self, obj):
+        images = obj.gallery_images.all()
+        return [img.image.url for img in images if img.image]
 
     class Meta:
         model = Services
         fields = ['name', 'description', 'cover_image', 'gallery_images']
-
-    def get_cover_image(self, obj):
-        # Extract the relative path from the full URL
-        if obj.cover_image:
-            return obj.cover_image.name  # Returns the relative path (e.g., "services/.../image.jpg")
-        return None
-
-    def get_gallery_images(self, obj):
-        return list(
-            obj.gallery_images.values_list('image', flat=True)
-        )

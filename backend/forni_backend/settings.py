@@ -16,8 +16,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # MEDIA_ROOT = os.path.join(BASE_DIR, '..', 'frontend', 'forni-web', 'public','webpage')
 # MEDIA_URL = '/webpage/'
+# MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# MEDIA_URL = '/media/'
+
+MEDIA_URL = f"https://{os.getenv("R2_S3_ENDPOINT_URL")}/"
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-MEDIA_URL = '/media/'
+
 
 # Point to the root directory .env file
 ROOT_DIR = BASE_DIR.parent  # This goes up one more level to the project root
