@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const backend_url = process.env.NEXT_BASE
-const supabase_domain = process.env.SUPABASSECRETHOSTNAME
+const cloudflare_domain = process.env.CLOUDFLARE_HOSTNAME
 const nextConfig = {
   async rewrites() {
     return [
@@ -23,7 +23,7 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol:"https",
-        hostname: supabase_domain
+        hostname: cloudflare_domain
       },
     ],
   },
