@@ -2,7 +2,7 @@
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-
+export const dynamic = 'force-static';
 const About = () => {
   return (
     <div className="min-h-screen bg-gray-50 pt-20">
