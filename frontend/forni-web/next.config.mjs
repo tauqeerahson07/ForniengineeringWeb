@@ -1,6 +1,7 @@
 /** @type {import('next').NextConfig} */
 const backend_url = process.env.NEXT_BASE
 const cloudflare_domain = process.env.CLOUDFLARE_HOSTNAME
+
 const nextConfig = {
   async rewrites() {
     return [
@@ -20,12 +21,12 @@ const nextConfig = {
     ];
   },
   images: {
-    remotePatterns: [
+    remotePatterns: cloudflare_domain ? [
       {
-        protocol:"https",
-        hostname: cloudflare_domain
+        protocol: "https",
+        hostname: cloudflare_domain,
       },
-    ],
+    ] : [],
   },
 };
 
