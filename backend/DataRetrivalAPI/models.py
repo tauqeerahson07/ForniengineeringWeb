@@ -1,6 +1,8 @@
 from django.db import models
 from django_ckeditor_5.fields import CKEditor5Field
 from django.utils.text import slugify
+from django.db.models.signals import pre_delete
+from django.dispatch import receiver
 import os
 from dotenv import load_dotenv
 
@@ -68,3 +70,24 @@ class ServiceImages(models.Model):
 
     def __str__(self):
         return f"Image for {self.service.name}"
+
+# Signal handlers to delete old images
+@receiver(pre_delete, sender=Furnaces)
+def delete_furnace_cover_image(sender, instance, **kwargs):
+    if instance.cover_image:
+        instance.cover_image.delete(save=False)
+
+@receiver(pre_delete, sender=FurnaceImages)
+def delete_furnace_gallery_image(sender, instance, **kwargs):
+    if instance.image:
+        instance.image.delete(save=False)
+
+@receiver(pre_delete, sender=Services)
+def delete_service_cover_image(sender, instance, **kwargs):
+    if instance.cover_image:
+        instance.cover_image.delete(save=False)
+
+@receiver(pre_delete, sender=ServiceImages)
+def delete_service_gallery_image(sender, instance, **kwargs):
+    if instance.image:
+        instance.image.delete(save=False)
