@@ -1,7 +1,7 @@
 from django.db import models
 from django_ckeditor_5.fields import CKEditor5Field
 from django.utils.text import slugify
-from django.db.models.signals import pre_delete
+from django.db.models.signals import pre_delete,pre_save
 from django.dispatch import receiver
 import os
 from dotenv import load_dotenv
@@ -71,7 +71,47 @@ class ServiceImages(models.Model):
     def __str__(self):
         return f"Image for {self.service.name}"
 
-# Signal handlers to delete old images
+# Signal handlers to delete old images when replaced or instance deleted
+@receiver(pre_save, sender=Furnaces)
+def delete_old_furnace_cover_image(sender, instance, **kwargs):
+    if instance.f_id:
+        try:
+            old_instance = Furnaces.objects.get(f_id=instance.f_id)
+            if old_instance.cover_image and old_instance.cover_image != instance.cover_image:
+                old_instance.cover_image.delete(save=False)
+        except Furnaces.DoesNotExist:
+            pass
+
+@receiver(pre_save, sender=FurnaceImages)
+def delete_old_furnace_gallery_image(sender, instance, **kwargs):
+    if instance.image_id:
+        try:
+            old_instance = FurnaceImages.objects.get(image_id=instance.image_id)
+            if old_instance.image and old_instance.image != instance.image:
+                old_instance.image.delete(save=False)
+        except FurnaceImages.DoesNotExist:
+            pass
+
+@receiver(pre_save, sender=Services)
+def delete_old_service_cover_image(sender, instance, **kwargs):
+    if instance.s_id:
+        try:
+            old_instance = Services.objects.get(s_id=instance.s_id)
+            if old_instance.cover_image and old_instance.cover_image != instance.cover_image:
+                old_instance.cover_image.delete(save=False)
+        except Services.DoesNotExist:
+            pass
+
+@receiver(pre_save, sender=ServiceImages)
+def delete_old_service_gallery_image(sender, instance, **kwargs):
+    if instance.image_id:
+        try:
+            old_instance = ServiceImages.objects.get(image_id=instance.image_id)
+            if old_instance.image and old_instance.image != instance.image:
+                old_instance.image.delete(save=False)
+        except ServiceImages.DoesNotExist:
+            pass
+
 @receiver(pre_delete, sender=Furnaces)
 def delete_furnace_cover_image(sender, instance, **kwargs):
     if instance.cover_image:
