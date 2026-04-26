@@ -314,33 +314,26 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# ===== CLOUDFLARE R2 CONFIGURATION =====
+# ===== CLOUDFLARE R2 CONFIGURATION (PRIVATE BUCKET) =====
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
-# R2 Credentials from .env
 AWS_ACCESS_KEY_ID = os.getenv("R2_ACCESS_KEY_ID")
 AWS_SECRET_ACCESS_KEY = os.getenv("R2_SECRET_ACCESS_KEY")
 AWS_STORAGE_BUCKET_NAME = os.getenv("BUCKET")
 
-# CRITICAL FIX: Format endpoint URL correctly for R2
 R2_ACCOUNT_ID = os.getenv("R2_ACCOUNT_ID")
 AWS_S3_ENDPOINT_URL = f"https://{R2_ACCOUNT_ID}.r2.cloudflarestorage.com"
 
-AWS_S3_REGION_NAME = "apac"
+AWS_S3_REGION_NAME = "auto"
+AWS_S3_ADDRESSING_STYLE = "path"
 AWS_S3_SIGNATURE_VERSION = "s3v4"
 AWS_S3_FILE_OVERWRITE = True
 AWS_DEFAULT_ACL = None
-AWS_QUERYSTRING_AUTH = True
+AWS_QUERYSTRING_AUTH = True   # generates presigned URLs for private access
 
-# Use virtual-hosted-style URLs (not path-style)
-AWS_S3_URL_PROTOCOL = "https:"
-AWS_S3_USE_SSL = True
+# No AWS_S3_CUSTOM_DOMAIN needed — presigned URLs use the S3 endpoint
+# No MEDIA_URL needed for serving — use default_storage.url() instead
 
-# R2 Custom Domain (for serving files)
-AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.{R2_ACCOUNT_ID}.r2.cloudflarestorage.com"
-
-# Media files
-MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/"
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # ===== CORS SETTINGS =====
