@@ -1,6 +1,5 @@
 import{React} from 'react';
 import ContactForm from '../../components/ContactForm';
-export const dynamic = 'force-static';
 const ContactPage = () => {
   return (
     <div className="contact-page flex flex-col items-center justify-center w-screen h-screen bg-orange-600">
