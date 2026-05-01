@@ -10,9 +10,7 @@ const ServiceDetailPage = () => {
   const name = pathname.split("/").pop();
   const decodedName = name ? decodeURIComponent(name) : "";
   const data = useContext(DataContext);
-  const service = data.getserviceByName(decodedName);
-
-
+  const service = data.getServiceByName(decodedName);
 
   // State for slideshow images
   const [allImages, setAllImages] = useState([]);
@@ -37,7 +35,7 @@ const ServiceDetailPage = () => {
   useEffect(() => {
     setAllImages(imagesList);
     setCurrentImageIndex(0); // Reset to first image when service changes
-  }, [service]);
+  }, []);
 
   // Navigation functions
   const nextImage = () => {
@@ -174,10 +172,10 @@ const ServiceDetailPage = () => {
               {service.name}
             </h1>
             <div className="grid grid-cols-1 gap-4">
-              {service.feature && (
+              {service.description && (
                 <div>
-                  <h2 className="text-xl font-semibold text-gray-800 mb-1">Feature</h2>
-                  <p className="text-gray-600">{service.feature}</p>
+                  <h2 className="text-xl font-semibold text-gray-800 mb-1">Description</h2>
+                  <p className="text-gray-600">{service.description}</p>
                 </div>
               )}
               {service.specification && (
