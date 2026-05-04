@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Furnaces, Services,FurnaceImages,ServiceImages
+from .models import Furnaces, Services,FurnaceImages,ServiceImages,SpareParts,SparePartImages
 from django.utils.text import slugify
 import os
 from supabase import create_client
@@ -104,9 +104,28 @@ class ServicesAdmin(admin.ModelAdmin):
             delete_supabase_folder(bucket_name, folder_path)
         super().delete_queryset(request, queryset)
 
+class SparePartImagesInline(admin.TabularInline):
+    model = SparePartImages
+    extra = 1
+
+class SparePartsAdmin(admin.ModelAdmin):
+    inlines = [SparePartImagesInline]
+    list_display = ('name','sp_id')
+
+    def delete_model(self, request, obj):
+        folder_path = f"spare_parts/{slugify(obj.name)}"
+        delete_supabase_folder(bucket_name, folder_path)
+        super().delete_model(request, obj)
+
+
+    def delete_queryset(self, request, queryset):
+        for obj in queryset:
+            folder_path = f"spare_parts/{slugify(obj.name)}"
+            delete_supabase_folder(bucket_name, folder_path)
 
 admin.site.register(Furnaces,FurnacesAdmin)
 admin.site.register(Services,ServicesAdmin)
+admin.site.register(SpareParts,SparePartsAdmin)
 
 # from django.contrib import admin
 # from .models import Furnaces, Services, FurnaceImages, ServiceImages

@@ -36,6 +36,20 @@ def additional_service_image_path(instance, filename):
     safe_filename = slugify(name) + ('.' + ext if ext else '')
     return f'services/{safe_name}/gallery/{safe_filename}'
 
+def spare_parts_upload_path(instance, filename):
+    safe_name = slugify(instance.name)
+    name, ext = filename.rsplit('.', 1) if '.' in filename else (filename, '')
+    safe_filename = slugify(name) + ('.' + ext if ext else '')
+    return f'spare-parts/{safe_name}/{safe_filename}'
+
+
+def additional_spare_part_image_path(instance, filename):
+    safe_name = slugify(instance.spare_part.name)
+    name, ext = filename.rsplit('.', 1) if '.' in filename else (filename, '')
+    safe_filename = slugify(name) + ('.' + ext if ext else '')
+    return f'spare-parts/{safe_name}/gallery/{safe_filename}'
+
+
 class Furnaces(models.Model):
     f_id = models.AutoField(primary_key=True, unique=True)
     cover_image = models.FileField(upload_to=furnaces_upload_path)
@@ -70,6 +84,24 @@ class ServiceImages(models.Model):
 
     def __str__(self):
         return f"Image for {self.service.name}"
+
+class SpareParts(models.Model):
+    sp_id = models.AutoField(primary_key=True, unique=True)
+    cover_image = models.FileField(upload_to=spare_parts_upload_path)
+    name = models.TextField()
+    description = models.TextField()
+
+    def __str__(self):
+        return f"{self.name}"
+
+class SparePartImages(models.Model):
+    image_id = models.AutoField(primary_key=True, unique=True)
+    image = models.FileField(upload_to=additional_spare_part_image_path)
+    spare_part = models.ForeignKey(SpareParts, on_delete=models.CASCADE, related_name='gallery_images')
+
+    def __str__(self):
+        return f"Image for {self.spare_part.name}"
+    
 
 # Signal handlers to delete old images when replaced or instance deleted
 @receiver(pre_save, sender=Furnaces)
@@ -112,6 +144,26 @@ def delete_old_service_gallery_image(sender, instance, **kwargs):
         except ServiceImages.DoesNotExist:
             pass
 
+@receiver(pre_save, sender=SpareParts)
+def delete_old_spare_part_cover_image(sender, instance, **kwargs):
+    if instance.sp_id:
+        try:
+            old_instance = SpareParts.objects.get(sp_id=instance.sp_id)
+            if old_instance.cover_image and old_instance.cover_image != instance.cover_image:
+                old_instance.cover_image.delete(save=False)
+        except SpareParts.DoesNotExist:
+            pass
+
+@receiver(pre_save, sender=SparePartImages)
+def delete_old_spare_part_gallery_image(sender, instance, **kwargs):
+    if instance.image_id:
+        try:
+            old_instance = SparePartImages.objects.get(image_id=instance.image_id)
+            if old_instance.image and old_instance.image != instance.image:
+                old_instance.image.delete(save=False)
+        except SparePartImages.DoesNotExist:
+            pass    
+
 @receiver(pre_delete, sender=Furnaces)
 def delete_furnace_cover_image(sender, instance, **kwargs):
     if instance.cover_image:
@@ -129,5 +181,16 @@ def delete_service_cover_image(sender, instance, **kwargs):
 
 @receiver(pre_delete, sender=ServiceImages)
 def delete_service_gallery_image(sender, instance, **kwargs):
+    if instance.image:
+        instance.image.delete(save=False)
+        
+
+@receiver(pre_delete, sender=SpareParts)
+def delete_spare_part_cover_image(sender, instance, **kwargs):
+    if instance.cover_image:
+        instance.cover_image.delete(save=False)
+
+@receiver(pre_delete, sender=SparePartImages)
+def delete_spare_part_gallery_image(sender, instance, **kwargs):
     if instance.image:
         instance.image.delete(save=False)
