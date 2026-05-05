@@ -2,8 +2,8 @@ from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import api_view
-from .models import Furnaces,Services
-from .serializer import FurnacesSerializer,ServiceSerializer
+from .models import Furnaces,Services,SpareParts
+from .serializer import FurnacesSerializer,ServiceSerializer,SparePartsSerializer
 from rest_framework import status
 # Create your views here.
 
@@ -47,6 +47,29 @@ def SearchFindServices(request, name):
         return Response(serializer.data)
     else:
         # Return a 404 response if no furnaces are found
+        return Response(
+            {"error": f"No services found containing the name '{name}'."},
+            status=status.HTTP_404_NOT_FOUND
+        )
+
+@api_view(["GET"])
+def spare_parts(request):
+    spare_parts = SpareParts.objects.all()
+    serializer = SparePartsSerializer(spare_parts, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+def SearchFindSpareParts(request, name):
+    # Filter spare parts by the name (URL parameter)
+    spare_parts = SpareParts.objects.filter(name__icontains=name).all()
+    print(spare_parts.query)
+    if spare_parts.exists():
+        # Serialize the filtered queryset
+        serializer = SparePartsSerializer(spare_parts, many=True)
+        return Response(serializer.data)
+    else:
+        # Return a 404 response if no spare parts are found
         return Response(
             {"error": f"No services found containing the name '{name}'."},
             status=status.HTTP_404_NOT_FOUND
