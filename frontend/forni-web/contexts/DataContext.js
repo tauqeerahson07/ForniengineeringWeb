@@ -5,11 +5,13 @@ import { getSignedUrl } from "@/lib/supabase";
 const DataContext = createContext({
     furnaces: null,
     services: null,
+    spareParts: null,
     loading: true,
     error: null,
     addData: function () {},
     getFurnaceByName: function (name) {},
     getServiceByName: function (name) {},
+    getSparePartByName: function (name) {},
     refreshData: function () {},
 });
 
@@ -59,6 +61,7 @@ const setCachedData = (data) => {
 export function DataContextProvider({ children, initialData = null }) {
     const [furnaces, setFurnaces] = useState(initialData?.furnaces || null);
     const [services, setServices] = useState(initialData?.services || null);
+    const [spareParts, setSpareParts] = useState(initialData?.spareParts || null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
@@ -78,13 +81,18 @@ export function DataContextProvider({ children, initialData = null }) {
             }
 
             // Parallel requests for better performance
-            const [furnacesResponse, servicesResponse] = await Promise.allSettled([
+            const [furnacesResponse, servicesResponse, sparePartsResponse] = await Promise.allSettled([
                 fetch(`${BACKEND_URL}/furnaces`, {
                     headers: {
                         "Cache-Control": "max-age=300", // 5 minutes browser cache
                     },
                 }),
                 fetch(`${BACKEND_URL}/services`, {
+                    headers: {
+                        "Cache-Control": "max-age=300",
+                    },
+                }),
+                fetch(`${BACKEND_URL}/spare-parts`, {
                     headers: {
                         "Cache-Control": "max-age=300",
                     },
@@ -155,22 +163,56 @@ export function DataContextProvider({ children, initialData = null }) {
             } else {
                 console.warn("❌ Services failed:", servicesResponse.reason || servicesResponse.value?.status);
             }
+            // Process spare parts
+            let sparePartsData = [];
+            if (sparePartsResponse.status === "fulfilled" && sparePartsResponse.value.ok) {
+                const rawSparePartsData = await sparePartsResponse.value.json();
+                sparePartsData = await Promise.all(
+                    rawSparePartsData.map(async (item) => {
+                        const cover_image =
+                            (await getSignedUrl("forni-web-images", item.cover_image)) || item.cover_image;
+
+                        // Process gallery images
+                        const gallery_images = item.gallery_images || [];
+                        const gallery_images_url = await Promise.all(
+                            gallery_images.map(async (image) => {
+                                const signedUrl = await getSignedUrl("forni-web-images", image);
+                                return signedUrl;
+                            })
+                        );
+
+                        return {
+                            ...item,
+                            cover_image,
+                            gallery_images: gallery_images_url,
+                        };
+                    })
+                );
+            } else {
+                console.warn(
+                    "❌ Spare Parts failed:",
+                    sparePartsResponse.reason || sparePartsResponse.value?.status
+                );
+            }
 
             // Cache the data
             const dataToCache = {
                 furnaces: furnacesData,
                 services: servicesData,
+                spareParts: sparePartsData,
             };
             setCachedData(dataToCache);
 
             // Update state
             setFurnaces(furnacesData);
             setServices(servicesData);
+            setSpareParts(sparePartsData);
         } catch (err) {
             console.error("💥 Critical error in fetchData:", err);
             setError(err.message);
             setFurnaces([]);
             setServices([]);
+            setSpareParts([]);
         } finally {
             setLoading(false);
         }
@@ -224,8 +266,28 @@ export function DataContextProvider({ children, initialData = null }) {
                         })
                     );
 
+                    const signedSpareParts = await Promise.all(
+                        (initialData.spareParts || []).map(async (item) => {
+                            const cover_image =
+                                (await getSignedUrl("forni-web-images", item.cover_image)) || item.cover_image;
+
+                            const gallery_images = await Promise.all(
+                                (item.gallery_images || []).map(async (img) => {
+                                    return (await getSignedUrl("forni-web-images", img)) || img;
+                                })
+                            );
+
+                            return {
+                                ...item,
+                                cover_image,
+                                gallery_images,
+                            };
+                        })
+                    );
+
                     setFurnaces(signedFurnaces);
                     setServices(signedServices);
+                    setSpareParts(signedSpareParts);
                 } catch (err) {
                     console.error("Error processing initial data:", err);
                     setError(err.message);
@@ -246,12 +308,21 @@ export function DataContextProvider({ children, initialData = null }) {
                 furnaces: updatedFurnaces,
                 services: services || [],
             });
-        } else if (type === "services" && services) {
+        } 
+        else if (type === "services" && services) {
             const updatedServices = [...services, newItem];
             setServices(updatedServices);
             setCachedData({
                 furnaces: furnaces || [],
                 services: updatedServices,
+            });
+        } else if (type === "spareParts" && spareParts) {
+            const updatedSpareParts = [...spareParts, newItem];
+            setSpareParts(updatedSpareParts);
+            setCachedData({
+                furnaces: furnaces || [],
+                services: services || [],
+                spareParts: updatedSpareParts,
             });
         }
     };
@@ -289,7 +360,21 @@ export function DataContextProvider({ children, initialData = null }) {
         },
         [services]
     );
+    const getSparePartByName = useCallback(
+        (name) => {
+            if (!name || !spareParts?.length) return null;
 
+            const decodedName = decodeURIComponent(name);
+            const sparePart = spareParts.find((sp) => sp.name.toLowerCase() === decodedName.toLowerCase());
+
+            if (!sparePart) {
+                console.warn(`⚠️ Spare Part not found: ${decodedName}`);
+            }
+
+            return sparePart || null;
+        },
+        [spareParts]
+    );
     // Refresh data function (bypass cache)
     const refreshData = useCallback(() => {
         fetchData(false);
@@ -298,11 +383,13 @@ export function DataContextProvider({ children, initialData = null }) {
     const value = {
         furnaces,
         services,
+        spareParts,
         loading,
         error,
         addData,
         getFurnaceByName,
         getServiceByName,
+        getSparePartByName,
         refreshData,
     };
     return <DataContext.Provider value={value}>{children}</DataContext.Provider>;

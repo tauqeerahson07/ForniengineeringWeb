@@ -7,7 +7,7 @@ import DataContext from '@/contexts/DataContext';
 import Sidebar from './Sidebar';
 
 const Navbar = () => {
-  const { furnaces, services, loading, error } = useContext(DataContext);
+  const { furnaces, services, spareParts, loading, error } = useContext(DataContext);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -88,15 +88,15 @@ const Navbar = () => {
             {/* Search Bar - Desktop */}
             <div className="hidden md:flex max-w-sm relative">
               <div className="relative w-full">
-                <input
+                {/* <input
                   type="text"
                   placeholder="Search furnaces, services..."
                   value={searchQuery}
                   onChange={handleSearchInputChange}
                   onFocus={() => setShowSearchResults(searchQuery.trim().length > 0)}
                   className="w-full px-4 py-2 pl-10 pr-10 text-sm bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-orange-200 focus:border-orange-300 focus:bg-white outline-none transition-colors duration-200 placeholder-gray-400"
-                />
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                /> */}
+                {/* <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                   <svg className="h-5 w-5 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                   </svg>
@@ -110,11 +110,11 @@ const Navbar = () => {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                     </svg>
                   </button>
-                )}
+                )} */}
               </div>
 
               {/* Search Results Dropdown */}
-              {showSearchResults && (
+              {/* {showSearchResults && (
                 <div className="absolute top-full right-0 left-0 mt-1 bg-white border border-gray-100 rounded-lg shadow-lg z-50 max-h-96 overflow-y-auto">
                   {searchResults.length > 0 ? (
                     <div className="py-2">
@@ -155,7 +155,7 @@ const Navbar = () => {
                     </div>
                   )}
                 </div>
-              )}
+              )} */}
             </div>
 
             {/* Desktop Navigation */}
@@ -166,6 +166,55 @@ const Navbar = () => {
               >
                 About Us
               </Link>
+              {/* Spare Parts Dropdown */}
+              <div className="relative group">
+                <Link href={'/spare_parts'}>
+                <button className="text-gray-700 hover:text-orange-600 px-3 py-2 text-sm font-medium flex items-center transition-colors duration-200">
+                  Spare Parts
+                  <svg className="ml-1 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+                </Link>
+                <div className="absolute left-0 top-full mt-1 w-64 bg-white rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 border border-gray-200">
+                  <div className="py-2">
+                    <Link 
+                      href="/spare_parts" 
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 font-medium border-b border-gray-100"
+                    >
+                      View All Spare Parts
+                    </Link>
+                    
+                    {loading ? (
+                      <div className="px-4 py-2 text-sm text-gray-500">Loading...</div>
+                    ) : spareParts && spareParts.length > 0 ? (
+                      spareParts.slice(0, 6).map((part) => (
+                        <Link
+                          key={part.id}
+                          href={`/spare_parts/${part.name}`}
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors duration-150"
+                        >
+                          {part.name.length > 30
+                            ? `${part.name.substring(0, 30)}...`
+                            : part.name
+                          }
+                        </Link>
+                      ))
+                    ) : (
+                      <div className="px-4 py-2 text-sm text-gray-500">No spare parts available</div>
+                    )}
+
+                    {spareParts && spareParts.length > 6 && (
+                      <Link
+                        href="/spare_parts"
+                        className="block px-4 py-2 text-sm text-orange-600 hover:bg-orange-50 font-medium border-t border-gray-100"
+                      >
+                        View More...
+                      </Link>
+                    )}
+                  </div>
+                </div>
+              </div>
               
               {/* Furnaces Dropdown */}
               <div className="relative group">

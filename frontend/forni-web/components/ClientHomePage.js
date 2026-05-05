@@ -5,7 +5,7 @@ import Card from "@/components/Card";
 import Link from "next/link";
 
 export default function ClientHomePage() {
-    const { furnaces, services, loading} = useContext(DataContext);
+    const { furnaces, services, spareParts, loading } = useContext(DataContext);
 
     if (loading) {
         return (
@@ -27,20 +27,15 @@ export default function ClientHomePage() {
 
     const currentFurnaces = furnaces || [];
     const currentServices = services || [];
-    
+    const currentSpareParts = spareParts || [];
+
     return (
         <div className="bg-white min-h-screen">
             {/* Copy ALL your existing JSX from page.js here */}
             {/* Hero Section */}
             <div className="relative min-h-[80vh] overflow-hidden">
                 <div className="absolute inset-0">
-                    <img 
-                        src='/webpage/forni_web_banner.jpg' 
-                        className="w-full h-full object-cover object-center" 
-                        alt="Forni Engineering Industrial Facility"
-                        loading="eager"
-                        fetchPriority="high"
-                    />
+                    <video src="/Forni_demo.mp4" autoPlay loop muted className="w-full h-full object-cover"/>
                     <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-transparent"></div>
                 </div>
                 
@@ -151,6 +146,44 @@ export default function ClientHomePage() {
                                     </h3>
                                     <p className="text-gray-500">
                                         We're currently updating our service catalog. Please check back soon.
+                                    </p>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            </section>
+            {/* Spare Parts Section */}
+            <section className="py-16 sm:py-20 lg:py-24 bg-white">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="text-center mb-16">
+                        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
+                            Available Spare Parts
+                        </h2>
+                        <div className="w-24 h-1 bg-orange-600 mx-auto mb-6"></div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10 max-w-6xl mx-auto">
+                            {currentSpareParts.length > 0 ? (
+                                currentSpareParts.slice(0, 6).map((item, index) => (
+                                    <div 
+                                        key={`spare-part-${item.id}`}
+                                        className="transform hover:scale-105 transition-all duration-300 flex justify-center"
+                                        style={{ animationDelay: `${index * 0.1}s` }}
+                                    >
+                                        <Card
+                                            name={item.name}
+                                            specs={item.description}
+                                            image={item.cover_image}
+                                        />
+                                    </div>
+                                ))
+                            ) : (
+                                <div className="col-span-full text-center py-16">
+                                    <div className="text-6xl text-gray-300 mb-4">⚙️</div>
+                                    <h3 className="text-xl font-semibold text-gray-600 mb-2">
+                                        No Spare Parts Available
+                                    </h3>
+                                    <p className="text-gray-500">
+                                        We're currently updating our spare parts catalog. Please check back soon.
                                     </p>
                                 </div>
                             )}
