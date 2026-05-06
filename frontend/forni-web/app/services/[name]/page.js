@@ -5,6 +5,21 @@ import { useContext } from "react";
 import DataContext from "@/contexts/DataContext";
 import Image from "next/image";
 
+export async function generateStaticParams() {
+  try {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND}/services`);
+    if (!response.ok) return [];
+    
+    const services = await response.json();
+    return services.map((service) => ({
+      name: encodeURIComponent(service.name),
+    }));
+  } catch (error) {
+    console.error("Error generating static params for services:", error);
+    return [];
+  }
+}
+
 const ServiceDetailPage = () => {
   const pathname = usePathname();
   const name = pathname.split("/").pop();

@@ -5,6 +5,22 @@ import { useContext } from "react";
 import DataContext from "@/contexts/DataContext";
 import Image from "next/image";
 
+// Generate static params for all furnaces
+export async function generateStaticParams() {
+  try {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND}/furnaces`);
+    if (!response.ok) return [];
+    
+    const furnaces = await response.json();
+    return furnaces.map((furnace) => ({
+      name: encodeURIComponent(furnace.name),
+    }));
+  } catch (error) {
+    console.error("Error generating static params for furnaces:", error);
+    return [];
+  }
+}
+
 const FurnaceDetailPage = () => {
   const pathname = usePathname();
   const name = pathname.split("/").pop();
