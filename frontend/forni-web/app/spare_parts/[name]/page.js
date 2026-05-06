@@ -5,20 +5,6 @@ import { useContext } from "react";
 import DataContext from "@/contexts/DataContext";
 import Image from "next/image";
 
-export async function generateStaticParams() {
-  try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND}/spare-parts`);
-    if (!response.ok) return [];
-    
-    const spareParts = await response.json();
-    return spareParts.map((part) => ({
-      name: encodeURIComponent(part.name),
-    }));
-  } catch (error) {
-    console.error("Error generating static params for spare parts:", error);
-    return [];
-  }
-}
 
 const SparePartsDetailPage = () => {
   const pathname = usePathname();
