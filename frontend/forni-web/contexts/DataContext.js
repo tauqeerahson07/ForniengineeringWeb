@@ -1,6 +1,5 @@
 "use client";
 import { createContext, useContext, useEffect, useState, useCallback } from "react";
-import { getSignedUrl } from "@/lib/supabase";
 
 const DataContext = createContext({
     furnaces: null,
@@ -75,6 +74,7 @@ export function DataContextProvider({ children, initialData = null }) {
                 if (cachedData) {
                     setFurnaces(cachedData.furnaces || []);
                     setServices(cachedData.services || []);
+                    setSpareParts(cachedData.spareParts || []);
                     setLoading(false);
                     return;
                 }
@@ -102,92 +102,26 @@ export function DataContextProvider({ children, initialData = null }) {
             // Process furnaces
             let furnacesData = [];
             if (furnacesResponse.status === "fulfilled" && furnacesResponse.value.ok) {
-                const rawFurnacesData = await furnacesResponse.value.json();
-
-                furnacesData = await Promise.all(
-                    rawFurnacesData.map(async (item) => {
-                        const cover_image =
-                            (await getSignedUrl("forni-web-images", item.cover_image)) || item.cover_image;
-                    
-                        // Process gallery images
-                        const gallery_images = item.gallery_images || [];
-                        const gallery_images_url = await Promise.all(
-                            gallery_images.map(async (image) => {
-                                const signedUrl = await getSignedUrl("forni-web-images", image);
-                                return signedUrl;
-                            })
-                        );
-                    
-                        return {
-                            ...item,
-                            cover_image,
-                            gallery_images: gallery_images_url,
-                        };
-                    })
+                furnacesData = await furnacesResponse.value.json();
+            } else {
+                console.warn(
+                    "❌ Furnaces failed:",
+                    furnacesResponse.reason || furnacesResponse.value?.status
                 );
-
-                } else {
-                    console.warn(
-                        "❌ Furnaces failed:",
-                        furnacesResponse.reason || furnacesResponse.value?.status
-                    );
-                }
-
+            }
 
             // Process services
             let servicesData = [];
             if (servicesResponse.status === "fulfilled" && servicesResponse.value.ok) {
-                const rawServicesData = await servicesResponse.value.json();
-                servicesData = await Promise.all(
-                    rawServicesData.map(async (item) => {
-                        const cover_image =
-                            (await getSignedUrl("forni-web-images", item.cover_image)) || item.cover_image;
-                    
-                        // Process gallery images
-                        const gallery_images = item.gallery_images || [];
-                        const gallery_images_url = await Promise.all(
-                            gallery_images.map(async (image) => {
-                                const signedUrl = await getSignedUrl("forni-web-images", image);
-                                return signedUrl;
-                            })
-                        );
-                    
-                        return {
-                            ...item,
-                            cover_image,
-                            gallery_images: gallery_images_url,
-                        };
-                        
-                    })
-                );
+                servicesData = await servicesResponse.value.json();
             } else {
                 console.warn("❌ Services failed:", servicesResponse.reason || servicesResponse.value?.status);
             }
+
             // Process spare parts
             let sparePartsData = [];
             if (sparePartsResponse.status === "fulfilled" && sparePartsResponse.value.ok) {
-                const rawSparePartsData = await sparePartsResponse.value.json();
-                sparePartsData = await Promise.all(
-                    rawSparePartsData.map(async (item) => {
-                        const cover_image =
-                            (await getSignedUrl("forni-web-images", item.cover_image)) || item.cover_image;
-
-                        // Process gallery images
-                        const gallery_images = item.gallery_images || [];
-                        const gallery_images_url = await Promise.all(
-                            gallery_images.map(async (image) => {
-                                const signedUrl = await getSignedUrl("forni-web-images", image);
-                                return signedUrl;
-                            })
-                        );
-
-                        return {
-                            ...item,
-                            cover_image,
-                            gallery_images: gallery_images_url,
-                        };
-                    })
-                );
+                sparePartsData = await sparePartsResponse.value.json();
             } else {
                 console.warn(
                     "❌ Spare Parts failed:",
@@ -218,112 +152,21 @@ export function DataContextProvider({ children, initialData = null }) {
         }
     }, [initialData]);
 
-    // useEffect(() => {
-    //     const processData = async () => {
-    //         if (!initialData) {
-    //             // No initial data - fetch from API
-    //             await fetchData(true);
-    //         } else {
-    //             // Process initial data and generate signed URLs
-    //             try {
-    //                 setLoading(true);
-                    
-    //                 const signedFurnaces = await Promise.all(
-    //                     (initialData.furnaces || []).map(async (item) => {
-    //                         const cover_image =
-    //                             (await getSignedUrl("forni-web-images", item.cover_image)) || item.cover_image;
-                        
-    //                         const gallery_images = await Promise.all(
-    //                             (item.gallery_images || []).map(async (img) => {
-    //                                 return (await getSignedUrl("forni-web-images", img)) || img;
-    //                             })
-    //                         );
-                        
-    //                         return {
-    //                             ...item,
-    //                             cover_image,
-    //                             gallery_images,
-    //                         };
-    //                     })
-    //                 );
-
-    //                 const signedServices = await Promise.all(
-    //                     (initialData.services || []).map(async (item) => {
-    //                         const cover_image = 
-    //                             (await getSignedUrl("forni-web-images", item.cover_image)) || item.cover_image;
-                        
-    //                         const gallery_images = await Promise.all(
-    //                             (item.gallery_images || []).map(async (img) => {
-    //                                 return (await getSignedUrl("forni-web-images", img)) || img;
-    //                             })
-    //                         );
-                        
-    //                         return {
-    //                             ...item,
-    //                             cover_image,
-    //                             gallery_images,
-    //                         };
-    //                     })
-    //                 );
-
-    //                 const signedSpareParts = await Promise.all(
-    //                     (initialData.spareParts || []).map(async (item) => {
-    //                         const cover_image =
-    //                             (await getSignedUrl("forni-web-images", item.cover_image)) || item.cover_image;
-
-    //                         const gallery_images = await Promise.all(
-    //                             (item.gallery_images || []).map(async (img) => {
-    //                                 return (await getSignedUrl("forni-web-images", img)) || img;
-    //                             })
-    //                         );
-
-    //                         return {
-    //                             ...item,
-    //                             cover_image,
-    //                             gallery_images,
-    //                         };
-    //                     })
-    //                 );
-
-    //                 setFurnaces(signedFurnaces);
-    //                 setServices(signedServices);
-    //                 setSpareParts(signedSpareParts);
-    //             } catch (err) {
-    //                 console.error("Error processing initial data:", err);
-    //                 setError(err.message);
-    //             } finally {
-    //                 setLoading(false);
-    //             }
-    //         }
-    //     };
-    //     processData();
-    // }, [fetchData, initialData]);
-
     useEffect(() => {
-    const processData = async () => {
-        if (!initialData) {
-            await fetchData(true);
-        } else {
-            // Check if we're in browser (not build time)
-            if (typeof window !== 'undefined') {
-                // Only generate signed URLs on client
-                try {
-                    setLoading(true);
-                    // ...generate signed URLs...
-                } finally {
-                    setLoading(false);
-                }
+        const processData = async () => {
+            if (!initialData) {
+                // No initial data - fetch from API
+                await fetchData(true);
             } else {
-                // During build, just set data as-is
+                // Simply set initial data as-is (no URL processing needed)
                 setFurnaces(initialData.furnaces || []);
                 setServices(initialData.services || []);
                 setSpareParts(initialData.spareParts || []);
                 setLoading(false);
             }
-        }
-    };
-    processData();
-}, [fetchData, initialData]);
+        };
+        processData();
+    }, [fetchData, initialData]);
 
     // Add data function
     const addData = (type, newItem) => {
@@ -333,14 +176,15 @@ export function DataContextProvider({ children, initialData = null }) {
             setCachedData({
                 furnaces: updatedFurnaces,
                 services: services || [],
+                spareParts: spareParts || [],
             });
-        } 
-        else if (type === "services" && services) {
+        } else if (type === "services" && services) {
             const updatedServices = [...services, newItem];
             setServices(updatedServices);
             setCachedData({
                 furnaces: furnaces || [],
                 services: updatedServices,
+                spareParts: spareParts || [],
             });
         } else if (type === "spareParts" && spareParts) {
             const updatedSpareParts = [...spareParts, newItem];
@@ -386,6 +230,8 @@ export function DataContextProvider({ children, initialData = null }) {
         },
         [services]
     );
+
+    // Get specific spare part by name (memoized)
     const getSparePartByName = useCallback(
         (name) => {
             if (!name || !spareParts?.length) return null;
@@ -401,6 +247,7 @@ export function DataContextProvider({ children, initialData = null }) {
         },
         [spareParts]
     );
+
     // Refresh data function (bypass cache)
     const refreshData = useCallback(() => {
         fetchData(false);
@@ -418,5 +265,6 @@ export function DataContextProvider({ children, initialData = null }) {
         getSparePartByName,
         refreshData,
     };
+
     return <DataContext.Provider value={value}>{children}</DataContext.Provider>;
 }
