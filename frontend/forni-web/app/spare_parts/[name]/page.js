@@ -121,9 +121,9 @@ const SparePartsDetailPage = () => {
                       key={index}
                       src={img.image}
                       alt={img.alt}
-                      layout="fill"
-                      objectFit="cover"
-                      className={`transition-opacity duration-500 ${index === currentImageIndex ? 'opacity-100' : 'opacity-0'}`}
+                      fill
+                      className={`object-cover transition-opacity duration-500 ${index === currentImageIndex ? 'opacity-100' : 'opacity-0'}`}
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 50vw"
                     />
                     ))
                 ) : (

@@ -165,7 +165,7 @@ export default function ClientHomePage() {
                             {currentSpareParts.length > 0 ? (
                                 currentSpareParts.slice(0, 6).map((item, index) => (
                                     <div 
-                                        key={`spare-part-${item.id}`}
+                                        key={`spare-part-${item.sp_id}`}
                                         className="transform hover:scale-105 transition-all duration-300 flex justify-center"
                                         style={{ animationDelay: `${index * 0.1}s` }}
                                     >

@@ -3,6 +3,21 @@ const backend_url = process.env.NEXT_BASE
 const cloudflare_domain = process.env.CLOUDFLARE_HOSTNAME
 
 const nextConfig = {
+  // Enable SWR (Stale-While-Revalidate) for better caching
+  headers: async () => {
+    return [
+      {
+        source: '/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=3600, stale-while-revalidate=86400'
+          }
+        ]
+      }
+    ]
+  },
+  
   async rewrites() {
     return [
       {
@@ -11,6 +26,7 @@ const nextConfig = {
       },
     ];
   },
+  
   async redirects() {
     return [
       {
@@ -20,6 +36,7 @@ const nextConfig = {
       },
     ];
   },
+  
   images: {
     remotePatterns: cloudflare_domain ? [
       {
@@ -27,6 +44,25 @@ const nextConfig = {
         hostname: cloudflare_domain,
       },
     ] : [],
+    // Optimize images for production
+    formats: ['image/avif', 'image/webp'],
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+  },
+  
+  // Performance optimizations
+  swcMinify: true,
+  compress: true,
+  productionBrowserSourceMaps: false,
+  
+  // Build optimizations
+  optimizeFonts: true,
+  
+  // Environment variables
+  env: {
+    NEXT_PUBLIC_BACKEND: process.env.NEXT_PUBLIC_BACKEND,
+    NEXT_BASE: process.env.NEXT_BASE,
+    CLOUDFLARE_HOSTNAME: process.env.CLOUDFLARE_HOSTNAME,
   },
 };
 

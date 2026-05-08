@@ -150,16 +150,20 @@ const SpareParts = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {filteredAndSortedSpareParts.map((sparePart) => (
     <div
-      key={sparePart.id}
+      key={sparePart.sp_id}
       className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow duration-200"
     >
       {/* Spare Part Image */}
       <div className="relative h-60 bg-gray-100">
         {
           sparePart.cover_image ? (
-            <Image src={sparePart.cover_image}
-            fill
-            className='w-full h-full object-cover object-center'/>
+            <Image 
+              src={sparePart.cover_image}
+              alt={sparePart.name}
+              fill
+              className='object-cover object-center'
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+            />
         ) : (
           <div className="flex items-center justify-center h-full">
             <svg className="h-16 w-16 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">

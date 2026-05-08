@@ -157,9 +157,13 @@ const Furnaces = () => {
       <div className="relative h-60 bg-gray-100">
         {
           furnace.cover_image ? (
-            <Image src={furnace.cover_image} 
-            fill
-            className='w-full h-full object-cover object-center'/>
+            <Image 
+              src={furnace.cover_image}
+              alt={furnace.name}
+              fill
+              className='object-cover object-center'
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+            />
         ) : (
           <div className="flex items-center justify-center h-full">
             <svg className="h-16 w-16 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">

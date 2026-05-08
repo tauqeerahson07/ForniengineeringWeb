@@ -26,6 +26,7 @@ const Navbar = () => {
         if (furnace.name.toLowerCase().includes(query) || 
             furnace.specification?.toLowerCase().includes(query)) {
           results.push({
+            id: `furnace-${furnace.f_id}`,
             type: 'furnace',
             name: furnace.name,
             description: furnace.specification,
@@ -41,6 +42,7 @@ const Navbar = () => {
         if (service.name.toLowerCase().includes(query) || 
             service.description?.toLowerCase().includes(query)) {
           results.push({
+            id: `service-${service.s_id}`,
             type: 'service',
             name: service.name,
             description: service.description,
@@ -120,7 +122,7 @@ const Navbar = () => {
                     <div className="py-2">
                       {searchResults.map((result) => (
                         <Link
-                          key={`${result.type}-${result.id}`}
+                          key={result.id}
                           href={result.url}
                           className="block px-4 py-3 hover:bg-gray-50 border-b border-gray-50 last:border-b-0"
                           onClick={clearSearch}
@@ -190,7 +192,7 @@ const Navbar = () => {
                     ) : spareParts && spareParts.length > 0 ? (
                       spareParts.slice(0, 6).map((part) => (
                         <Link
-                          key={part.id}
+                          key={part.sp_id}
                           href={`/spare_parts/${part.name}`}
                           className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors duration-150"
                         >
@@ -380,7 +382,7 @@ const Navbar = () => {
                     <div className="py-2">
                       {searchResults.map((result) => (
                         <Link
-                          key={`${result.type}-${result.id}`}
+                          key={result.id}
                           href={result.url}
                           className="block px-3 py-2 hover:bg-white rounded border-b border-gray-100 last:border-b-0"
                           onClick={() => {

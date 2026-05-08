@@ -43,12 +43,13 @@ const Card = (props) => {
   };
   return (
     <div className="card text-black w-96 shadow-sm">
-      <figure>
+      <figure className="relative w-full h-64">
         <Image
           src={props.image}
           alt={props.name}
-          width={256}
-          height={256}
+          fill
+          className="object-cover"
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           onClick={handleCardClick}
         />
       </figure>
