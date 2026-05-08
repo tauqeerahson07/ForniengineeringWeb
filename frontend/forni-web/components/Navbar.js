@@ -121,12 +121,12 @@ const Navbar = () => {
                   {searchResults.length > 0 ? (
                     <div className="py-2">
                       {searchResults.map((result) => (
-                        <Link
-                          key={result.id}
-                          href={result.url}
-                          className="block px-4 py-3 hover:bg-gray-50 border-b border-gray-50 last:border-b-0"
-                          onClick={clearSearch}
-                        >
+                        <React.Fragment key={result.id}>
+                          <Link
+                            href={result.url}
+                            className="block px-4 py-3 hover:bg-gray-50 border-b border-gray-50 last:border-b-0"
+                            onClick={clearSearch}
+                          >
                           <div className="flex items-start">
                             <div className="flex-shrink-0 mt-1">
                               {result.type === 'furnace' ? (
@@ -149,6 +149,7 @@ const Navbar = () => {
                             </div>
                           </div>
                         </Link>
+                        </React.Fragment>
                       ))}
                     </div>
                   ) : (
@@ -188,22 +189,27 @@ const Navbar = () => {
                     </Link>
                     
                     {loading ? (
-                      <div className="px-4 py-2 text-sm text-gray-500">Loading...</div>
+                      <React.Fragment key="spare-parts-loading">
+                        <div className="px-4 py-2 text-sm text-gray-500">Loading...</div>
+                      </React.Fragment>
                     ) : spareParts && spareParts.length > 0 ? (
                       spareParts.slice(0, 6).map((part) => (
-                        <Link
-                          key={part.sp_id}
-                          href={`/spare_parts/${part.name}`}
-                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors duration-150"
-                        >
-                          {part.name.length > 30
-                            ? `${part.name.substring(0, 30)}...`
-                            : part.name
-                          }
-                        </Link>
+                        <React.Fragment key={part.sp_id}>
+                          <Link
+                            href={`/spare_parts/${part.name}`}
+                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors duration-150"
+                          >
+                            {part.name.length > 30
+                              ? `${part.name.substring(0, 30)}...`
+                              : part.name
+                            }
+                          </Link>
+                        </React.Fragment>
                       ))
                     ) : (
-                      <div className="px-4 py-2 text-sm text-gray-500">No spare parts available</div>
+                      <React.Fragment key="spare-parts-empty">
+                        <div className="px-4 py-2 text-sm text-gray-500">No spare parts available</div>
+                      </React.Fragment>
                     )}
 
                     {spareParts && spareParts.length > 6 && (
@@ -238,22 +244,27 @@ const Navbar = () => {
                     </Link>
                     
                     {loading ? (
-                      <div className="px-4 py-2 text-sm text-gray-500">Loading...</div>
+                      <React.Fragment key="furnaces-loading">
+                        <div className="px-4 py-2 text-sm text-gray-500">Loading...</div>
+                      </React.Fragment>
                     ) : furnaces && furnaces.length > 0 ? (
                       furnaces.slice(0, 6).map((furnace) => (
-                        <Link
-                          key={furnace.f_id}
-                          href={`/furnaces/${furnace.name}`}
-                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors duration-150"
-                        >
-                          {furnace.name.length > 30 
-                            ? `${furnace.name.substring(0, 30)}...` 
-                            : furnace.name
-                          }
-                        </Link>
+                        <React.Fragment key={furnace.f_id}>
+                          <Link
+                            href={`/furnaces/${furnace.name}`}
+                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors duration-150"
+                          >
+                            {furnace.name.length > 30 
+                              ? `${furnace.name.substring(0, 30)}...` 
+                              : furnace.name
+                            }
+                          </Link>
+                        </React.Fragment>
                       ))
                     ) : (
-                      <div className="px-4 py-2 text-sm text-gray-500">No furnaces available</div>
+                      <React.Fragment key="furnaces-empty">
+                        <div className="px-4 py-2 text-sm text-gray-500">No furnaces available</div>
+                      </React.Fragment>
                     )}
                     
                     {furnaces && furnaces.length > 6 && (
@@ -289,22 +300,27 @@ const Navbar = () => {
                     </Link>
                     
                     {loading ? (
-                      <div className="px-4 py-2 text-sm text-gray-500">Loading...</div>
+                      <React.Fragment key="services-loading">
+                        <div className="px-4 py-2 text-sm text-gray-500">Loading...</div>
+                      </React.Fragment>
                     ) : services && services.length > 0 ? (
                       services.slice(0, 6).map((service) => (
-                        <Link
-                          key={service.s_id}
-                          href={`/services/${service.name}`}
-                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors duration-150"
-                        >
-                          {service.name.length > 30 
-                            ? `${service.name.substring(0, 30)}...` 
-                            : service.name
-                          }
-                        </Link>
+                        <React.Fragment key={service.s_id}>
+                          <Link
+                            href={`/services/${service.name}`}
+                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors duration-150"
+                          >
+                            {service.name.length > 30 
+                              ? `${service.name.substring(0, 30)}...` 
+                              : service.name
+                            }
+                          </Link>
+                        </React.Fragment>
                       ))
                     ) : (
-                      <div className="px-4 py-2 text-sm text-gray-500">No services available</div>
+                      <React.Fragment key="services-empty">
+                        <div className="px-4 py-2 text-sm text-gray-500">No services available</div>
+                      </React.Fragment>
                     )}
                     
                     {services && services.length > 6 && (
@@ -381,15 +397,15 @@ const Navbar = () => {
                   {searchResults.length > 0 ? (
                     <div className="py-2">
                       {searchResults.map((result) => (
-                        <Link
-                          key={result.id}
-                          href={result.url}
-                          className="block px-3 py-2 hover:bg-white rounded border-b border-gray-100 last:border-b-0"
-                          onClick={() => {
-                            clearSearch();
-                            setIsMobileMenuOpen(false);
-                          }}
-                        >
+                        <React.Fragment key={result.id}>
+                          <Link
+                            href={result.url}
+                            className="block px-3 py-2 hover:bg-white rounded border-b border-gray-100 last:border-b-0"
+                            onClick={() => {
+                              clearSearch();
+                              setIsMobileMenuOpen(false);
+                            }}
+                          >
                           <div className="flex items-start">
                             <div className="flex-shrink-0 mt-1">
                               {result.type === 'furnace' ? (
@@ -404,6 +420,7 @@ const Navbar = () => {
                             </div>
                           </div>
                         </Link>
+                        </React.Fragment>
                       ))}
                     </div>
                   ) : (
