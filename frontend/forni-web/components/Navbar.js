@@ -406,20 +406,20 @@ const Navbar = () => {
                               setIsMobileMenuOpen(false);
                             }}
                           >
-                          <div className="flex items-start">
-                            <div className="flex-shrink-0 mt-1">
-                              {result.type === 'furnace' ? (
-                                <div className="w-2 h-2 bg-orange-400 rounded-full"></div>
-                              ) : (
-                                <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
-                              )}
+                            <div className="flex items-start">
+                              <div className="flex-shrink-0 mt-1">
+                                {result.type === 'furnace' ? (
+                                  <div className="w-2 h-2 bg-orange-400 rounded-full"></div>
+                                ) : (
+                                  <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
+                                )}
+                              </div>
+                              <div className="ml-3">
+                                <p className="text-sm font-medium text-gray-800">{result.name}</p>
+                                <p className="text-xs text-gray-400 capitalize">{result.type}</p>
+                              </div>
                             </div>
-                            <div className="ml-3">
-                              <p className="text-sm font-medium text-gray-800">{result.name}</p>
-                              <p className="text-xs text-gray-400 capitalize">{result.type}</p>
-                            </div>
-                          </div>
-                        </Link>
+                          </Link>
                         </React.Fragment>
                       ))}
                     </div>

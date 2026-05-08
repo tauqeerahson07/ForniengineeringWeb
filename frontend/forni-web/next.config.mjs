@@ -1,42 +1,9 @@
 /** @type {import('next').NextConfig} */
-const backend_url = process.env.NEXT_BASE
 const cloudflare_domain = process.env.CLOUDFLARE_HOSTNAME
+const backend_url = process.env.NEXT_BASE
 
 const nextConfig = {
-  // Enable SWR (Stale-While-Revalidate) for better caching
-  headers: async () => {
-    return [
-      {
-        source: '/:path*',
-        headers: [
-          {
-            key: 'Cache-Control',
-            value: 'public, max-age=3600, stale-while-revalidate=86400'
-          }
-        ]
-      }
-    ]
-  },
-  
-  async rewrites() {
-    return [
-      {
-        source: "/product",
-        destination: "/api/furnaces",
-      },
-    ];
-  },
-  
-  async redirects() {
-    return [
-      {
-        source: '/admin',
-        destination: `${backend_url}/admin`,
-        permanent: false,
-      },
-    ];
-  },
-  
+  // Image optimization
   images: {
     remotePatterns: cloudflare_domain ? [
       {
@@ -44,21 +11,52 @@ const nextConfig = {
         hostname: cloudflare_domain,
       },
     ] : [],
-    // Optimize images for production
-    formats: ['image/avif', 'image/webp'],
-    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
-    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
   },
-  
-  // Performance optimizations
-  compress: true,
-  productionBrowserSourceMaps: false,
-  
-  // Environment variables
-  env: {
-    NEXT_PUBLIC_BACKEND: process.env.NEXT_PUBLIC_BACKEND,
-    NEXT_BASE: process.env.NEXT_BASE,
-    CLOUDFLARE_HOSTNAME: process.env.CLOUDFLARE_HOSTNAME,
+
+  // Redirect admin to backend
+  async redirects() {
+    return [
+      {
+        source: '/admin',
+        destination: `${backend_url}/admin/`,
+        permanent: false,
+      },
+    ];
+  },
+
+  // Rewrite URLs for API calls
+  async rewrites() {
+    return {
+      beforeFiles: [
+        // Services API
+        {
+          source: '/api/services',
+          destination: `${backend_url}/api/services`,
+        },
+        {
+          source: '/api/services/:id',
+          destination: `${backend_url}/api/services/:id`,
+        },
+        // Spare Parts API
+        {
+          source: '/api/spare-parts',
+          destination: `${backend_url}/api/spare-parts`,
+        },
+        {
+          source: '/api/spare-parts/:id',
+          destination: `${backend_url}/api/spare-parts/:id`,
+        },
+        // Furnaces API
+        {
+          source: '/api/furnaces',
+          destination: `${backend_url}/api/furnaces`,
+        },
+        {
+          source: '/api/furnaces/:id',
+          destination: `${backend_url}/api/furnaces/:id`,
+        },
+      ],
+    };
   },
 };
 
