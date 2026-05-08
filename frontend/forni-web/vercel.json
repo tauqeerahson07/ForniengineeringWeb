@@ -1,15 +1,10 @@
 {
-
-"version": 2,
-"buildCommand": "npm run build",
-
- "devCommand": "npm run dev",
- "installCommand": "npm install",
-  "framework": "nextjs", 
-  "nodeVersion": "20.x",
-
+  "version": 2,
+  "buildCommand": "npm run build",
+  "devCommand": "npm run dev",
+  "installCommand": "npm install",
+  "framework": "nextjs",
   
-
   "builds": [
     {
       "src": "package.json",
