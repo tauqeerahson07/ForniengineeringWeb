@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const cloudflare_domain = process.env.CLOUDFLARE_HOSTNAME
-const backend_url = process.env.NEXT_BASE
+const backend_url = process.env.NEXT_PUBLIC_BACKEND
 
 const nextConfig = {
   // Image optimization
@@ -22,41 +22,6 @@ const nextConfig = {
         permanent: false,
       },
     ];
-  },
-
-  // Rewrite URLs for API calls
-  async rewrites() {
-    return {
-      beforeFiles: [
-        // Services API
-        {
-          source: '/api/services',
-          destination: `${backend_url}/api/services`,
-        },
-        {
-          source: '/api/services/:id',
-          destination: `${backend_url}/api/services/:id`,
-        },
-        // Spare Parts API
-        {
-          source: '/api/spare-parts',
-          destination: `${backend_url}/api/spare-parts`,
-        },
-        {
-          source: '/api/spare-parts/:id',
-          destination: `${backend_url}/api/spare-parts/:id`,
-        },
-        // Furnaces API
-        {
-          source: '/api/furnaces',
-          destination: `${backend_url}/api/furnaces`,
-        },
-        {
-          source: '/api/furnaces/:id',
-          destination: `${backend_url}/api/furnaces/:id`,
-        },
-      ],
-    };
   },
 };
 
