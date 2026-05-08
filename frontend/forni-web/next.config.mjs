@@ -51,12 +51,8 @@ const nextConfig = {
   },
   
   // Performance optimizations
-  swcMinify: true,
   compress: true,
   productionBrowserSourceMaps: false,
-  
-  // Build optimizations
-  optimizeFonts: true,
   
   // Environment variables
   env: {
