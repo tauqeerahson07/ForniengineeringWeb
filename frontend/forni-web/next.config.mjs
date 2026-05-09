@@ -1,6 +1,4 @@
 /** @type {import('next').NextConfig} */
-const backend_url = process.env.NEXT_PUBLIC_BACKEND 
-const admin_url = process.env.NEXT_BASE
 
 const nextConfig = {
   // Image optimization
@@ -10,16 +8,25 @@ const nextConfig = {
         protocol: "https",
         hostname: "*.r2.cloudflarestorage.com",
       },
+      {
+        protocol: "https",
+        hostname: "35ffd708fb9c5296e361d1923425135c.r2.cloudflarestorage.com",
+      },
+      {
+        protocol: "https",
+        hostname: "vxlkpbtobodxceewbozs.supabase.co",
+      },
     ],
     unoptimized: true, // Disable optimization for R2 images with query parameters
   },
 
   // Redirect admin to backend
   async redirects() {
+    const adminUrl = process.env.NEXT_BASE || 'https://forniengineeringweb.onrender.com';
     return [
       {
         source: '/admin',
-        destination: `${admin_url}/admin/`,
+        destination: `${adminUrl}/admin/`,
         permanent: false,
       },
     ];
