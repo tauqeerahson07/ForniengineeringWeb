@@ -33,12 +33,12 @@ export default function ClientHomePage() {
         <div className="bg-white min-h-screen">
             {/* Copy ALL your existing JSX from page.js here */}
             {/* Hero Section */}
-            <div className="relative min-h-[80vh] overflow-hidden">
+            <div className="relative min-h-[80vh] overflow-hidden ">
                 <div className="absolute inset-0">
                     <video src="/Forni_demo.mp4" autoPlay loop muted className="w-full h-full object-cover"/>
                     <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-transparent"></div>
                 </div>
-                
+
                 <div className="relative z-10 flex items-center min-h-[80vh] px-4 sm:px-6 lg:px-8">
                     <div className="max-w-7xl mx-auto w-full">
                         <div className="max-w-2xl">

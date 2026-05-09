@@ -51,9 +51,24 @@ const Navbar = () => {
         }
       });
     }
+    // Search spare parts
+    if (spareParts) {
+      spareParts.forEach(part => {
+        if (part.name.toLowerCase().includes(query) || 
+            part.description?.toLowerCase().includes(query)) {
+          results.push({
+            id: `spare-part-${part.sp_id}`,
+            type: 'spare-part',
+            name: part.name,
+            description: part.description,
+            url: `/spare-parts/${part.name}`
+          });
+        }
+      });
+    }
 
     return results.slice(0, 6); // Limit to 6 results
-  }, [searchQuery, furnaces, services]);
+  }, [searchQuery, furnaces, services, spareParts]);
 
   const handleSearchInputChange = (e) => {
     setSearchQuery(e.target.value);
@@ -66,7 +81,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-white text-orange-600 fixed top-0 left-0 w-full z-50 bg-white/95 backdrop-blur-md border-b border-gray-200 shadow-sm">
+    <nav className="bg-white text-orange-600 fixed top-0 left-0 w-full z-20 backdrop-blur-md  shadow-sm">
       <div className="max-w-screen px-4 sm:px-6 lg:px-8">
         <div className="relative flex items-center h-16">
           {/* Logo - Absolute Left */}
