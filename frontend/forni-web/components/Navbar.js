@@ -193,8 +193,8 @@ const Navbar = () => {
                         <div className="px-4 py-2 text-sm text-gray-500">Loading...</div>
                       </React.Fragment>
                     ) : spareParts && spareParts.length > 0 ? (
-                      spareParts.slice(0, 6).map((part) => (
-                        <React.Fragment key={part.sp_id}>
+                      spareParts.slice(0, 6).map((part, idx) => (
+                        <React.Fragment key={part.sp_id || `spare-part-${idx}`}>
                           <Link
                             href={`/spare_parts/${part.name}`}
                             className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors duration-150"
@@ -248,8 +248,8 @@ const Navbar = () => {
                         <div className="px-4 py-2 text-sm text-gray-500">Loading...</div>
                       </React.Fragment>
                     ) : furnaces && furnaces.length > 0 ? (
-                      furnaces.slice(0, 6).map((furnace) => (
-                        <React.Fragment key={furnace.f_id}>
+                      furnaces.slice(0, 6).map((furnace, idx) => (
+                        <React.Fragment key={furnace.f_id || `furnace-${idx}`}>
                           <Link
                             href={`/furnaces/${furnace.name}`}
                             className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors duration-150"
@@ -304,8 +304,8 @@ const Navbar = () => {
                         <div className="px-4 py-2 text-sm text-gray-500">Loading...</div>
                       </React.Fragment>
                     ) : services && services.length > 0 ? (
-                      services.slice(0, 6).map((service) => (
-                        <React.Fragment key={service.s_id}>
+                      services.slice(0, 6).map((service, idx) => (
+                        <React.Fragment key={service.s_id || `service-${idx}`}>
                           <Link
                             href={`/services/${service.name}`}
                             className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors duration-150"

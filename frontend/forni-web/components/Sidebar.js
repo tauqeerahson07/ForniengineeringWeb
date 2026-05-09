@@ -65,9 +65,9 @@ const Sidebar = ({ isOpen, onClose }) => {
                   <div className="text-sm text-gray-500">Loading...</div>
                 ) : furnaces && furnaces.length > 0 ? (
                   <div className="space-y-2 max-h-40 overflow-y-auto">
-                    {furnaces.slice(0, 8).map((furnace) => (
+                    {furnaces.slice(0, 8).map((furnace, idx) => (
                       <Link
-                        key={furnace.f_id}
+                        key={furnace.f_id || `furnace-${idx}`}
                         href={`/furnaces/${furnace.name}`}
                         className="block text-sm text-gray-600 hover:text-orange-600 transition-colors duration-200"
                         onClick={onClose}
@@ -99,9 +99,9 @@ const Sidebar = ({ isOpen, onClose }) => {
               <h3 className="text-lg font-medium text-gray-900 mb-3">Services</h3>
               <div className="space-y-2 pl-4">
                 {services && services.length > 0 ? (
-                  services.map((service) => (
+                  services.map((service, idx) => (
                     <Link
-                      key={service.s_id}
+                      key={service.s_id || `service-${idx}`}
                       href={`/services/${service.name}`}
                       className="block text-sm text-gray-600 hover:text-orange-600 transition-colors duration-200"
                       onClick={onClose}

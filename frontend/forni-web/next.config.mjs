@@ -1,6 +1,7 @@
 /** @type {import('next').NextConfig} */
 const cloudflare_domain = process.env.CLOUDFLARE_HOSTNAME
 const backend_url = process.env.NEXT_PUBLIC_BACKEND
+const admin_url = process.env.NEXT_BASE
 
 const nextConfig = {
   // Image optimization
@@ -18,7 +19,7 @@ const nextConfig = {
     return [
       {
         source: '/admin',
-        destination: `${backend_url}/admin/`,
+        destination: `${admin_url}/admin/`,
         permanent: false,
       },
     ];
