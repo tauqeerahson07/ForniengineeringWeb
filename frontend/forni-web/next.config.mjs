@@ -1,7 +1,6 @@
 /** @type {import('next').NextConfig} */
-const cloudflare_domain = process.env.CLOUDFLARE_HOSTNAME || '35ffd708fb9c5296e361d1923425135c.r2.cloudflarestorage.com'
-const backend_url = process.env.NEXT_PUBLIC_BACKEND || 'https://forniengineeringweb.onrender.com/api'
-const admin_url = process.env.NEXT_BASE || 'https://forniengineeringweb.onrender.com'
+const backend_url = process.env.NEXT_PUBLIC_BACKEND 
+const admin_url = process.env.NEXT_BASE
 
 const nextConfig = {
   // Image optimization
@@ -9,9 +8,10 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: cloudflare_domain,
+        hostname: "*.r2.cloudflarestorage.com",
       },
     ],
+    unoptimized: true, // Disable optimization for R2 images with query parameters
   },
 
   // Redirect admin to backend
