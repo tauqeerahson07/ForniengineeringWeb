@@ -3,11 +3,11 @@ import ClientHomePage from '@/components/ClientHomePage';
 
 // Generate metadata with fresh data
 export async function generateMetadata() {
-    const { furnaces, services } = await getStaticData();
+    const { furnaces, services, spareParts } = await getStaticData();
     
     return {
         title: 'Forni Engineering - Industrial Furnace Solutions',
-        description: `Leading manufacturer of industrial furnaces. We offer ${furnaces.length} furnace solutions and ${services.length} specialized services for various industries.`,
+        description: `Leading manufacturer of industrial furnaces. We offer specialized furnaces, solutions for various industries. We also provide comprehensive support and maintenance services.`,
         keywords: 'industrial furnaces, heat treatment, manufacturing, engineering, forni engineering',
         openGraph: {
             title: 'Forni Engineering - Industrial Furnace Solutions',
