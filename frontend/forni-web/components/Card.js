@@ -8,15 +8,24 @@ const Card = (props) => {
   const data = useContext(DataContext)
   let url = null
   let is_furnace = null
+  let is_service = null
   const router = useRouter()
   if(data.getFurnaceByName(props.name))
   {
     url = `/furnaces/${props.name}`
     is_furnace = true
+    is_service = false
   }
   if(data.getServiceByName(props.name))
   {
     url = `/services/${props.name}`
+    is_furnace = false
+    is_service = true
+  }
+  if(data.getSparePartByName(props.name))
+  {
+    url = `/spare-parts/${props.name}`
+    is_service = false
     is_furnace = false
   }
   // Handle navigation
@@ -28,17 +37,22 @@ const Card = (props) => {
 
   // Handle get quotation
   const handleGetQuotation = (e) => {
-    e.stopPropagation(); // Prevent card click when button is clicked
+    // e.stopPropagation(); // Prevent card click when button is clicked
     const subject = `Quotation Request - ${props.name}`;
     if(is_furnace){
-    const body = `Hello,\n\nI would like to request a quotation for:\n\nProduct: ${props.name}\n\nPlease provide detailed pricing, specifications, and delivery information.\n\nThank you.`;
+    const body = `Hello,\n\nI would like to request a quotation for the following furnace:\n\nFurnace: ${props.name}\n\nPlease provide detailed pricing, specifications, and delivery information.\n\nThank you.`;
     const mailtoUrl = `mailto:forniengg@yahoo.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     window.open(mailtoUrl, '_blank');
     }
+    else if(is_service){ 
+      const body = `Hello,\n\nI would like to request a quotation for the following service:\n\nService: ${props.name}\n\nPlease provide detailed pricing, specifications, and delivery information.\n\nThank you.`;
+      const mailtoUrl = `mailto:forniengg@yahoo.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+      window.open(mailtoUrl, '_blank');
+    }
     else{
-    const body = `Hello,\n\nI would like to request a quotation for:\n\nService: ${props.name}\n\nPlease provide detailed pricing, specifications, and delivery information.\n\nThank you.`;
-    const mailtoUrl = `mailto:forniengg@yahoo.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    window.open(mailtoUrl, '_blank');
+      const body = `Hello,\n\nI would like to request a quotation for the following spare part:\n\nSpare Part: ${props.name}\n\nPlease provide detailed pricing, specifications, and delivery information.\n\nThank you.`;
+      const mailtoUrl = `mailto:forniengg@yahoo.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+      window.open(mailtoUrl, '_blank');
     }
   };
   return (
@@ -59,7 +73,7 @@ const Card = (props) => {
             {props.specs}
         </p>
                   <button
-            onClick={() => handleGetQuotation(service.name)}
+            onClick={() => handleGetQuotation(props.name)}
             className="w-full bg-orange-600 hover:bg-orange-700 text-white font-medium py-2 px-4 rounded-md transition-colors duration-200 flex items-center justify-center gap-2"
           >
             <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -81,7 +81,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-white text-orange-600 fixed top-0 left-0 w-full z-20 backdrop-blur-md  shadow-sm">
+    <nav className="bg-orange-50 text-orange-600 fixed top-0 left-0 w-full z-20 backdrop-blur-md  shadow-sm">
       <div className="max-w-screen px-4 sm:px-6 lg:px-8">
         <div className="relative flex items-center h-16">
           {/* Logo - Absolute Left */}

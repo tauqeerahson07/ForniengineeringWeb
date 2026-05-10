@@ -15,15 +15,15 @@ const HandleMessage = (e) => {
 
 const ContactForm = () => {
   return (
-    <form className="contact-form flex flex-col p-8 rounded-lg w-full max-w-md " onSubmit={HandleMessage}>
-      <label htmlFor="name" className="text-white">Name:</label>
-      <input type="text" id="name" name="name" className="mb-4 p-2 rounded-lg" required />
+    <form className="contact-form flex flex-col p-8 rounded-lg w-full max-w-md text-gray-600 bg-transparent" onSubmit={HandleMessage}>
+      <label htmlFor="name" className="text-gray-600">Name:</label>
+      <input type="text" id="name" name="name" className="mb-4 p-2 rounded-lg bg-white" required />
 
-      <label htmlFor="email" className="text-white">Email:</label>
-      <input type="email" id="email" name="email" className="mb-4 p-2 rounded-lg" required />
+      <label htmlFor="email" className="text-gray-600">Email:</label>
+      <input type="email" id="email" name="email" className="mb-4 p-2 rounded-lg bg-white" required />
 
-      <label htmlFor="message" className="text-white">Message:</label>
-      <textarea id="message" name="message" className="mb-4 p-2 rounded-lg" required></textarea>
+      <label htmlFor="message" className="text-gray-600">Message:</label>
+      <textarea id="message" name="message" className="mb-4 p-2 rounded-lg bg-white" required></textarea>
 
       <button type="submit" className="mt-8 bg-white text-orange-600 hover:bg-gray-100 font-semibold py-4 px-8 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg">Send Message</button>
     </form>
