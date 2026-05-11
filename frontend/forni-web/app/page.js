@@ -32,5 +32,5 @@ export default async function Home() {
     return <ClientHomePage initialData={staticData} />;
 }
 
-// Enable ISR (Incremental Static Regeneration)
-export const revalidate = 300; // Revalidate every 5 minutes
+// // Enable ISR (Incremental Static Regeneration)
+// export const revalidate = 300; // Revalidate every 5 minutes
