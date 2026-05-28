@@ -145,9 +145,9 @@ const Services = () => {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {filteredAndSortedServices.map((service) => (
+            {filteredAndSortedServices.map((service,idx) => (
     <div
-      key={service.s_id}
+      key={service.s_id || idx}
       className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow duration-200"
     >
       {/* Furnace Image */}

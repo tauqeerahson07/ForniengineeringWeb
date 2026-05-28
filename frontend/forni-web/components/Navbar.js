@@ -81,7 +81,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-orange-50 text-orange-600 fixed top-0 left-0 w-full z-20 backdrop-blur-md  shadow-sm">
+    <nav className=" bg-white text-orange-600 fixed top-0 left-0 w-full z-20  shadow-sm">
       <div className="max-w-screen px-4 sm:px-6 lg:px-8">
         <div className="relative flex items-center h-16">
           {/* Logo - Absolute Left */}
@@ -180,7 +180,7 @@ const Navbar = () => {
             <div className="hidden md:flex items-center space-x-6">
               <Link 
                 href="/about" 
-                className="text-gray-700 hover:text-orange-600 px-3 py-2 text-sm font-medium transition-colors duration-200"
+                className="text-gray-700 hover:text-orange-600 px-3 py-2 z-20 text-sm font-medium transition-colors duration-200"
               >
                 About Us
               </Link>

@@ -148,12 +148,12 @@ const SpareParts = () => {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {filteredAndSortedSpareParts.map((sparePart) => (
-    <div
-      key={sparePart.sp_id}
-      className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow duration-200"
-    >
-      {/* Spare Part Image */}
+            {filteredAndSortedSpareParts.map((sparePart, idx) => (
+              <div
+                key={sparePart.sp_id || idx}
+                className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow duration-200"
+              >
+                {/* Spare Part Image */}
       <div className="relative h-60 bg-gray-100">
         {
           sparePart.cover_image ? (
