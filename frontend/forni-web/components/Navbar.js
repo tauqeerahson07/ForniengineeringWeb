@@ -211,7 +211,7 @@ const Navbar = () => {
                       spareParts.slice(0, 6).map((part, idx) => (
                         <React.Fragment key={part.sp_id || `spare-part-${idx}`}>
                           <Link
-                            href={`/spare_parts/${part.name}`}
+                            href={`/spare_parts/${encodeURIComponent(part.name)}`}
                             className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors duration-150"
                           >
                             {part.name.length > 30
@@ -266,7 +266,7 @@ const Navbar = () => {
                       furnaces.slice(0, 6).map((furnace, idx) => (
                         <React.Fragment key={furnace.f_id || `furnace-${idx}`}>
                           <Link
-                            href={`/furnaces/${furnace.name}`}
+                            href={`/furnaces/${encodeURIComponent(furnace.name)}`}
                             className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors duration-150"
                           >
                             {furnace.name.length > 30 
@@ -322,7 +322,7 @@ const Navbar = () => {
                       services.slice(0, 6).map((service, idx) => (
                         <React.Fragment key={service.s_id || `service-${idx}`}>
                           <Link
-                            href={`/services/${service.name}`}
+                            href={`/services/${encodeURIComponent(service.name)}`}
                             className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors duration-150"
                           >
                             {service.name.length > 30 

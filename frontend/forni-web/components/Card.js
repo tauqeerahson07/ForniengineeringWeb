@@ -4,30 +4,31 @@ import { useContext } from "react";
 import DataContext from "@/contexts/DataContext";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+
 const Card = (props) => {
   const data = useContext(DataContext)
   let url = null
   let is_furnace = null
   let is_service = null
   const router = useRouter()
-  if(data.getFurnaceByName(props.name))
-  {
-    url = `/furnaces/${props.name}`
-    is_furnace = true
-    is_service = false
-  }
-  if(data.getServiceByName(props.name))
-  {
-    url = `/services/${props.name}`
-    is_furnace = false
-    is_service = true
-  }
-  if(data.getSparePartByName(props.name))
-  {
-    url = `/spare-parts/${props.name}`
-    is_service = false
-    is_furnace = false
-  }
+if(data.getFurnaceByName(props.name))
+{
+  url = `/furnaces/${encodeURIComponent(props.name)}`
+  is_furnace = true
+  is_service = false
+}
+if(data.getServiceByName(props.name))
+{
+  url = `/services/${encodeURIComponent(props.name)}`
+  is_furnace = false
+  is_service = true
+}
+if(data.getSparePartByName(props.name))
+{
+  url = `/spare-parts/${encodeURIComponent(props.name)}`
+  is_service = false
+  is_furnace = false
+}
   // Handle navigation
   const handleCardClick = () => {
     if (url) {
