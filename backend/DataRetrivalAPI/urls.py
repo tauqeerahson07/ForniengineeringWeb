@@ -8,4 +8,5 @@ urlpatterns = [
     path('services/<str:name>/',views.SearchFindServices, name = 'Search'),
     path('spare-parts/',views.spare_parts,  name='spare_parts'),
     path('spare-parts/<str:name>/',views.SearchFindSpareParts, name = 'Search'),
+    path('health-check/', views.health_check, name='health_check'),
 ]

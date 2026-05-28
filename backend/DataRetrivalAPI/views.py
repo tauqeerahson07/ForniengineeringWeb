@@ -1,3 +1,4 @@
+from django.http import JsonResponse
 from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework import status
@@ -5,7 +6,12 @@ from rest_framework.decorators import api_view
 from .models import Furnaces,Services,SpareParts
 from .serializer import FurnacesSerializer,ServiceSerializer,SparePartsSerializer
 from rest_framework import status
+
 # Create your views here.
+@api_view(['GET'])
+def health_check(request):
+    """Simple endpoint to keep service alive"""
+    return JsonResponse({'status': 'ok'})
 
 @api_view(['GET'])
 def furnaces(request):
