@@ -16,8 +16,8 @@ const geistMono = Geist_Mono({
 
 export const metadata = {
   Image:"/images/logo.png",
-  title: "Forni Engineering",
-  description: "Forni Engineering is a full-service engineering firm.",
+  title: "Forni Engineering | Gas Carburizing Furnaces Pakistan",
+  description: "Pakistan's pioneer in gas carburizing furnace technology and heat treatment solutions. Leading manufacturer of controlled atmosphere furnaces for automotive, aerospace, and industrial sectors.",
 };
 
 export default async function RootLayout({ children }) {

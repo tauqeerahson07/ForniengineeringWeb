@@ -1,7 +1,19 @@
-"use client";
+
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+
+export const metadata = {
+  title: "Gas Carburizing Furnaces in Pakistan | Forni Engineering",
+  description: "Pakistan's leading pioneer in gas carburizing furnace technology. We manufacture high-performance carburizing furnaces for automotive, aerospace, and industrial heat treatment.",
+  keywords: "gas carburizing furnaces Pakistan, carburizing furnace manufacturer, controlled atmosphere furnace, heat treatment furnace Pakistan",
+  openGraph: {
+    title: "Gas Carburizing Furnaces in Pakistan | Forni Engineering",
+    description: "Pakistan's pioneering manufacturer of gas carburizing furnaces and controlled atmosphere heat treatment systems.",
+    url: "https://forniengineering.com/about",
+    type: "website",
+  },
+};
 
 const About = () => {
   return (
@@ -13,8 +25,8 @@ const About = () => {
             <h1 className="text-4xl md:text-5xl font-bold mb-6">
               About Forni Engineering
             </h1>
-            <p className="text-xl md:text-2xl text-orange-100 max-w-3xl mx-auto">
-              Leading the industry in industrial furnace manufacturing and engineering solutions since our inception
+            <p className="text-xl md:text-2xl text-orange-100 max-w-4xl mx-auto">
+              Pakistan&apos;s Pioneer in Advanced heat treatment furnace technology. Manufacturers of Gas Carburizing, Nitriding, Nitro Carburizing, Normalizing furnaces.
             </p>
           </div>
         </div>
@@ -29,25 +41,91 @@ const About = () => {
             </h2>
             <div className="space-y-4 text-gray-600">
               <p>
-                Forni Engineering has been at the forefront of industrial furnace technology for over two decades. 
-                We specialize in designing, manufacturing, and maintaining high-quality industrial furnaces that 
-                meet the demanding requirements of modern manufacturing.
+                Forni Engineering stands as Pakistan&apos;s pioneering leader in advanced heat treatment furnace technology. 
+                Since our inception, we have been instrumental in establishing and advancing the industrial furnace 
+                industry in Pakistan by introducing world-class technology and expertise in gas carburizing, nitriding, 
+                nitro carburizing, normalizing, and tempering furnaces.
+                As the first and foremost innovator in controlled atmosphere furnace systems in Pakistan, we have set the industry 
+                standard for design, manufacturing, and maintenance of high-performance heat treatment equipment. 
               </p>
               <p>
-                Our commitment to innovation, quality, and customer satisfaction has made us a trusted partner 
-                for businesses across various industries including automotive, aerospace, steel, and manufacturing.
-              </p>
-              <p>
-                From small-scale heat treatment solutions to large industrial installations, we deliver 
-                engineering excellence that powers industries worldwide.
+                Our commitment to technological excellence and continuous innovation has made us the trusted partner 
+                for businesses across Pakistan and beyond. From pioneering installations to ongoing technical support, 
+                we deliver engineering solutions that reflect our legacy of being the industry&apos;s true innovators in 
+                advanced heat treatment furnace technology.
               </p>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Mission & Vision */}
+      {/*Client List */}
       <div className="bg-white py-16">
+  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="text-center mb-12">
+      <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-2">
+        Trusted by industry leaders
+      </p>
+      <h2 className="text-3xl font-bold text-gray-900">
+        Some of Our Valuable Clients
+      </h2>
+    </div>
+
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 border border-gray-50 rounded-3xl overflow-hidden">
+      <div className="p-6 border-b border-r border-gray-100 hover:bg-gray-50 transition-colors duration-150">
+        <p className="text-lg font-semibold text-gray-900">Pakistan Aeronautical Complex</p>
+        <p className="text-md text-gray-400 mt-1">Kamra</p>
+      </div>
+      <div className="p-6 border-b border-r border-gray-100 hover:bg-gray-50 transition-colors duration-150">
+        <p className="text-lg font-semibold text-gray-900">Pakistan Heavy Industries</p>
+        <p className="text-md text-gray-400 mt-1">Taxila</p>
+      </div>
+      <div className="p-6 border-b border-r border-gray-100 hover:bg-gray-50 transition-colors duration-150">
+        <p className="text-lg font-semibold text-gray-900">Trojans Hattar</p>
+        <p className="text-md text-gray-400 mt-1">Lahore</p>
+      </div>
+      <div className="p-6 border-b border-gray-100 hover:bg-gray-50 transition-colors duration-150">
+        <p className="text-lg font-semibold text-gray-900">Millat Tractors</p>
+        <p className="text-md text-gray-400 mt-1">Lahore</p>
+      </div>
+      <div className="p-6 border-b border-r border-gray-100 hover:bg-gray-50 transition-colors duration-150">
+        <p className="text-lg font-semibold text-gray-900">Mannan Shahid Forgings</p>
+        <p className="text-md text-gray-400 mt-1">Lahore</p>
+      </div>
+      <div className="p-6 border-b border-r border-gray-100 hover:bg-gray-50 transition-colors duration-150">
+        <p className="text-lg font-semibold text-gray-900">Mistequay International</p>
+        <p className="text-md text-gray-400 mt-1">Faisalabad</p>
+      </div>
+      <div className="p-6 border-b border-r border-gray-100 hover:bg-gray-50 transition-colors duration-150">
+        <p className="text-lg font-semibold text-gray-900">Mapro Industries</p>
+        <p className="text-md text-gray-400 mt-1">Lahore</p>
+      </div>
+      <div className="p-6 border-b border-gray-100 hover:bg-gray-50 transition-colors duration-150">
+        <p className="text-lg font-semibold text-gray-900">Fabman Engineers</p>
+        <p className="text-md text-gray-400 mt-1">Lahore</p>
+      </div>
+      <div className="p-6 border-b border-r border-gray-100 hover:bg-gray-50 transition-colors duration-150">
+        <p className="text-lg font-semibold text-gray-900">Al-Mustafa Engineers</p>
+        <p className="text-md text-gray-400 mt-1">Lahore</p>
+      </div>
+      <div className="p-6 border-gray-100 border-r hover:bg-gray-50 transition-colors duration-150">
+        <p className="text-lg font-semibold text-gray-900">Mecas Engineering</p>
+        <p className="text-md text-gray-400 mt-1">Lahore</p>
+      </div>
+      <div className="p-6 border-gray-100 border-r hover:bg-gray-50 transition-colors duration-150">
+        <p className="text-lg font-semibold text-gray-900">Kortech Radiators</p>
+        <p className="text-md text-gray-400 mt-1">Lahore</p>
+      </div>
+        <div className="p-6 border-gray-100 border-r hover:bg-gray-50 transition-colors duration-150">
+        <p className="text-lg font-semibold text-gray-900">Amin Heat Treaters</p>
+        <p className="text-md text-gray-400 mt-1">Lahore</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+      {/* Mission & Vision */}
+      <div className="bg-gray-50 py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">
@@ -70,9 +148,11 @@ const About = () => {
                 <h3 className="text-2xl font-bold text-gray-900">Our Mission</h3>
               </div>
               <p className="text-gray-700">
-                To provide innovative, reliable, and energy-efficient industrial furnace solutions that exceed 
-                customer expectations while contributing to sustainable manufacturing practices. We are committed 
-                to delivering exceptional value through cutting-edge technology and superior customer service.
+                To lead Pakistan&apos;s industrial heat treatment sector through pioneering innovations in gas carburizing 
+                furnace technology. We are committed to providing cutting-edge carburizing solutions that empower Pakistani 
+                industries to achieve world-class precision, efficiency, and quality. Our mission is to continuously advance 
+                the science and engineering of controlled atmosphere furnaces while delivering exceptional value and support 
+                to every client.
               </p>
             </div>
 
@@ -88,9 +168,11 @@ const About = () => {
                 <h3 className="text-2xl font-bold text-gray-900">Our Vision</h3>
               </div>
               <p className="text-gray-700">
-                To be the global leader in industrial furnace technology, recognized for our innovation, 
-                quality, and environmental responsibility. We envision a future where our solutions enable 
-                sustainable industrial growth and contribute to a cleaner, more efficient world.
+                To establish Forni Engineering as the globally recognized authority in gas carburizing furnace 
+                technology, building upon our pioneering legacy in Pakistan. We envision a future where our innovations 
+                in controlled atmosphere furnaces enable Pakistani industries to compete at the highest international 
+                standards, contributing to sustainable industrial growth and technological advancement across the region 
+                and beyond.
               </p>
             </div>
           </div>
