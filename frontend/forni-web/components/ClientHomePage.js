@@ -127,7 +127,7 @@ export default function ClientHomePage() {
                             {currentServices.length > 0 ? (
                                 currentServices.slice(0, 6).map((item, index) => (
                                     <div 
-                                        key={`service-${item.s_id}`}
+                                        key={`service-${index}`}
                                         className="transform hover:scale-105 transition-all duration-300 flex justify-center"
                                         style={{ animationDelay: `${index * 0.1}s` }}
                                     >
@@ -163,11 +163,10 @@ export default function ClientHomePage() {
                         <div className="w-24 h-1 bg-orange-600 mx-auto mb-6"></div>
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10 max-w-6xl mx-auto">
                             {currentSpareParts.length > 0 ? (
-                                currentSpareParts.slice(0, 6).map((item, index) => (
+                                currentSpareParts.slice(0, 6).map((item,idx) => (
                                     <div 
-                                        key={`spare-part-${item.sp_id}`}
+                                        key={`spare-part-${idx}`}
                                         className="transform hover:scale-105 transition-all duration-300 flex justify-center"
-                                        style={{ animationDelay: `${index * 0.1}s` }}
                                     >
                                         <Card
                                             name={item.name}
