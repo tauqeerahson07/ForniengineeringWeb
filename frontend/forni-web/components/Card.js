@@ -11,19 +11,20 @@ const Card = (props) => {
   let is_furnace = null
   let is_service = null
   const router = useRouter()
+
 if(data.getFurnaceByName(props.name))
 {
   url = `/furnaces/${encodeURIComponent(props.name)}`
   is_furnace = true
   is_service = false
 }
-if(data.getServiceByName(props.name))
+else if(data.getServiceByName(props.name))
 {
   url = `/services/${encodeURIComponent(props.name)}`
   is_furnace = false
   is_service = true
 }
-if(data.getSparePartByName(props.name))
+else if(data.getSparePartByName(props.name))
 {
   url = `/spare-parts/${encodeURIComponent(props.name)}`
   is_service = false
