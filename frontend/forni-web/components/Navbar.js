@@ -471,6 +471,14 @@ const Navbar = () => {
               >
                 Services
               </Link>
+
+              <Link 
+                href="/spare-parts" 
+                className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-orange-600 hover:bg-orange-50 rounded-md"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Spare Parts
+              </Link>
               
               <Link 
                 href="/contact" 

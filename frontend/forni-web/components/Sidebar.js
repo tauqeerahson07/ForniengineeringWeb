@@ -115,26 +115,6 @@ const Sidebar = ({ isOpen, onClose }) => {
               </div>
             </div>
 
-            {/* Spare Parts Section */}
-            <div>
-              <h3 className="text-lg font-medium text-gray-900 mb-3">Spare Parts</h3>
-              <div className="space-y-2 pl-4">
-                {spareParts && spareParts.length > 0 ? (
-                  spareParts.map((part, idx) => (
-                    <Link
-                      key={part.sp_id || `spare-part-${idx}`}
-                      href={`/spare-parts/${part.name}`}
-                      className="block text-sm text-gray-600 hover:text-orange-600 transition-colors duration-200"
-                      onClick={onClose}
-                    >
-                      {part.name}
-                    </Link>
-                  ))
-                ) : (
-                  <div className="text-sm text-gray-500">No spare parts available yet</div>
-                )}
-              </div>
-            </div>
 
             {/* Contact */}
             <div className="pt-4 border-t border-gray-200">
