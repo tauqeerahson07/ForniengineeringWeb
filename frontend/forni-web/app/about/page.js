@@ -77,8 +77,8 @@ const About = () => {
         <p className="text-md text-gray-400 mt-1">Kamra</p>
       </div>
       <div className="p-6 border-b border-r border-gray-100 hover:bg-gray-50 transition-colors duration-150">
-        <p className="text-lg font-semibold text-gray-900">Pakistan Heavy Industries</p>
-        <p className="text-md text-gray-400 mt-1">Taxila</p>
+        <p className="text-lg font-semibold text-gray-900">GIK Institute of Engineering</p>
+        <p className="text-md text-gray-400 mt-1">Topi</p>
       </div>
       <div className="p-6 border-b border-r border-gray-100 hover:bg-gray-50 transition-colors duration-150">
         <p className="text-lg font-semibold text-gray-900">Trojans Hattar</p>
@@ -117,8 +117,8 @@ const About = () => {
         <p className="text-md text-gray-400 mt-1">Lahore</p>
       </div>
         <div className="p-6 border-gray-100 border-r hover:bg-gray-50 transition-colors duration-150">
-        <p className="text-lg font-semibold text-gray-900">Amin Heat Treaters</p>
-        <p className="text-md text-gray-400 mt-1">Lahore</p>
+        <p className="text-lg font-semibold text-gray-900">Innoviatech Industries</p>
+        <p className="text-md text-gray-400 mt-1">Taxila</p>
       </div>
     </div>
   </div>
@@ -148,9 +148,9 @@ const About = () => {
                 <h3 className="text-2xl font-bold text-gray-900">Our Mission</h3>
               </div>
               <p className="text-gray-700">
-                To lead Pakistan&apos;s industrial heat treatment sector through pioneering innovations in gas carburizing 
-                furnace technology. We are committed to providing cutting-edge carburizing solutions that empower Pakistani 
-                industries to achieve world-class precision, efficiency, and quality. Our mission is to continuously advance 
+                To lead Pakistan&apos;s industrial heat treatment sector through pioneering innovations in controlled atmosphere and conventional
+                furnace technology. We are committed to providing cutting edge solutions that empower Pakistani 
+                industries to achieve world class precision, efficiency, and quality. Our mission is to continuously advance 
                 the science and engineering of controlled atmosphere furnaces while delivering exceptional value and support 
                 to every client.
               </p>
@@ -168,7 +168,7 @@ const About = () => {
                 <h3 className="text-2xl font-bold text-gray-900">Our Vision</h3>
               </div>
               <p className="text-gray-700">
-                To establish Forni Engineering as the globally recognized authority in gas carburizing furnace 
+                To establish Forni Engineering as the globally recognized authority in in controlled atmosphere and conventional furnace 
                 technology, building upon our pioneering legacy in Pakistan. We envision a future where our innovations 
                 in controlled atmosphere furnaces enable Pakistani industries to compete at the highest international 
                 standards, contributing to sustainable industrial growth and technological advancement across the region 
@@ -188,7 +188,7 @@ const About = () => {
               Our Location
             </h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Visit our state-of-the-art facility where innovation meets precision manufacturing
+              Visit our state of the art facility where innovation meets precision manufacturing
             </p>
           </div>
 
