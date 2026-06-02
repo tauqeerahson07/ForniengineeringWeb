@@ -114,7 +114,7 @@ const FurnaceDetailPage = () => {
             {/* Main Slideshow Container */}
             <div className="relative">
               {/* Main Image Display */}
-              <div className="relative aspect-square bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+              <div className="relative aspect-square bg-orange-50 rounded-lg shadow-sm border border-gray-200 overflow-hidden group">
                 {allImages.length > 0 ? (
                   allImages.map((img, index) => (
                     <Image
@@ -122,7 +122,7 @@ const FurnaceDetailPage = () => {
                       src={img.image}
                       alt={img.alt}
                       fill
-                      className={`object-cover transition-opacity duration-500 ${index === currentImageIndex ? 'opacity-100' : 'opacity-0'}`}
+                      className={`object-contain transition-all duration-300 group-hover:scale-110 ${index === currentImageIndex ? 'opacity-100' : 'opacity-0'}`}
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 50vw"
                     />
                     ))

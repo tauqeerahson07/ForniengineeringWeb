@@ -76,7 +76,7 @@ const Furnaces = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 pt-20">
+    <div className="min-h-screen bg-orange-50 pt-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="text-center mb-8">
@@ -151,17 +151,17 @@ const Furnaces = () => {
             {filteredAndSortedFurnaces.map((furnace,idx) => (
     <div
       key={furnace.f_id || idx}
-      className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow duration-200"
+      className="bg-orange-50 rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow duration-200"
     >
       {/* Furnace Image */}
-      <div className="relative h-60 bg-gray-100">
+      <div className="relative h-60 bg-orange-50">
         {
           furnace.cover_image ? (
             <Image 
               src={furnace.cover_image}
               alt={furnace.name}
               fill
-              className='object-cover object-center'
+              className='object-contain'
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
             />
         ) : (

@@ -57,21 +57,21 @@ if(data.getSparePartByName(props.name))
     }
   };
   return (
-    <div className="card text-black w-96 shadow-sm">
-      <figure className="relative w-full h-64">
+    <div className="card text-black w-96 shadow-sm bg-orange-50">
+      <figure className="relative w-full h-64 bg-orange-50">
         <Image
           src={props.image}
           alt={props.name}
           fill
-          className="object-cover"
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          className="object-contain"
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 384px"
           onClick={handleCardClick}
         />
       </figure>
       <div className="card-body">
         <h2 className="card-title text-orange-600">{props.name}</h2>
         <p>
-            {props.specs}
+            {props.specs} 
         </p>
                   <button
             onClick={() => handleGetQuotation(props.name)}

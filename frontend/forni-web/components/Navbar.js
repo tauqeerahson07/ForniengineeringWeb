@@ -57,8 +57,8 @@ const Navbar = () => {
         if (part.name.toLowerCase().includes(query) || 
             part.description?.toLowerCase().includes(query)) {
           results.push({
-            id: `spare-part-${part.sp_id}`,
-            type: 'spare-part',
+            id: `spare-parts-${part.sp_id}`,
+            type: 'spare-parts',
             name: part.name,
             description: part.description,
             url: `/spare-parts/${part.name}`
@@ -186,7 +186,7 @@ const Navbar = () => {
               </Link>
               {/* Spare Parts Dropdown */}
               <div className="relative group">
-                <Link href={'/spare_parts'}>
+                <Link href={'/spare-parts'}>
                 <button className="text-gray-700 hover:text-orange-600 px-3 py-2 text-sm font-medium flex items-center transition-colors duration-200">
                   Spare Parts
                   <svg className="ml-1 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -197,7 +197,7 @@ const Navbar = () => {
                 <div className="absolute left-0 top-full mt-1 w-64 bg-white rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 border border-gray-200">
                   <div className="py-2">
                     <Link 
-                      href="/spare_parts" 
+                      href="/spare-parts" 
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 font-medium border-b border-gray-100"
                     >
                       View All Spare Parts

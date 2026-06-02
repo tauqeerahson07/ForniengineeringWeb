@@ -73,7 +73,7 @@ const Services = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 pt-20">
+    <div className="min-h-screen bg-orange-50 pt-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="text-center mb-8">
@@ -148,16 +148,16 @@ const Services = () => {
             {filteredAndSortedServices.map((service,idx) => (
     <div
       key={service.s_id || idx}
-      className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow duration-200"
+      className="bg-orange-50 rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow duration-200"
     >
       {/* Furnace Image */}
-      <div className="relative h-48 bg-gray-100">
+      <div className="relative h-48 bg-orange-50">
         {service.cover_image ? (
           <Image
             src={service.cover_image}
             alt={service.name}
             fill
-            className="object-cover"
+            className="object-contain"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
           />
         ) : (
