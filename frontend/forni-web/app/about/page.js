@@ -81,8 +81,8 @@ const About = () => {
         <p className="text-md text-gray-400 mt-1">Topi</p>
       </div>
       <div className="p-6 border-b border-r border-gray-100 hover:bg-gray-50 transition-colors duration-150">
-        <p className="text-lg font-semibold text-gray-900">Trojans Hattar</p>
-        <p className="text-md text-gray-400 mt-1">Lahore</p>
+        <p className="text-lg font-semibold text-gray-900">Pakistan Heavy Industry</p>
+        <p className="text-md text-gray-400 mt-1">Taxila</p>
       </div>
       <div className="p-6 border-b border-gray-100 hover:bg-gray-50 transition-colors duration-150">
         <p className="text-lg font-semibold text-gray-900">Millat Tractors</p>
