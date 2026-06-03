@@ -31,25 +31,25 @@ else if(props.type === 'spare-part')
   is_service = false
   is_furnace = false
 }
-// Fallback to searching if type not provided
-else if(data.getFurnaceByName(props.name))
-{
-  url = `/furnaces/${encodeURIComponent(props.name)}`
-  is_furnace = true
-  is_service = false
-}
-else if(data.getServiceByName(props.name))
-{
-  url = `/services/${encodeURIComponent(props.name)}`
-  is_furnace = false
-  is_service = true
-}
-else if(data.getSparePartByName(props.name))
-{
-  url = `/spare-parts/${encodeURIComponent(props.name)}`
-  is_service = false
-  is_furnace = false
-}
+// // Fallback to searching if type not provided
+// else if(data.getFurnaceByName(props.name))
+// {
+//   url = `/furnaces/${encodeURIComponent(props.name)}`
+//   is_furnace = true
+//   is_service = false
+// }
+// else if(data.getServiceByName(props.name))
+// {
+//   url = `/services/${encodeURIComponent(props.name)}`
+//   is_furnace = false
+//   is_service = true
+// }
+// else if(data.getSparePartByName(props.name))
+// {
+//   url = `/spare-parts/${encodeURIComponent(props.name)}`
+//   is_service = false
+//   is_furnace = false
+// }
   // Handle navigation
   const handleCardClick = () => {
     if (url) {
