@@ -229,6 +229,7 @@ INSTALLED_APPS = [
     "storages",
 ]
 
+
 CKEDITOR_5_UPLOAD_PATH = "uploads/"
 
 CKEDITOR_5_CONFIGS = {
