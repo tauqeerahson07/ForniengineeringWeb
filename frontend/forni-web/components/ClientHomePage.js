@@ -90,6 +90,7 @@ export default function ClientHomePage() {
                                             name={item.name}
                                             specs={item.specification}
                                             image={item.cover_image}
+                                            type="furnace"
                                         />
                                     </div>
                                 ))
@@ -127,7 +128,7 @@ export default function ClientHomePage() {
                             {currentServices.length > 0 ? (
                                 currentServices.slice(0, 6).map((item, index) => (
                                     <div 
-                                        key={`service-${index}`}
+                                        key={`service-${item.name}`}
                                         className="transform hover:scale-105 transition-all duration-300 flex justify-center"
                                         style={{ animationDelay: `${index * 0.1}s` }}
                                     >
@@ -135,6 +136,7 @@ export default function ClientHomePage() {
                                             name={item.name}
                                             specs={item.description}
                                             image={item.cover_image}
+                                            type="service"
                                         />
                                     </div>
                                 ))
@@ -165,13 +167,14 @@ export default function ClientHomePage() {
                             {currentSpareParts.length > 0 ? (
                                 currentSpareParts.slice(0, 6).map((item,idx) => (
                                     <div 
-                                        key={`spare-part-${idx}`}
+                                        key={`spare-part-${item.name}`}
                                         className="transform hover:scale-105 transition-all duration-300 flex justify-center"
                                     >
                                         <Card
                                             name={item.name}
                                             specs={item.description}
                                             image={item.cover_image}
+                                            type="spare-part"
                                         />
                                     </div>
                                 ))

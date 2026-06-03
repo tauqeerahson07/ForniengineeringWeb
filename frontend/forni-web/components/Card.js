@@ -12,7 +12,27 @@ const Card = (props) => {
   let is_service = null
   const router = useRouter()
 
-if(data.getFurnaceByName(props.name))
+// Use the type prop if provided, otherwise fallback to searching
+if(props.type === 'furnace')
+{
+  url = `/furnaces/${encodeURIComponent(props.name)}`
+  is_furnace = true
+  is_service = false
+}
+else if(props.type === 'service')
+{
+  url = `/services/${encodeURIComponent(props.name)}`
+  is_furnace = false
+  is_service = true
+}
+else if(props.type === 'spare-part')
+{
+  url = `/spare-parts/${encodeURIComponent(props.name)}`
+  is_service = false
+  is_furnace = false
+}
+// Fallback to searching if type not provided
+else if(data.getFurnaceByName(props.name))
 {
   url = `/furnaces/${encodeURIComponent(props.name)}`
   is_furnace = true
