@@ -176,17 +176,13 @@ const ServiceDetailPage = () => {
               {service.description && (
                 <div>
                   <h2 className="text-xl font-semibold text-gray-800 mb-1">Description</h2>
-                  <p className="text-gray-600">{service.description}</p>
+                  <p className="text-gray-600">{service.description.split("\n").map((line, index) => (
+                      <li key={index}>{line}</li>
+                    ))}
+                    </p>
                 </div>
               )}
-              {service.specification && (
-                <div>
-                  <h2 className="text-xl font-semibold text-gray-800 mb-1">Specifications</h2>
-                  <ul className="list-disc list-inside text-gray-600">
-                    {service.specification}
-                  </ul>
-                </div>
-              )}
+
               <div>
                 <button
                   onClick={handleGetQuotation}
