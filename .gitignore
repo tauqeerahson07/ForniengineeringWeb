@@ -39,3 +39,7 @@ env/
 # Logs
 *.log
 logs/
+
+# auto-generated files
+.claude/*
+CLAUDE.md
