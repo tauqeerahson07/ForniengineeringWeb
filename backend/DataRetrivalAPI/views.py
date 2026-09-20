@@ -8,7 +8,7 @@ from .serializer import FurnacesSerializer,ServiceSerializer,SparePartsSerialize
 from rest_framework import status
 
 # Create your views here.
-@api_view(['GET'])
+@api_view(['HEAD'])
 def health_check(request):
     """Simple endpoint to keep service alive"""
     return JsonResponse({'status': 'ok'})
